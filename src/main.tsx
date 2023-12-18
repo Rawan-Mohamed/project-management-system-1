@@ -10,19 +10,19 @@ import { AuthContextProvider } from "./Context/AuthContext.tsx";
 import ToastContextProvider from "./Context/ToastContext";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <AuthContextProvider>
       <ToastContextProvider>
         <App />
       </ToastContextProvider>
     </AuthContextProvider>
-  </React.StrictMode>
+  // </React.StrictMode>
 );
 
 
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <AuthContextProvider>
       <ToastContextProvider>
       <App />
@@ -30,6 +30,6 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 
     </AuthContextProvider>
 
-  </React.StrictMode>,
+  // </React.StrictMode>,
 )
 

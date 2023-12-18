@@ -3,7 +3,6 @@ import axios from "axios";
 import { useContext } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from 'react-router-dom';
-import { ToastContainer } from "react-toastify";
 import { AuthContext } from '../../Context/AuthContext';
 import { ToastContext } from '../../Context/ToastContext';
 import logo from './../../assets/images/pms.png';
@@ -49,7 +48,6 @@ const VerifyUser: React.FC  = () => {
     
   return (
     <div className="auth-container container-fluid">
-      <ToastContainer />
       <div className="row vh-100 justify-content-center align-items-center">
         <div className="col-md-6">
           <div className="p-2">
