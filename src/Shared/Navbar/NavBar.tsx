@@ -3,7 +3,7 @@ import logo from "../../assets/images/navLogo.png"
 import avatar from "../../assets/images/avatar.png"
 export default function NavBar({userData}) {
   return (
-    <nav className="navbar navbar-expand-lg nav-bg bg-light p-0 ">
+    <nav className="navbar navbar-expand-lg nav-bg p-0 ">
     <div className="container-fluid ">
       <img src={logo}   alt="" />
       <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
