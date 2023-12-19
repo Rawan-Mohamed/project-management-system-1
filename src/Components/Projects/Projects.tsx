@@ -147,12 +147,12 @@ const Projects: React.FC = () => {
       <div className="header d-flex justify-content-between p-3">
         <h3>projects</h3>
 
-        <button className="btn btn-warning rounded-5 px-4 ">
-          <Link to={"/dashboard/add-project"} className="customize-link">
+        
+          <Link to={"/dashboard/add-project"} className="btn btn-warning rounded-5 px-4 customize-link">
             <i className="fa fa-plus" aria-hidden="true"></i> &nbsp;Add New
             Project
           </Link>
-        </button>
+        
       </div>
       {/* table */}
       <>
