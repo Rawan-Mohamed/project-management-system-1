@@ -7,6 +7,7 @@ import noData from "./../../assets/images/no-data.png";
 import Modal from "react-bootstrap/Modal";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "./../../Context/AuthContext";
+import { Link } from "react-router-dom";
 import { ToastContext } from "../../Context/ToastContext";
 import { useForm } from "react-hook-form";
 
@@ -21,7 +22,7 @@ const Projects: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   interface FormValues {
-    title: any;
+    title: string;
     description: string;
   }
   const {
@@ -36,7 +37,6 @@ const Projects: React.FC = () => {
   const handleClose = () => setModalState("close");
   // ********to show view modal*******************
   const showViewModal = (id: any) => {
-    console.log("proj", project);
     setItemId(id);
     setModalState("view-modal");
     getPtojectDetails(id);
@@ -59,7 +59,6 @@ const Projects: React.FC = () => {
     axios
       .get(`${baseUrl}/Project/manager`, { headers: requestHeaders })
       .then((response) => {
-        console.log(response?.data[0].title);
         setProjects(response?.data);
       })
       .catch((error) => {
@@ -70,10 +69,7 @@ const Projects: React.FC = () => {
         );
       });
   };
-  // **********navigate to add proj******************
-  const navigateToNew = () => {
-    navigate("/dashboard/add-project");
-  };
+
   //****************update project**********************
   const updateProject = (data: any) => {
     setIsLoading(true);
@@ -82,9 +78,8 @@ const Projects: React.FC = () => {
         headers: requestHeaders,
       })
       .then((response) => {
-        console.log(response);
         handleClose();
-        setIsLoading(false);
+
         getAllProjectsList();
         getToastValue(
           "success",
@@ -92,14 +87,13 @@ const Projects: React.FC = () => {
         );
       })
       .catch((error) => {
-        console.log(error);
         getToastValue(
           "error",
           error?.response?.data?.message ||
             "An error occurred. Please try again."
         );
-        setIsLoading(false);
-      });
+      })
+      .finally(() => setIsLoading(false));
   };
   // ************to deleted from projects*********
   const deleteProject = () => {
@@ -109,10 +103,8 @@ const Projects: React.FC = () => {
         headers: requestHeaders,
       })
       .then((response) => {
-        console.log("project", project);
         setProjects(response.data.data);
         setItemId(itemId);
-        setIsLoading(false);
         handleClose();
         getToastValue(
           "success",
@@ -122,7 +114,6 @@ const Projects: React.FC = () => {
         getAllProjectsList();
       })
       .catch((error) => {
-        setIsLoading(false);
         getToastValue(
           "error",
           error?.response?.data?.message ||
@@ -132,17 +123,14 @@ const Projects: React.FC = () => {
   };
   // ************get project details to view****************
   const getPtojectDetails = (itemId) => {
-    console.log("proj-details", projectDetails);
     axios
       .get(`${baseUrl}/Project/${itemId}`, {
         headers: requestHeaders,
       })
       .then((response) => {
-        console.log("projdetailsucc", response?.data);
         setProjectDetails(response?.data);
       })
       .catch((error) => {
-        console.log("faildetails", error);
         getToastValue(
           "error",
           error?.response?.data?.message ||
@@ -153,179 +141,184 @@ const Projects: React.FC = () => {
 
   useEffect(() => {
     getAllProjectsList();
-  }, [])
+  }, []);
   return (
     <>
-    <div className="header d-flex justify-content-between p-3">
-      <h3>projects</h3>
-      <button
-        onClick={navigateToNew}
-        className="btn btn-warning rounded-5 px-4"
-      >
-        <i className="fa fa-plus" aria-hidden="true"></i> &nbsp;Add New
-        Project
-      </button>
-    </div>
-    {/* table */}
-    <>
-      <div className="table-container1 vh-100">
-        <table className="table">
-          <thead className="table-head table-bg ">
-            <tr>
-              <th scope="col">Title</th>
-              <th scope="col">Description</th>
-              <th scope="col">Num Task</th>
-              <th scope="col">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {projects?.length > 0 ? (
-              projects.map((project: any) => (
-                <tr key={project?.id}>
-                  <td>{project?.title}</td>
-                  <td>{project?.description}</td>
-                  <td>{project?.task?.length}</td>
-                  <td>
-                    <i
-                      onClick={() => showViewModal(project?.id)}
-                      className="fa fa-eye  text-info px-2"
-                    ></i>
-                    <i
-                      onClick={() => showUpdateModal(project)}
-                      className="fa fa-pen  text-warning px-2"
-                    ></i>
-                    <i
-                      onClick={() => showDeleteModal(project.id)}
-                      className="fa fa-trash  text-danger"
-                    ></i>
+      <div className="header d-flex justify-content-between p-3">
+        <h3>projects</h3>
+
+        <button className="btn btn-warning rounded-5 px-4 ">
+          <Link to={"/dashboard/add-project"} className="customize-link">
+            <i className="fa fa-plus" aria-hidden="true"></i> &nbsp;Add New
+            Project
+          </Link>
+        </button>
+      </div>
+      {/* table */}
+      <>
+        <div className="table-responsive table-container1 vh-100">
+          <table className="table">
+            <thead className="table-head table-bg ">
+              <tr>
+                <th scope="col">Title</th>
+                <th scope="col">Description</th>
+                <th scope="col">Num Task</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {projects?.length > 0 ? (
+                projects.map((project: any) => (
+                  <tr key={project?.id}>
+                    <td>{project?.title}</td>
+                    <td>{project?.description}</td>
+                    <td>{project?.task?.length}</td>
+                    <td>
+                      <i
+                        onClick={() => showViewModal(project?.id)}
+                        className="fa fa-eye  text-info px-2"
+                      ></i>
+                      <i
+                        onClick={() => showUpdateModal(project)}
+                        className="fa fa-pen  text-warning px-2"
+                      ></i>
+                      <i
+                        onClick={() => showDeleteModal(project.id)}
+                        className="fa fa-trash  text-danger"
+                      ></i>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colspan="4">
+                    <NoData />
                   </td>
                 </tr>
-              ))
-            ) : (
-              <NoData />
-            )}
-          </tbody>
-        </table>
-        {/* ******************** view modal ***************************/}
-        <Modal show={modalState == "view-modal"} onHide={handleClose}>
-          <Modal.Header closeButton>
-            <h3>Project Details</h3>
-          </Modal.Header>
-          <Modal.Body>
-            <>
-              <p>
-                <span className="text-warning">Title :&nbsp;</span>
-                {projectDetails?.title}
-              </p>
-              <p>
-                <span className="text-warning">description :&nbsp;</span>
-                {projectDetails?.description}
-              </p>
-              <p>
+              )}
+            </tbody>
 
-                <span className="text-warning">creation Date :&nbsp;</span>
-                {projectDetails?.creationDate}
-              </p>
-            </>
-          </Modal.Body>
-        </Modal>
-        {/* //*****************view modal******************** */}
-        {/* ****************update modal *****************/}
-        <Modal show={modalState == "update-modal"} onHide={handleClose}>
-          <Modal.Header closeButton>
-            <h3>Update project</h3>
-          </Modal.Header>
-          <Modal.Body>
-            <p>Welcome Back! Please enter your details</p>
-            <form
-              onSubmit={handleSubmit(updateProject)}
-              action=""
-              className="form-wrapper m-auto   pt-5 pb-3 px-5"
-            >
-              <div className="form-group my-3">
-                <label className="label-title mb-2">Title</label>
-                <input
-                  {...register("title", {
-                    required: true,
-                  })}
-                  type="text"
-                  name="title"
-                  className="form-control"
-                  placeholder="Enter Title..."
-                />
+          
+          </table>
+          {/* ******************** view modal ***************************/}
+          <Modal show={modalState == "view-modal"} onHide={handleClose}>
+            <Modal.Header closeButton>
+              <h3>Project Details</h3>
+            </Modal.Header>
+            <Modal.Body>
+              <>
+                <p>
+                  <span className="text-warning">Title :&nbsp;</span>
+                  {projectDetails?.title}
+                </p>
+                <p>
+                  <span className="text-warning">description :&nbsp;</span>
+                  {projectDetails?.description}
+                </p>
+                <p>
+                  <span className="text-warning">creation Date :&nbsp;</span>
+                  {projectDetails?.creationDate}
+                </p>
+              </>
+            </Modal.Body>
+          </Modal>
+          {/* //*****************view modal******************** */}
+          {/* ****************update modal *****************/}
+          <Modal show={modalState == "update-modal"} onHide={handleClose}>
+            <Modal.Header closeButton>
+              <h3>Update project</h3>
+            </Modal.Header>
+            <Modal.Body>
+              <p>Welcome Back! Please enter your details</p>
+              <form
+                onSubmit={handleSubmit(updateProject)}
+                action=""
+                className="form-wrapper m-auto   pt-5 pb-3 px-5"
+              >
+                <div className="form-group my-3">
+                  <label className="label-title mb-2">Title</label>
+                  <input
+                    {...register("title", {
+                      required: true,
+                    })}
+                    type="text"
+                    name="title"
+                    className="form-control"
+                    placeholder="Enter Title..."
+                  />
 
-                {errors.title && errors.title.type === "required" && (
-                  <span className="text-danger ">title is required</span>
-                )}
+                  {errors.title && errors.title.type === "required" && (
+                    <span className="text-danger ">title is required</span>
+                  )}
+                </div>
+                <div className="form-group my-3">
+                  <label className="label-title mb-2">Description</label>
+                  <textarea
+                    {...register("description", {
+                      required: true,
+                    })}
+                    rows={5}
+                    type="text"
+                    name="description"
+                    className="form-control"
+                    placeholder="Enter description..."
+                  ></textarea>
+
+                  {errors.title && errors.title.type === "required" && (
+                    <span className="text-danger ">title is required</span>
+                  )}
+                </div>
+
+                <div className="form-group my-3 text-end">
+                  <button
+                    className={"btn my-3 px-4" + (isLoading ? " disabled" : "")}
+                  >
+                    {isLoading == true ? (
+                      <i className="fas fa-spinner fa-spin"></i>
+                    ) : (
+                      "Update"
+                    )}
+                  </button>
+                </div>
+              </form>
+            </Modal.Body>
+          </Modal>
+          {/***************** //update modal *****************/}
+          {/* **************** * delete modal *****************/}
+          <Modal show={modalState == "delete-modal"} onHide={handleClose}>
+            <Modal.Header closeButton>
+              <h3>delete this Project?</h3>
+            </Modal.Header>
+            <Modal.Body>
+              <div className="text-center">
+                <img src={noData} />
+                <p>
+                  are you sure you want to delete this item ? if you are sure
+                  just click on delete it
+                </p>
               </div>
-              <div className="form-group my-3">
-                <label className="label-title mb-2">Description</label>
-                <textarea
-                  {...register("description", {
-                    required: true,
-                  })}
-                  rows={5}
-                  type="text"
-                  name="description"
-                  className="form-control"
-                  placeholder="Enter description..."
-                ></textarea>
-
-                {errors.title && errors.title.type === "required" && (
-                  <span className="text-danger ">title is required</span>
-                )}
-              </div>
-
-              <div className="form-group my-3 text-end">
+              <div className="text-end">
                 <button
-                  className={"btn my-3 px-4" + (isLoading ? " disabled" : "")}
+                  onClick={deleteProject}
+                  className={
+                    "btn btn-outline-danger my-3" +
+                    (isLoading ? " disabled" : "")
+                  }
                 >
                   {isLoading == true ? (
                     <i className="fas fa-spinner fa-spin"></i>
                   ) : (
-                    "Update"
+                    "Delete this item"
                   )}
                 </button>
               </div>
-            </form>
-          </Modal.Body>
-        </Modal>
-        {/***************** //update modal *****************/}
-        {/* **************** * delete modal *****************/}
-        <Modal show={modalState == "delete-modal"} onHide={handleClose}>
-          <Modal.Header closeButton>
-            <h3>delete this Project?</h3>
-          </Modal.Header>
-          <Modal.Body>
-            <div className="text-center">
-              <img src={noData} />
-              <p>
-                are you sure you want to delete this item ? if you are sure
-                just click on delete it
-              </p>
-            </div>
-            <div className="text-end">
-              <button
-                onClick={deleteProject}
-                className={
-                  "btn btn-outline-danger my-3" +
-                  (isLoading ? " disabled" : "")
-                }
-              >
-                {isLoading == true ? (
-                  <i className="fas fa-spinner fa-spin"></i>
-                ) : (
-                  "Delete this item"
-                )}
-              </button>
-            </div>
-          </Modal.Body>
-        </Modal>
-        {/************************* * //delete modal*************** */}
-      </div>
+            </Modal.Body>
+          </Modal>
+          {/************************* * //delete modal*************** */}
+        </div>
+      </>
+      {/* table */}
     </>
-    {/* table */}
-  </>
-);
+  );
 };
 export default Projects;
