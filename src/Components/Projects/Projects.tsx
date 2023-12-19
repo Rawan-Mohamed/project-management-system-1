@@ -118,7 +118,7 @@ const Projects: React.FC = () => {
           "error",
           error?.response?.data?.message ||
             "An error occurred. Please try again."
-        );
+        ).finally(() => setIsLoading(false));
       });
   };
   // ************get project details to view****************
