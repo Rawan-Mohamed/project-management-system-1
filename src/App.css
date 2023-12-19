@@ -123,3 +123,8 @@ table td {
   padding: 1rem !important;
 }
 /* //table */
+.customize-link{
+  text-decoration: none !important;
+  color: #fff;
+  
+}
