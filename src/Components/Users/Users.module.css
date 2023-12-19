@@ -1,0 +1,43 @@
+.badgeActiveInActive{
+  color: #ffffff;
+  font-family: "Montserrat-Regular", Helvetica;
+  font-size: 16px;
+  font-weight: 250;
+  border-radius: 15px;
+  text-align: center;
+
+}
+.active {
+  background-color: #009247;
+}
+
+.inactive {
+  background-color: #922e25b2;
+}
+
+
+.blockBtn {
+  color: #121010;
+  background: rgb(255, 255, 255);
+  cursor: pointer;
+  font-size: 16px;
+  text-align: center;
+  border: none;
+  border-radius: 15px;
+}
+
+.blockBtn:hover {
+  background: red;
+}
+.title{
+  font-weight: bold;
+}
+
+.icons {
+  top: calc(15%);
+  left: 0.5rem;
+}
+form .inputIcons .form-control .inputField{
+  left: .7rem;
+  padding-left: 2.5rem;
+}
