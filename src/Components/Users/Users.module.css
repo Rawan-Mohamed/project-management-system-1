@@ -21,16 +21,10 @@
   text-align: center;
   border: none;
   border-radius: 15px;
-  /* background-color: hsl(354, 85%, 69%);
-  color: #fff;
-  border-color: #dc3545; */
 }
 
 
-/* .blockBtn:hover {
-    background-color: #db4b3b;
-    border-color: #e74c3c;
-} */
+
 
 
 .title{
@@ -45,12 +39,12 @@
 .btnactions{
   display: flex;
   align-items: center;
-  width: 150px; /* Adjust the width as needed */
+  width: 150px;
 
 }
 
 .btnactions span {
-  margin-right: 5px; /* Adjust as needed */
+  margin-right: 5px; 
 }
 
 .eyeIcon {
