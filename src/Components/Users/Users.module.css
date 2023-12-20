@@ -13,7 +13,7 @@
 }
 
 .inactive {
-  background-color: #922e25b2;
+  background-color: rgba(146, 46, 37, 0.698);
 }
 
 .blockBtn {
@@ -21,16 +21,16 @@
   text-align: center;
   border: none;
   border-radius: 15px;
-  background-color: #ef3f51;
+  /* background-color: hsl(354, 85%, 69%);
   color: #fff;
-  border-color: #dc3545;
+  border-color: #dc3545; */
 }
 
 
-.blockBtn:hover {
+/* .blockBtn:hover {
     background-color: #db4b3b;
     border-color: #e74c3c;
-}
+} */
 
 
 .title{
@@ -40,4 +40,29 @@
 .icons {
   top: 30%;
   left: 0.5rem;
+}
+
+.btnactions{
+  display: flex;
+  align-items: center;
+  width: 150px; /* Adjust the width as needed */
+
+}
+
+.btnactions span {
+  margin-right: 5px; /* Adjust as needed */
+}
+
+.eyeIcon {
+  cursor: pointer;
+}
+.blockunblock {
+  width: 85px;
+  margin-right: 5px;
+  font-family: "Montserrat-Regular", Helvetica;
+  font-size: 16px;
+  border: none;
+}
+.blockunblock:focus,.eyeIcon:focus{
+  outline: 3px solid black;
 }

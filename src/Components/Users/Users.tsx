@@ -84,9 +84,9 @@ export default function Users() {
   }
 
   useEffect(() => {
-    const timerId = setTimeout(()=>{
+    const timerId = setTimeout(() => {
       getAllUsers()
-    },500)
+    }, 500)
     return () => clearTimeout(timerId)
   }, [])
 
@@ -132,12 +132,12 @@ export default function Users() {
       <div className=''>
         <div className=' row mx-4 w-50 '>
           <div className='col-md-6'>
-          <div className='icon-input position-relative'>
-                <i className={`${style.icons} fa-solid fa-search position-absolute text-success`} />
-                <input onChange={getNameValue} placeholder='search by user name....' className='form-control ${style.inputField} my-2' type="text"
-                 style={{ paddingLeft: '2rem' }}/>
+            <div className='icon-input position-relative'>
+              <i className={`${style.icons} fa-solid fa-search position-absolute text-success`} />
+              <input onChange={getNameValue} placeholder='search by user name....' className='form-control ${style.inputField} my-2' type="text"
+                style={{ paddingLeft: '2rem' }} />
 
-              </div>
+            </div>
           </div>
         </div>
         {userList.length > 0 ?
@@ -174,12 +174,17 @@ export default function Users() {
                     <td >{user.email}</td>
                     <td >{new Date(user.group.creationDate).toLocaleDateString()}</td>
                     <td>
-
-                      <button className={`${style.blockBtn} mx-2`} onClick={() => toggleActivationStatus(user.id, user.isActivated)}>
-                        {user.isActivated ? 'Block' : 'Unblock'}
-                      </button>
+                    <div className={style.btnactions}>
+                      <span className={`p-2 mx-1`} onClick={() => toggleActivationStatus(user.id, user.isActivated)}>
+                        {user.isActivated ?
+                          <button className={`bg-danger text-white rounded-4  ${style.blockunblock} `}>Block</button> :
+                          <button className={`bg-success text-white rounded-4  ${style.blockunblock} `}>Unblock</button>
+                          // 'Block' : 'Unblock'
+                        }
+                      </span>
                       <i onClick={() => showViewModel(user.id)}
-                        className="fa-solid fa-eye text-success"></i>
+                        className={`fa-solid fa-eye text-success ${style.eyeIcon} `} tabIndex={0}></i>
+                      </div>
                     </td>
                   </tr>
 
@@ -191,7 +196,7 @@ export default function Users() {
           <NoData />
 
         }
-</div>
+      </div>
     </>
   )
 }
