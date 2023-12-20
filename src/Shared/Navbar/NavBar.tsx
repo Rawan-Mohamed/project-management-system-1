@@ -26,8 +26,9 @@ export default function NavBar() {
 
               <img src={avatar} className='m-3 rounded-circle' alt='user-image' />
               {/* {userData?.userName || "user"} */}
-              <a className="nav-link">{userData?.userName || "user"}
-                <p>{userData.userEmail}</p>
+              <a className="nav-link">
+                {userData?.userName || "user"}
+                <p>{userData?.userEmail}</p>
               </a>
 
 

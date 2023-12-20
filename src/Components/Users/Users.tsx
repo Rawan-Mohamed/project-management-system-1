@@ -84,12 +84,14 @@ export default function Users() {
   }
 
   useEffect(() => {
-    getAllUsers()
+    const timerId = setTimeout(()=>{
+      getAllUsers()
+    },500)
+    return () => clearTimeout(timerId)
   }, [])
 
   // Search by name
-  const getNameValue = (input) => {
-    console.log(input);
+  const getNameValue = (input: string) => {
     setSearchString(input.target.value);
     getAllUsers(1, input.target.value);
   }
@@ -127,62 +129,69 @@ export default function Users() {
 
       </div>
 
-      {userList.length > 0 ?
-        <div className='table-container1 vh-100'>
-          <div className='w-50'>
-            <div>
-              <input onChange={getNameValue} placeholder='search by user name....' className='form-control my-2' type="text" />
-            </div>
+      <div className=''>
+        <div className=' row mx-4 w-50 '>
+          <div className='col-md-6'>
+          <div className='icon-input position-relative'>
+                <i className={`${style.icons} fa-solid fa-search position-absolute text-success`} />
+                <input onChange={getNameValue} placeholder='search by user name....' className='form-control ${style.inputField} my-2' type="text"
+                 style={{ paddingLeft: '2rem' }}/>
+
+              </div>
           </div>
-
-          <table className="table">
-            <thead className='table-head table-bg'>
-              <tr>
-
-                <th scope="col">user Name</th>
-                <th scope="col">Statues</th>
-                <th scope="col">Phone Number</th>
-                <th scope="col">Email</th>
-                <th scope="col">Date Created</th>
-                <th scope="col">Action</th>
-
-              </tr>
-            </thead>
-            <tbody>
-              {userList.map((user) => (
-
-                <tr key={user.id} >
-
-                  <td >{user.userName}</td>
-                  <td >
-                    {user.isActivated ?
-                      (
-                        <div className={`${style.active} ${style.badgeActiveInActive}`}>Active</div>) : (
-                        <div className={`${style.inactive} ${style.badgeActiveInActive}`}>InActive</div>
-                      )}
-                  </td>
-                  <td >{user.phoneNumber}</td>
-                  <td >{user.email}</td>
-                  <td >{new Date(user.group.creationDate).toLocaleDateString()}</td>
-                  <td>
-
-                    <button className={`${style.blockBtn} mx-2`} onClick={() => toggleActivationStatus(user.id, user.isActivated)}>
-                      {user.isActivated ? 'Block' : 'Unblock'}
-                    </button>
-                    <i onClick={() => showViewModel(user.id)}
-                      className="fa-solid fa-eye text-success"></i>
-                  </td>
-                </tr>
-
-              ))}
-            </tbody>
-          </table>
         </div>
-        :
-        <NoData />
+        {userList.length > 0 ?
+          <div className='table-container1 vh-100'>
 
-      }
 
+            <table className="table">
+              <thead className='table-head table-bg'>
+                <tr>
+
+                  <th scope="col">user Name</th>
+                  <th scope="col">Statues</th>
+                  <th scope="col">Phone Number</th>
+                  <th scope="col">Email</th>
+                  <th scope="col">Date Created</th>
+                  <th scope="col">Action</th>
+
+                </tr>
+              </thead>
+              <tbody>
+                {userList.map((user) => (
+
+                  <tr key={user.id} >
+
+                    <td >{user.userName}</td>
+                    <td >
+                      {user.isActivated ?
+                        (
+                          <div className={`${style.active} ${style.badgeActiveInActive}`}>Active</div>) : (
+                          <div className={`${style.inactive} ${style.badgeActiveInActive}`}>InActive</div>
+                        )}
+                    </td>
+                    <td >{user.phoneNumber}</td>
+                    <td >{user.email}</td>
+                    <td >{new Date(user.group.creationDate).toLocaleDateString()}</td>
+                    <td>
+
+                      <button className={`${style.blockBtn} mx-2`} onClick={() => toggleActivationStatus(user.id, user.isActivated)}>
+                        {user.isActivated ? 'Block' : 'Unblock'}
+                      </button>
+                      <i onClick={() => showViewModel(user.id)}
+                        className="fa-solid fa-eye text-success"></i>
+                    </td>
+                  </tr>
+
+                ))}
+              </tbody>
+            </table>
+          </div>
+          :
+          <NoData />
+
+        }
+</div>
     </>
   )
 }
