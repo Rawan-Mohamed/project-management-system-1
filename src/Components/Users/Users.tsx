@@ -58,7 +58,6 @@ export default function Users() {
     })
       .then((response) => {
         console.log(response);
-
         getAllUsers();
         getToastValue("success", response?.data?.message || "Updated Sucessfully")
       })
@@ -82,13 +81,20 @@ export default function Users() {
     setModelState("view-model")
     getUsersDetails(id)
   }
+  //handle pree view icon
+  const handleKeyPress = (event, id) => {
+    if (event.key === 'Enter' || event.key === ' ' || event.key === 'Spacebar') {
+      event.preventDefault(); // Prevents spacebar from triggering a click (form submission, etc.)
+      showViewModel(id);
+    }
+  };
 
   useEffect(() => {
     const timerId = setTimeout(() => {
-      getAllUsers()
+      getAllUsers(1,searchString)
     }, 500)
     return () => clearTimeout(timerId)
-  }, [])
+  }, [searchString])
 
   // Search by name
   const getNameValue = (input: string) => {
@@ -172,18 +178,20 @@ export default function Users() {
                     </td>
                     <td >{user.phoneNumber}</td>
                     <td >{user.email}</td>
-                    <td >{new Date(user.group.creationDate).toLocaleDateString()}</td>
+                    <td >{new Date(user.creationDate).toLocaleDateString()}</td>
                     <td>
-                    <div className={style.btnactions}>
-                      <span className={`p-2 mx-1`} onClick={() => toggleActivationStatus(user.id, user.isActivated)}>
-                        {user.isActivated ?
-                          <button className={`bg-danger text-white rounded-4  ${style.blockunblock} `}>Block</button> :
-                          <button className={`bg-success text-white rounded-4  ${style.blockunblock} `}>Unblock</button>
-                          // 'Block' : 'Unblock'
-                        }
-                      </span>
-                      <i onClick={() => showViewModel(user.id)}
-                        className={`fa-solid fa-eye text-success ${style.eyeIcon} `} tabIndex={0}></i>
+                      <div className={style.btnactions}>
+                        <span className={`p-2 mx-1`} onClick={() => toggleActivationStatus(user.id, user.isActivated)}
+                        >
+                          {user.isActivated ?
+                            <button className={`bg-danger text-white rounded-4  ${style.blockunblock} `}>Block</button> :
+                            <button className={`bg-success text-white rounded-4  ${style.blockunblock} `}>Unblock</button>
+                            // 'Block' : 'Unblock'
+                          }
+                        </span>
+                        <i onClick={() => showViewModel(user.id)}
+                          className={`fa-solid fa-eye text-success ${style.eyeIcon} `}
+                          onKeyDown={(e) => handleKeyPress(e, user.id)} tabIndex={0}></i>
                       </div>
                     </td>
                   </tr>
