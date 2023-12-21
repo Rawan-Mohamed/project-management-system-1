@@ -59,7 +59,7 @@ const Projects: React.FC = () => {
     axios
       .get(`${baseUrl}/Project/manager`, { headers: requestHeaders })
       .then((response) => {
-        setProjects(response?.data);
+        setProjects(response?.data?.data);
       })
       .catch((error) => {
         getToastValue(
