@@ -10,3 +10,11 @@ export interface FormValues {
     title: string;
     description: string;
   }
+
+  export interface IAuth {
+    userData: string;
+    saveUserData: () => void;
+    requestHeaders: string;
+    baseUrl: string;
+    userRole: string;
+  }

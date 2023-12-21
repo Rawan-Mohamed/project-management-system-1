@@ -1,5 +1,4 @@
-// nadia.mohamed.taha166@gmail.com
-// @Password123!
+
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -7,13 +6,15 @@ import { AuthContext } from "./../../Context/AuthContext";
 import { ToastContext } from "../../Context/ToastContext";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { ProjectContext } from '../../Context/ProjectContext';
-import { FormValues, projectType } from './../../Types/Types';
+import { FormValues, projectType ,IAuth} from './../../Types/Types';
 
 
 const AddTask: React.FC = () => {
-  const { baseUrl, requestHeaders }: any = useContext(AuthContext);
-  const { getToastValue }: any = useContext(ToastContext);
-  const {  projects }: any = useContext(ProjectContext);
+  const { baseUrl, requestHeaders }:any
+  //Pick<IAuth, 'baseUrl','requestHeaders'> 
+  = useContext(AuthContext);
+  const { getToastValue }: void = useContext(ToastContext);
+  const {  projects }: projectType = useContext(ProjectContext);
   // console.log(projects, "from addtasks");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
