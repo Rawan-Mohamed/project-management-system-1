@@ -1,7 +1,10 @@
-// nadia.mohamed.taha166@gmail.com
-// @Password123!
 import axios from "axios";
-import { useContext, useEffect, useState } from "react";
+import {
+  MouseEvent,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import NoData from "./../../Shared/NoData/NoData";
 import noData from "./../../assets/images/no-data.png";
 import Modal from "react-bootstrap/Modal";
@@ -10,13 +13,15 @@ import { AuthContext } from "./../../Context/AuthContext";
 import { Link } from "react-router-dom";
 import { ToastContext } from "../../Context/ToastContext";
 import { useForm } from "react-hook-form";
+import style from "../Projects/Projects.module.css";
 
 const Projects: React.FC = () => {
   const { baseUrl, requestHeaders }: any = useContext(AuthContext);
   const { getToastValue }: any = useContext(ToastContext);
-  const [project, setProject] = useState({});
+  // const [project, setProject] = useState({});
   const [projectDetails, setProjectDetails] = useState({});
   const [projects, setProjects] = useState([]);
+  const [searchByName, setSearchByName] = useState('');
   const navigate = useNavigate();
   let [itemId, setItemId]: any = useState(0);
   const [isLoading, setIsLoading] = useState(false);
@@ -36,7 +41,7 @@ const Projects: React.FC = () => {
   // ********to close modal*******************
   const handleClose = () => setModalState("close");
   // ********to show view modal*******************
-  const showViewModal = (id: any) => {
+  const showViewModal = (id: number) => {
     setItemId(id);
     setModalState("view-modal");
     getPtojectDetails(id);
@@ -50,15 +55,23 @@ const Projects: React.FC = () => {
   };
   // ********to show delete modal*******************
 
-  const showDeleteModal = (itemId: any) => {
+  const showDeleteModal = (itemId: number) => {
     setItemId(itemId);
     setModalState("delete-modal");
   };
   // **********get all projects*****************
-  const getAllProjectsList = () => {
+  const getAllProjectsList = (pageNo: number, title: string) => {
     axios
-      .get(`${baseUrl}/Project/manager`, { headers: requestHeaders })
+      .get(`${baseUrl}/Project/manager`, {
+        headers: requestHeaders,
+        params: {
+          pageSize: 5,
+          pageNumber: pageNo,
+          title: title,
+        },
+      })
       .then((response) => {
+        console.log("list", response?.data?.data);
         setProjects(response?.data?.data);
       })
       .catch((error) => {
@@ -122,7 +135,7 @@ const Projects: React.FC = () => {
       });
   };
   // ************get project details to view****************
-  const getPtojectDetails = (itemId) => {
+  const getPtojectDetails = (itemId: number) => {
     axios
       .get(`${baseUrl}/Project/${itemId}`, {
         headers: requestHeaders,
@@ -138,25 +151,55 @@ const Projects: React.FC = () => {
         );
       });
   };
-
+  // **********search by proj name***********************
+  const getProjectTitleValue = (e: MouseEvent) => {
+    console.log("search", e.target.value);
+    getAllProjectsList(1, e.target.value);
+    setSearchByName(e.target.value);
+    console.log("searchbyname is", searchByName);
+   
+  };
+  // *****************************************************
   useEffect(() => {
-    getAllProjectsList();
+      getAllProjectsList(1,searchByName);
   }, []);
+  // useEffect(() => {
+  //   const timerId = setTimeout(() => {
+  //     getAllProjectsList(1, searchByName);
+  //   }, 500);
+  //   return () => clearTimeout(timerId);
+  // }, [searchByName]);
+
   return (
     <>
       <div className="header d-flex justify-content-between p-3">
         <h3>projects</h3>
 
-        
-          <Link to={"/dashboard/add-project"} className="btn btn-warning rounded-5 px-4 customize-link">
-            <i className="fa fa-plus" aria-hidden="true"></i> &nbsp;Add New
-            Project
-          </Link>
-        
+        <Link
+          to={"/dashboard/add-project"}
+          className="btn btn-warning rounded-5 px-4 customize-link"
+        >
+          <i className="fa fa-plus" aria-hidden="true"></i> &nbsp;Add New
+          Project
+        </Link>
       </div>
       {/* table */}
       <>
         <div className="table-responsive table-container1 vh-100">
+          <div className="w-50">
+            <div className="icon-input position-relative">
+              <i
+                className={`${style.icons} fa-solid fa-search position-absolute text-success`}
+              />
+              <input
+                onChange={getProjectTitleValue}
+                placeholder="search by project name...."
+                className="form-control  my-2"
+                type="text"
+                style={{ paddingLeft: "2rem" }}
+              />
+            </div>
+          </div>
           <table className="table">
             <thead className="table-head table-bg ">
               <tr>
@@ -197,8 +240,6 @@ const Projects: React.FC = () => {
                 </tr>
               )}
             </tbody>
-
-          
           </table>
           {/* ******************** view modal ***************************/}
           <Modal show={modalState == "view-modal"} onHide={handleClose}>
