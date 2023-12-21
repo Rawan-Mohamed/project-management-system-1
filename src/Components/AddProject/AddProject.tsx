@@ -5,7 +5,7 @@ import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "./../../Context/AuthContext";
 import { ToastContext } from "../../Context/ToastContext";
-import { SubmitHandler,useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 
 const AddProject: React.FC = () => {
   const { baseUrl, requestHeaders }: any = useContext(AuthContext);
@@ -23,12 +23,10 @@ const AddProject: React.FC = () => {
   } = useForm<FormValues>();
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    setIsLoading(true)
+    setIsLoading(true);
     axios
       .post(`${baseUrl}/Project`, data, { headers: requestHeaders })
       .then((response) => {
-
-        setIsLoading(false)
         getToastValue(
           "success",
           response?.data?.message || "Project added suceessfully"
@@ -36,13 +34,13 @@ const AddProject: React.FC = () => {
         navigate("/dashboard/projects");
       })
       .catch((error) => {
-        setIsLoading(false)
         getToastValue(
           "error",
           error?.response?.data?.message ||
             "An error occurred. Please try again."
         );
-      });
+      })
+      .finally(() => setIsLoading(false));
   };
 
   return (
@@ -91,20 +89,15 @@ const AddProject: React.FC = () => {
           </div>
 
           <div className="form-group my-3 text-end">
-          <button
-
-                 className={
-                   "btn my-3 px-4" +
-                   (isLoading ? " disabled" : "")
-                 }
-               >
-                 {isLoading == true ? (
-                 <i className="fas fa-spinner fa-spin"></i>
-               ) : (
-                 "Send"
-               )}
-               </button>
-
+            <button
+              className={"btn my-3 px-4" + (isLoading ? " disabled" : "")}
+            >
+              {isLoading == true ? (
+                <i className="fas fa-spinner fa-spin"></i>
+              ) : (
+                "Send"
+              )}
+            </button>
           </div>
         </form>
       </div>

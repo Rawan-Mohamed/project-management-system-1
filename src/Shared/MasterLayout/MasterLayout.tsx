@@ -4,7 +4,7 @@ import NavBar from "../Navbar/NavBar";
 import { Outlet } from "react-router-dom";
 import styles from "./MasterLayout.module.css";
 
-export default function MasterLayout({ userData }) {
+export default function MasterLayout() {
   return (
     <>
       <div className="container-fluid">
@@ -12,7 +12,7 @@ export default function MasterLayout({ userData }) {
           {/* Navbar at the top */}
           <div className="col-12">
             <div className="">
-              <NavBar userData={userData} />
+              <NavBar/>
             </div>
           </div>
         </div>
