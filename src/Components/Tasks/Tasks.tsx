@@ -1,23 +1,14 @@
-// nadia.mohamed.taha166@gmail.com
-// @Password123!
 
-//token
-//eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjYsInJvbGVzIjpbIk1hbmFnZXIiLCJjYW5BZGRVc2VyIiwiY2FuVXBkYXRlVXNlciIsImNhbkRlbGV0ZVVzZXIiLCJjYW5HZXRVc2VyQnlJZCIsImNhbkdldEN1cnJlbnRVc2VyIiwiY2FuR2V0QWxsVXNlcnMiLCJjYW5DaGFuZ2VQYXNzd29yZCJdLCJ1c2VyTmFtZSI6Im5hZGlhMSIsInVzZXJFbWFpbCI6Im5hZGlhLm1vaGFtZWQudGFoYTE2NkBnbWFpbC5jb20iLCJ1c2VyR3JvdXAiOiJNYW5hZ2VyIiwiaWF0IjoxNzAzMDY4MDcyLCJleHAiOjE3MDY2NjgwNzJ9.ECN8Ispoty_gt3zS4q6hPw0yxLUupaEYCas3hbJ_Y8IXapR39ZQi9WA5oyjIrX10IspPUiWa27ne995iQHexj46cyKvmTPE2PdsL7pIR-xt51z2Vt9pbl6UGfjo6Rgj8UAk0_9AFB7aLR8coS4uBDt3iJBvucr7uXXzA334memARCvDRe981NkoKZ5fddkHgEE3OWGFTOjXqxgd8C-mFaxaVtrxaUw_CaXfg4l067__MjDCnbQLO3p88fiYgeQ1OBeLzoJ9V6EuYYqGjTUNiUe_LS2AXqx4dvN6RiFNCYwQX1zqSiU814RziffSuat_ZdL9PJtPuYJukQ0ygb4A-Og
-
-//user//samiya.bouridane@gmail.com
-//@Password123!
-//manager@gmail.com
-//@Password123!
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 // import noData from "./../../assets/images/no-data.png";
 // import Modal from "react-bootstrap/Modal";
-import NoData from './../../Shared/noData/noData';
+
 import { AuthContext } from "./../../Context/AuthContext";
 import { ToastContext } from "../../Context/ToastContext";
-import { useForm } from "react-hook-form";
+// import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-
+import NoData from "../../Shared/NoData/NoData";
 
 
 const Tasks: React.FC  = () => {
@@ -37,25 +28,30 @@ const Tasks: React.FC  = () => {
   //   formState: { errors },
   // } = useForm<FormValues>();
 
-  // **********get all tasks*****************
-  const getTasksList = () => {
-    setIsLoading(true);
-    axios
-      .get(`${baseUrl}/Task/manager`, 
-      { headers: requestHeaders })
+  // **********get all tasks**********pageSize:number, pageNumber:number*******
+  const getTasksList =  async(pageSize:number, pageNumber:number) => {
+    // setIsLoading(true);
+    await axios
+      .get(`${baseUrl}/Task/manager?pageSize=10&pageNumber=1`, 
+      { headers: requestHeaders ,
+        // params:{
+        //   pageSize: 5,
+        //   pageNumber: pageNumber,
+        // }
+      })
       .then((response) => {
-        setIsLoading(false);
+        // setIsLoading(false);
         console.log(response.data);
-        setTasks(response?.data);
+        // setTasks(response?.data?.data);
       })
       .catch((error) => {
-        setIsLoading(false);
+        // setIsLoading(false);
         console.log(error);
-        getToastValue(
-          "error",
-          error?.response?.data?.message ||
-            "An error occurred. Please try again."
-        );
+        // getToastValue(
+        //   "error",
+        //   error?.response?.data?.message ||
+        //     "An error occurred. Please try again."
+        // );
       });
   };
   // **********navigate to add task******************
@@ -65,6 +61,7 @@ const Tasks: React.FC  = () => {
   useEffect(() => {
     getTasksList();
   }, [])
+
   return (
     <>
     <div className="header d-flex justify-content-between p-3">
@@ -84,20 +81,25 @@ const Tasks: React.FC  = () => {
           <thead className="table-head table-bg ">
             <tr>
               <th scope="col">Title</th>
-              <th scope="col">Description</th>
               <th scope="col">Status</th>
+              <th scope="col">Description</th>
+              
               <th scope="col">User</th>   
               <th scope="col">Date Created</th>
+              <th scope="col">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {tasks?.length > 0 ? (
+            {
+            // tasks?.length > 0 ? (
               tasks.map((task: any) => (
                 <tr key={task?.id}>
-                  <td>{task?.title}</td>
-                  <td>{task?.description}</td>
-                  <td>Status</td>
-                  <td>Status</td>
+                  <th scope="row">{task?.title}</th>
+                  <td>{task?.status}</td> 
+                  <td>{task?.description}</td> 
+                  
+                  <td>User</td>
+                  <td>{task?.description}</td>  
                   <td>
                     <i
                       // onClick={() => showViewModal(project?.id)}
@@ -114,9 +116,10 @@ const Tasks: React.FC  = () => {
                   </td>
                 </tr>
               ))
-            ) : (
-              <NoData/>
-            )}
+            // ) : (
+            //   <NoData/>
+            // )
+            }
           </tbody>
         </table>
 
