@@ -21,7 +21,7 @@ const Projects: React.FC = () => {
   // const [project, setProject] = useState({});
   const [projectDetails, setProjectDetails] = useState({});
   const [projects, setProjects] = useState([]);
-  const [searchByName, setSearchByName] = useState('');
+  const [searchString, setSearchString] = useState('');
   const navigate = useNavigate();
   let [itemId, setItemId]: any = useState(0);
   const [isLoading, setIsLoading] = useState(false);
@@ -155,20 +155,20 @@ const Projects: React.FC = () => {
   const getProjectTitleValue = (e: MouseEvent) => {
     console.log("search", e.target.value);
     getAllProjectsList(1, e.target.value);
-    setSearchByName(e.target.value);
-    console.log("searchbyname is", searchByName);
+    setSearchString(e.target.value);
+    console.log("searchString is", searchString);
    
   };
   // *****************************************************
   useEffect(() => {
-      getAllProjectsList(1,searchByName);
+      getAllProjectsList(1,searchString);
   }, []);
   // useEffect(() => {
   //   const timerId = setTimeout(() => {
-  //     getAllProjectsList(1, searchByName);
+  //     getAllProjectsList(1, searchString);
   //   }, 500);
   //   return () => clearTimeout(timerId);
-  // }, [searchByName]);
+  // }, [searchString]);
 
   return (
     <>
