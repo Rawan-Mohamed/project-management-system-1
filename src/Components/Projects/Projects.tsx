@@ -153,10 +153,9 @@ const Projects: React.FC = () => {
   };
   // **********search by proj name***********************
   const getProjectTitleValue = (e: MouseEvent) => {
-    console.log("search", e.target.value);
+   
     getAllProjectsList(1, e.target.value);
     setSearchString(e.target.value);
-    console.log("searchString is", searchString);
    
   };
   // *****************************************************
