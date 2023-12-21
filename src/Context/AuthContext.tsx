@@ -5,13 +5,18 @@ import { jwtDecode } from "jwt-decode";
 export interface IAuth {
   userData: string;
   saveUserData: () => void;
-  requestHeaders: any;
+  requestHeaders: string;
   baseUrl: string;
   userRole: string;
 }
 
 // Create the AuthContext and set the initial value to null
-export const AuthContext = createContext<IAuth | null>(null);
+export const AuthContext = createContext<IAuth>({
+  userData: '', 
+  saveUserData: () => {},
+  requestHeaders: '',
+  baseUrl: '',
+  userRole: ''});
 
 // Define the props for AuthContextProvider component
 interface AuthContextProviderProps {
