@@ -81,17 +81,10 @@ export default function Users() {
     setModelState("view-model")
     getUsersDetails(id)
   }
-  //handle pree view icon
-  const handleKeyPress = (event, id) => {
-    if (event.key === 'Enter' || event.key === ' ' || event.key === 'Spacebar') {
-      event.preventDefault(); // Prevents spacebar from triggering a click (form submission, etc.)
-      showViewModel(id);
-    }
-  };
 
   useEffect(() => {
     const timerId = setTimeout(() => {
-      getAllUsers(1,searchString)
+      getAllUsers(1, searchString)
     }, 500)
     return () => clearTimeout(timerId)
   }, [searchString])
@@ -189,9 +182,11 @@ export default function Users() {
                             // 'Block' : 'Unblock'
                           }
                         </span>
-                        <i onClick={() => showViewModel(user.id)}
-                          className={`fa-solid fa-eye text-success ${style.eyeIcon} `}
-                          onKeyDown={(e) => handleKeyPress(e, user.id)} tabIndex={0}></i>
+
+                        <button className=' border-0 bg-white' onClick={() => showViewModel(user.id)}  >
+                          <i className={`fa-solid fa-eye text-success ${style.eyeIcon} `}></i>
+                        </button>
+
                       </div>
                     </td>
                   </tr>
