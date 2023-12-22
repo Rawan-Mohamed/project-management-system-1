@@ -14,7 +14,7 @@ const AddTask: React.FC = () => {
   //Pick<IAuth, 'baseUrl','requestHeaders'> 
   = useContext(AuthContext);
   const { getToastValue }: void = useContext(ToastContext);
-  const {  projects }: projectType = useContext(ProjectContext);
+  const {  projects }: projectType[] = useContext(ProjectContext);
   // console.log(projects, "from addtasks");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
