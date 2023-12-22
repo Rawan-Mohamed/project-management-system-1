@@ -8,28 +8,21 @@ import "react-toastify/dist/ReactToastify.css";
 import "./index.css";
 import { AuthContextProvider } from "./Context/AuthContext.tsx";
 import ToastContextProvider from "./Context/ToastContext";
+import { ProjectContextProvider } from './Context/ProjectContext';
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   // <React.StrictMode>
     <AuthContextProvider>
+       <ProjectContextProvider>
       <ToastContextProvider>
         <App />
       </ToastContextProvider>
+      </ProjectContextProvider>
     </AuthContextProvider>
   // </React.StrictMode>
 );
 
 
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  // <React.StrictMode>
-    <AuthContextProvider>
-      <ToastContextProvider>
-      <App />
-      </ToastContextProvider>
 
-    </AuthContextProvider>
-
-  // </React.StrictMode>,
-)
 
