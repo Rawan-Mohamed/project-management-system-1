@@ -148,7 +148,7 @@ const Projects: React.FC = () => {
         <h3>projects</h3>
 
         
-          <Link to={"/dashboard/add-project"} className="btn btn-warning rounded-5 px-4 customize-link">
+          <Link to={"/add-project"} className="btn btn-warning rounded-5 px-4 customize-link">
             <i className="fa fa-plus" aria-hidden="true"></i> &nbsp;Add New
             Project
           </Link>

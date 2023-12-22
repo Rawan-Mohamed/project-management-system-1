@@ -1,6 +1,3 @@
-// nadia.mohamed.taha166@gmail.com
-// @Password123!
-
 import axios from "axios";
 import { useContext } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -50,13 +47,13 @@ const RequestReset: React.FC = () => {
   return (
     <div className=" vh-100 auth-container d-flex justify-content-center align-items-center flex-column">
       <div className="text-center ">
-        <img src={logo} alt="" className="img-fluid" />
+        <img src={logo} alt="logo" className="img-fluid" />
       </div>
-      <div className="w-50">
+      <div className="w-50 mb-5">
         <form
           onSubmit={handleSubmit(onSubmit)}
           action=""
-          className="login-wrapper m-auto w-75 my-2 py-3 px-5"
+          className="login-wrapper m-auto  mt-3 py-3 px-5"
         >
           <p className="text-white">welcome to PMS</p>
           <h2 className="title mb-5">Request reset password</h2>

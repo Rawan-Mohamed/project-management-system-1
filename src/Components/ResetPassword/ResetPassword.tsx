@@ -1,6 +1,3 @@
-// nadia.mohamed.taha166@gmail.com
-// @Password123!
-
 import axios from "axios";
 import { useContext } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -52,19 +49,19 @@ const ResetPassword: React.FC = () => {
   };
 
   return (
-    <div className=" vh-100 auth-container d-flex justify-content-center align-items-center flex-column">
+    <div className="vh-100 auth-container d-flex justify-content-center align-items-center flex-column">
       <div className="text-center ">
-        <img src={logo} alt="" className="img-fluid" />
+        <img src={logo} alt="logo" className="img-fluid" />
       </div>
-      <div className="w-75">
+      <div className="w-75 mb-5">
         <form
           onSubmit={handleSubmit(onSubmit)}
           action=""
-          className="login-wrapper m-auto w-75 my-2 py-3 px-5"
+          className="login-wrapper m-auto  mt-1 py-2 px-5"
         >
           <p className="text-white">welcome to PMS</p>
-          <h2 className="title mb-5">Reset password</h2>
-          <div className="form-group my-3">
+          <h2 className="title mb-4">Reset password</h2>
+          <div className="form-group my-1">
             <label className="label-title mb-2">E-mail</label>
             <input
               {...register("email", {
@@ -85,8 +82,8 @@ const ResetPassword: React.FC = () => {
               <span className="text-danger ">Email is invalid</span>
             )}
           </div>
-          <div className="form-group my-3">
-            <label className="label-title mb-2">OTP Verification</label>
+          <div className="form-group my-1">
+            <label className="label-title mb-1">OTP Verification</label>
              <input
               {...register("seed", {
                 required: true,
