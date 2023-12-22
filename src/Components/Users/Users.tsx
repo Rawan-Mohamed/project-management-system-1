@@ -6,7 +6,7 @@ import Modal from 'react-bootstrap/Modal';
 import style from '../Users/Users.module.css';
 import noData from "../../../src/assets/images/no-data.png"
 import NoData from '../../Shared/NoData/NoData';
-import debounce from 'lodash/debounce';
+
 
 export default function Users() {
 
