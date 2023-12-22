@@ -61,6 +61,9 @@ form{
   border-bottom: 2px solid #fff !important;
   border-radius: 0 !important;
 }
+.custom-input::placeholder {
+  color: rgb(239, 228, 228) !important; /* Set the desired color */
+}
 .btn{
   background-color: var(--main-color) !important;
   border-radius: 2rem !important;
