@@ -24,6 +24,9 @@ body,
   background-color: rgba(49, 89, 81, 0.9);
   border-radius: 20px;
 }
+.row{
+  margin-right: 0 !important;
+}
 .form-wrapper {
   background-color: #fff !important;
   border-radius: 20px;
@@ -126,5 +129,21 @@ table td {
 .customize-link{
   text-decoration: none !important;
   color: #fff;
+  
+}
+/* **************screens************* */
+/* small screen*/
+
+@media only screen and (max-width: 576px) {
+ h2 {
+    font-size: 15px !important;
+  }
+}
+
+/* medium screen*/
+@media only screen and (max-width: 768px) {
+  h2 {
+    font-size: 22px !important;
+  }
   
 }

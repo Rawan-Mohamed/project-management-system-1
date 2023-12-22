@@ -51,7 +51,7 @@ const VerifyUser: React.FC  = () => {
       <div className="row vh-100 justify-content-center align-items-center">
         <div className="col-md-6">
           <div className="p-2">
-            <div className="logo-cont text-center mb-3">
+            <div className="logo-cont text-center mb-1">
               <img src={logo} className="w-50" alt="logo" />
             </div>
             <form
@@ -95,7 +95,7 @@ const VerifyUser: React.FC  = () => {
                   <span className="text-danger">Verification code is required</span>
                 )}
               </div>
-              <div className="form-group my-3">
+              <div className="form-group my-1">
                 <button type="submit" className="btn btn-success w-100">
                   Verify
                 </button>
