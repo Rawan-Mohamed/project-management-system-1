@@ -1,4 +1,5 @@
 import noData from "./../../assets/images/no-data.png";
+
 export default function NoData() {
   return (
     <div className="text-center bg-white ">

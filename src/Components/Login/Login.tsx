@@ -1,6 +1,3 @@
-// nadia.mohamed.taha166@gmail.com
-// @Password123!
-
 import axios from 'axios';
 import { useContext } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -34,7 +31,7 @@ const Login: React.FC = ()=> {
       localStorage.setItem('userToken', response.data.token )
       saveUserData();
       navigate('/dashboard');
-      getToastValue("success", "Loged in successfully!")
+      getToastValue("success", "Login successfully!")
     })
     .catch((error)=>{
       console.log(error);
@@ -44,13 +41,13 @@ const Login: React.FC = ()=> {
 
 
   return (
-    <div className=' vh-100 auth-container d-flex justify-content-center align-items-center flex-column'>
-        <div className="text-center mb-2">
-          <img src={logo} alt="" className='img-fluid' />
+    <div className='vh-100 auth-container d-flex justify-content-center align-items-center flex-column'>
+        <div className="text-center">
+          <img src={logo} alt="logo" className='img-fluid' />
         </div>
-        <div className=' w-50 h-50'>
+        <div className='w-50 mb-5'>
           <form onSubmit={handleSubmit(onSubmit)}
-                action="" className="login-wrapper m-auto w-75 my-5 py-3 px-5">
+                action="" className="login-wrapper m-auto mt-1 py-3 px-5">
                   <p className='text-white'>welcome to PMS</p>
                   <h2 className='title mb-5'>Login</h2>
                 <div className="form-group my-3">

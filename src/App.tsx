@@ -18,6 +18,7 @@ import ChangePassword from './Components/ChangePassword/ChangePassword';
 import ProtectedRoute from './Shared/ProtectedRoute/ProtectedRoute';
 import { ToastContainer } from 'react-toastify';
 import AddProject from './Components/AddProject/AddProject';
+import AddTask from './Components/AddTask/AddTask';
 
 function App() {
   let {userData,saveUserData,userRole}= useContext(AuthContext);
@@ -50,6 +51,7 @@ function App() {
       { path: 'add-project', element: <AddProject /> },
       { path: 'users', element: <Users /> },
       { path: 'tasks', element: <Tasks /> },
+      { path: 'add-task', element: <AddTask /> },
     ]
   }]);
 

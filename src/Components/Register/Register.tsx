@@ -61,13 +61,13 @@ const Register: React.FC = () => {
     <div className="auth-container container-fluid">
     <div className="row vh-100 justify-content-center align-items-center">
       <div className="col-md-6">
-        <div className=" p-2">
+        <div className="p-2">
           <div className="logo-cont text-center mb-3">
             <img src={logo} className="w-50" alt="logo" />
           </div>
           <form
             onSubmit={handleSubmit(onSubmit)}
-            className="m-auto w-75 p-5 rounded-4"
+            className="m-auto w-100 p-5 rounded-4"
           >
             <p className="text-white">Welcome to PMs</p>
             <h2 className="title">Create New Account</h2>
