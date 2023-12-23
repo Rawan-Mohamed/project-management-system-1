@@ -1,15 +1,13 @@
-// nadia.mohamed.taha166@gmail.com
-// @Password123!
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import NoData from "./../../Shared/NoData/NoData";
 import noData from "./../../assets/images/no-data.png";
 import Modal from "react-bootstrap/Modal";
-import { useNavigate } from "react-router-dom";
 import { AuthContext } from "./../../Context/AuthContext";
 import { Link } from "react-router-dom";
 import { ToastContext } from "../../Context/ToastContext";
 import { useForm } from "react-hook-form";
+import style from "../Projects/Projects.module.css";
 
 const Projects: React.FC = () => {
   const { baseUrl, requestHeaders }: any = useContext(AuthContext);
@@ -17,7 +15,7 @@ const Projects: React.FC = () => {
   const [project, setProject] = useState({});
   const [projectDetails, setProjectDetails] = useState({});
   const [projects, setProjects] = useState([]);
-  const navigate = useNavigate();
+
   let [itemId, setItemId]: any = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -31,12 +29,14 @@ const Projects: React.FC = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<FormValues>();
+  // *************************
+
   // **********to use more than one modal in same component**********
   const [modalState, setModalState] = useState("close");
   // ********to close modal*******************
   const handleClose = () => setModalState("close");
   // ********to show view modal*******************
-  const showViewModal = (id: any) => {
+  const showViewModal = (id: number) => {
     setItemId(id);
     setModalState("view-modal");
     getPtojectDetails(id);
@@ -50,15 +50,22 @@ const Projects: React.FC = () => {
   };
   // ********to show delete modal*******************
 
-  const showDeleteModal = (itemId: any) => {
+  const showDeleteModal = (itemId: number) => {
     setItemId(itemId);
     setModalState("delete-modal");
   };
   // **********get all projects*****************
-  const getAllProjectsList = () => {
+  const getAllProjectsList = (pageNo: number = 1) => {
     axios
-      .get(`${baseUrl}/Project/manager`, { headers: requestHeaders })
+      .get(`${baseUrl}/Project/manager`, {
+        headers: requestHeaders,
+        params: {
+          pageSize: 5,
+          pageNumber: pageNo,
+        },
+      })
       .then((response) => {
+        console.log("list", response?.data?.data);
         setProjects(response?.data?.data);
       })
       .catch((error) => {
@@ -80,7 +87,7 @@ const Projects: React.FC = () => {
       .then((response) => {
         handleClose();
 
-        getAllProjectsList();
+        getAllProjectsList(1);
         getToastValue(
           "success",
           response?.data?.message || "Project updated suceessfully"
@@ -111,7 +118,7 @@ const Projects: React.FC = () => {
           response?.data?.message || "project deleted successfully"
         );
 
-        getAllProjectsList();
+        getAllProjectsList(1);
       })
       .catch((error) => {
         getToastValue(
@@ -122,7 +129,7 @@ const Projects: React.FC = () => {
       });
   };
   // ************get project details to view****************
-  const getPtojectDetails = (itemId) => {
+  const getPtojectDetails = (itemId: number) => {
     axios
       .get(`${baseUrl}/Project/${itemId}`, {
         headers: requestHeaders,
@@ -138,21 +145,24 @@ const Projects: React.FC = () => {
         );
       });
   };
+  // *****************************************************
 
   useEffect(() => {
-    getAllProjectsList();
+    getAllProjectsList(1);
   }, []);
+
   return (
     <>
       <div className="header d-flex justify-content-between p-3">
         <h3>projects</h3>
 
-        
-          <Link to={"/add-project"} className="btn btn-warning rounded-5 px-4 customize-link">
-            <i className="fa fa-plus" aria-hidden="true"></i> &nbsp;Add New
-            Project
-          </Link>
-        
+        <Link
+          to={"/dashboard/projects/add-project"}
+          className="btn btn-warning rounded-5 px-4 customize-link"
+        >
+          <i className="fa fa-plus" aria-hidden="true"></i> &nbsp;Add New
+          Project
+        </Link>
       </div>
       {/* table */}
       <>
@@ -197,8 +207,6 @@ const Projects: React.FC = () => {
                 </tr>
               )}
             </tbody>
-
-          
           </table>
           {/* ******************** view modal ***************************/}
           <Modal show={modalState == "view-modal"} onHide={handleClose}>
