@@ -1,6 +1,5 @@
 import axios from "axios";
 import {
-  MouseEvent,
   useContext,
   useEffect,
   useState,
@@ -8,7 +7,6 @@ import {
 import NoData from "./../../Shared/NoData/NoData";
 import noData from "./../../assets/images/no-data.png";
 import Modal from "react-bootstrap/Modal";
-import { useNavigate } from "react-router-dom";
 import { AuthContext } from "./../../Context/AuthContext";
 import { Link } from "react-router-dom";
 import { ToastContext } from "../../Context/ToastContext";
@@ -18,11 +16,10 @@ import style from "../Projects/Projects.module.css";
 const Projects: React.FC = () => {
   const { baseUrl, requestHeaders }: any = useContext(AuthContext);
   const { getToastValue }: any = useContext(ToastContext);
-  // const [project, setProject] = useState({});
+  const [project, setProject] = useState({});
   const [projectDetails, setProjectDetails] = useState({});
   const [projects, setProjects] = useState([]);
-  const [searchString, setSearchString] = useState('');
-  const navigate = useNavigate();
+  
   let [itemId, setItemId]: any = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -36,6 +33,8 @@ const Projects: React.FC = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<FormValues>();
+  // *************************
+
   // **********to use more than one modal in same component**********
   const [modalState, setModalState] = useState("close");
   // ********to close modal*******************
@@ -60,14 +59,13 @@ const Projects: React.FC = () => {
     setModalState("delete-modal");
   };
   // **********get all projects*****************
-  const getAllProjectsList = (pageNo: number, title: string) => {
+  const getAllProjectsList = (pageNo: number=5) => {
     axios
       .get(`${baseUrl}/Project/manager`, {
         headers: requestHeaders,
         params: {
           pageSize: 5,
           pageNumber: pageNo,
-          title: title,
         },
       })
       .then((response) => {
@@ -93,7 +91,7 @@ const Projects: React.FC = () => {
       .then((response) => {
         handleClose();
 
-        getAllProjectsList();
+        getAllProjectsList(1);
         getToastValue(
           "success",
           response?.data?.message || "Project updated suceessfully"
@@ -124,7 +122,7 @@ const Projects: React.FC = () => {
           response?.data?.message || "project deleted successfully"
         );
 
-        getAllProjectsList();
+        getAllProjectsList(1);
       })
       .catch((error) => {
         getToastValue(
@@ -151,23 +149,14 @@ const Projects: React.FC = () => {
         );
       });
   };
-  // **********search by proj name***********************
-  const getProjectTitleValue = (e: MouseEvent) => {
-   
-    getAllProjectsList(1, e.target.value);
-    setSearchString(e.target.value);
-   
-  };
   // *****************************************************
+ 
   useEffect(() => {
-      getAllProjectsList(1,searchString);
+    const timerId = setTimeout(() => {
+      getAllProjectsList(1);
+    }, 500);
+    return () => clearTimeout(timerId);
   }, []);
-  // useEffect(() => {
-  //   const timerId = setTimeout(() => {
-  //     getAllProjectsList(1, searchString);
-  //   }, 500);
-  //   return () => clearTimeout(timerId);
-  // }, [searchString]);
 
   return (
     <>
@@ -175,7 +164,7 @@ const Projects: React.FC = () => {
         <h3>projects</h3>
 
         <Link
-          to={"/dashboard/add-project"}
+          to={"/dashboard/projects/add-project"}
           className="btn btn-warning rounded-5 px-4 customize-link"
         >
           <i className="fa fa-plus" aria-hidden="true"></i> &nbsp;Add New
@@ -185,20 +174,6 @@ const Projects: React.FC = () => {
       {/* table */}
       <>
         <div className="table-responsive table-container1 vh-100">
-          <div className="w-50">
-            <div className="icon-input position-relative">
-              <i
-                className={`${style.icons} fa-solid fa-search position-absolute text-success`}
-              />
-              <input
-                onChange={getProjectTitleValue}
-                placeholder="search by project name...."
-                className="form-control  my-2"
-                type="text"
-                style={{ paddingLeft: "2rem" }}
-              />
-            </div>
-          </div>
           <table className="table">
             <thead className="table-head table-bg ">
               <tr>
@@ -362,3 +337,4 @@ const Projects: React.FC = () => {
   );
 };
 export default Projects;
+
