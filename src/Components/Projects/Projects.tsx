@@ -1,9 +1,5 @@
 import axios from "axios";
-import {
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { useContext, useEffect, useState } from "react";
 import NoData from "./../../Shared/NoData/NoData";
 import noData from "./../../assets/images/no-data.png";
 import Modal from "react-bootstrap/Modal";
@@ -19,7 +15,7 @@ const Projects: React.FC = () => {
   const [project, setProject] = useState({});
   const [projectDetails, setProjectDetails] = useState({});
   const [projects, setProjects] = useState([]);
-  
+
   let [itemId, setItemId]: any = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -59,7 +55,7 @@ const Projects: React.FC = () => {
     setModalState("delete-modal");
   };
   // **********get all projects*****************
-  const getAllProjectsList = (pageNo: number=5) => {
+  const getAllProjectsList = (pageNo: number = 1) => {
     axios
       .get(`${baseUrl}/Project/manager`, {
         headers: requestHeaders,
@@ -150,12 +146,9 @@ const Projects: React.FC = () => {
       });
   };
   // *****************************************************
- 
+
   useEffect(() => {
-    const timerId = setTimeout(() => {
-      getAllProjectsList(1);
-    }, 500);
-    return () => clearTimeout(timerId);
+    getAllProjectsList(1);
   }, []);
 
   return (
@@ -337,4 +330,3 @@ const Projects: React.FC = () => {
   );
 };
 export default Projects;
-
