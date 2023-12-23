@@ -1,5 +1,4 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import "./App.css";
 import AuthLayout from "./Shared/AuthLayout/AuthLayout";
 import Login from "./Components/Login/Login";
 import Register from "./Components/Register/Register";
@@ -18,6 +17,8 @@ import ChangePassword from "./Components/ChangePassword/ChangePassword";
 import ProtectedRoute from "./Shared/ProtectedRoute/ProtectedRoute";
 import { ToastContainer } from "react-toastify";
 import AddProject from "./Components/AddProject/AddProject";
+import AddTask from "./Components/AddTask/AddTask";
+import "./App.css";
 
 function App() {
   let { userData, saveUserData, userRole } = useContext(AuthContext);
@@ -53,7 +54,6 @@ function App() {
         { path: "users", element: <Users /> },
         { path: "tasks", element: <Tasks /> },
       ],
-  
     },
   ]);
 
