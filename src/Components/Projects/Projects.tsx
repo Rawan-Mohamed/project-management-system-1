@@ -147,12 +147,12 @@ const Projects: React.FC = () => {
       <div className="header d-flex justify-content-between p-3">
         <h3>projects</h3>
 
-        
+
           <Link to={"/dashboard/add-project"} className="btn btn-warning rounded-5 px-4 customize-link">
             <i className="fa fa-plus" aria-hidden="true"></i> &nbsp;Add New
             Project
           </Link>
-        
+
       </div>
       {/* table */}
       <>
@@ -198,7 +198,7 @@ const Projects: React.FC = () => {
               )}
             </tbody>
 
-          
+
           </table>
           {/* ******************** view modal ***************************/}
           <Modal show={modalState == "view-modal"} onHide={handleClose}>

@@ -51,7 +51,7 @@ function App() {
       { path: 'add-project', element: <AddProject /> },
       { path: 'users', element: <Users /> },
       { path: 'tasks', element: <Tasks /> },
-      { path: 'add-task', element: <AddTask /> },
+      { path: 'tasks/add-task', element: <AddTask /> },
     ]
   }]);
 
