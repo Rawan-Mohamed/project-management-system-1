@@ -7,15 +7,17 @@ import style from '../Users/Users.module.css';
 import noData from "../../../src/assets/images/no-data.png"
 import NoData from '../../Shared/NoData/NoData';
 
+
 export default function Users() {
 
-  const { baseUrl, requestHeaders }: any = useContext(AuthContext);
+  const { baseUrl, requestHeaders } = useContext(AuthContext);
   const { getToastValue }: any = useContext(ToastContext);
   const [userList, setUserList] = useState<any[]>([]);
   const [itemId, setItemId] = useState<number>(0);
   const [searchString, setSearchString] = useState('');
   const [modelState, setModelState] = useState("close")
   const [userDetails, setUserDetails] = useState({});
+  const [timerId, setTimerId] = useState(null);
 
   const handleClose = () => setModelState("close");
   // Get All users
@@ -83,16 +85,19 @@ export default function Users() {
   }
 
   useEffect(() => {
-    const timerId = setTimeout(() => {
-      getAllUsers(1, searchString)
-    }, 500)
-    return () => clearTimeout(timerId)
-  }, [searchString])
+    if (timerId) {
+      clearTimeout(timerId);
+    }
+    const newTimeOut = setTimeout(() => {
+      getAllUsers(1, searchString);
+    }, 500);
+    setTimerId(newTimeOut);
+  }, [searchString]);
 
   // Search by name
   const getNameValue = (input: string) => {
     setSearchString(input.target.value);
-    getAllUsers(1, input.target.value);
+    // getAllUsers(1, input.target.value);
   }
 
   return (
