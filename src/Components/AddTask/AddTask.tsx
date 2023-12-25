@@ -29,7 +29,7 @@ const AddTask: React.FC = () => {
   } = useForm<FormValues>();
 
   const goBack = () => {
-    navigate("/dashboard/tasks");
+    navigate(-1);
   }
   const onSubmit: SubmitHandler<FormValues> = async (data: FormValues) => {
     // setIsLoading(true)
@@ -37,7 +37,7 @@ const AddTask: React.FC = () => {
     axios
       .post(`${baseUrl}/Task`, data, { headers: requestHeaders })
       .then((response) => {
-        setIsLoading(false)
+        // setIsLoading(false)
         getToastValue(
           "success",
           response?.data?.message || "Project added suceessfully"
@@ -45,13 +45,15 @@ const AddTask: React.FC = () => {
         navigate("/dashboard/tasks");
       })
       .catch((error) => {
-        setIsLoading(false)
+        // setIsLoading(false)
         getToastValue(
           "error",
           error?.response?.data?.message ||
             "An error occurred. Please try again."
         );
-      });
+      })
+      .finally(() => setIsLoading(false));
+
   }
 
   // Get users list
@@ -66,12 +68,14 @@ const AddTask: React.FC = () => {
 
     })
       .then((response) => {
-        console.log(response);
-
         setUserList(response?.data?.data);
       })
       .catch((error) => {
-        console.log(error);
+        getToastValue(
+          "error",
+          error?.response?.data?.message ||
+            "An error occurred. Please try again."
+        );
       })
   }
   const getAllProjectsList = () => {
@@ -81,11 +85,11 @@ const AddTask: React.FC = () => {
         setProjectList(response?.data?.data);
       })
       .catch((error) => {
-        // getToastValue(
-        //   "error",
-        //   error?.response?.data?.message ||
-        //     "An error occurred. Please try again."
-        // );
+        getToastValue(
+          "error",
+          error?.response?.data?.message ||
+            "An error occurred. Please try again."
+        );
       });
   };
 
@@ -160,19 +164,12 @@ const AddTask: React.FC = () => {
                 <option  className="text-muted">
                   User
                 </option>
-                {userList.map((user)=>(
-                <option key={user.id} value={user.id} >
-                  {user.userName}
+                {userList.map(({id, userName})=>(
+                <option key={id} value={id} >
+                  {userName}
                 </option>
 
                 ))}
-                {/* {
-                    tagsList?.map((tag) =>(
-                      <>
-                      <option key={tag.id} value={tag.id}>{tag.name}</option>
-                      </>
-                    ))
-                  } */}
               </select>
               {errors.employeeId && errors.employeeId.type === "required" && (
                 <span className="text-danger ">No User Selected</span>

@@ -24,7 +24,7 @@ const Tasks: React.FC = () => {
   // const [selectedUser, setSelectedUser] = useState(null);
 
 
-  const [itemId, setItemId]: any = useState(0);
+  const [taskId, setTaskId]: any = useState(0);
   const {
     register,
     setValue,
@@ -37,13 +37,13 @@ const Tasks: React.FC = () => {
   const handleClose = () => setModalState("close");
   // ********to show view modal*******************
   const showViewModal = (id: any) => {
-    setItemId(id);
+    setTaskId(id);
     setModalState("view-modal");
     getTaskDetails(id);
   };
   // ***********update modal******************
   const showUpdateModal = (task: any) => {
-    setItemId(task.id);
+    setTaskId(task.id);
     setValue("title", task.title);
     setValue("description", task.description);
     setValue("employeeId", task.employee.userName);
@@ -52,15 +52,14 @@ const Tasks: React.FC = () => {
   };
   // ********to show delete modal*******************
 
-  const showDeleteModal = (itemId: any) => {
-    setItemId(itemId);
+  const showDeleteModal = (taskId: any) => {
+    setTaskId(taskId);
     setModalState("delete-modal");
   };
 
 
   // **********get all tasks**********pageSize:number, pageNumber:number*******
   const getTasksList = async (pageSize: number, pageNumber: number) => {
-    // setIsLoading(true);
     await axios
       .get(`${baseUrl}/Task/manager`,
         {
@@ -71,18 +70,14 @@ const Tasks: React.FC = () => {
           // }
         })
       .then((response) => {
-        // setIsLoading(false);
-        // console.log(response.data);
         setTasks(response?.data?.data);
       })
       .catch((error) => {
-        // setIsLoading(false);
-        console.log(error);
-        // getToastValue(
-        //   "error",
-        //   error?.response?.data?.message ||
-        //     "An error occurred. Please try again."
-        // );
+        getToastValue(
+          "error",
+          error?.response?.data?.message ||
+            "An error occurred. Please try again."
+        );
       });
   };
   // Get All users
@@ -102,20 +97,19 @@ const Tasks: React.FC = () => {
       })
   }
 
-  //****************update project**********************
+  //****************update Task**********************
   const updateTask = (data: any) => {
     setIsLoading(true);
     axios
-      .put(`${baseUrl}/Task/${itemId}`, data, {
+      .put(`${baseUrl}/Task/${taskId}`, data, {
         headers: requestHeaders,
       })
       .then((response) => {
         handleClose();
-
         getTasksList();
         getToastValue(
           "success",
-          response?.data?.message || "Project updated suceessfully"
+          response?.data?.message || "Task updated suceessfully"
         );
       })
       .catch((error) => {
@@ -127,20 +121,20 @@ const Tasks: React.FC = () => {
       })
       .finally(() => setIsLoading(false));
   };
-  // ************to deleted from projects*********
+  // ************to deleted from Tasks*********
   const deleteTask = () => {
     setIsLoading(true);
     axios
-      .delete(`${baseUrl}/Task/${itemId}`, {
+      .delete(`${baseUrl}/Task/${taskId}`, {
         headers: requestHeaders,
       })
       .then((response) => {
         setTasks(response.data.data);
-        setItemId(itemId);
+        setTaskId(taskId);
         handleClose();
         getToastValue(
           "success",
-          response?.data?.message || "project deleted successfully"
+          response?.data?.message || "Task deleted successfully"
         );
 
         getTasksList();
@@ -153,10 +147,10 @@ const Tasks: React.FC = () => {
         ).finally(() => setIsLoading(false));
       });
   };
-  // ************get project details to view****************
-  const getTaskDetails = (itemId) => {
+  // ************get tasks details to view****************
+  const getTaskDetails = (taskId) => {
     axios
-      .get(`${baseUrl}/Task/${itemId}`, {
+      .get(`${baseUrl}/Task/${taskId}`, {
         headers: requestHeaders,
       })
       .then((response) => {
@@ -210,22 +204,22 @@ const Tasks: React.FC = () => {
       {/* table */}
       <>
         <div className="table-container1 vh-100">
-          <table className="table">
-            <thead className="table-head table-bg ">
-              <tr>
-                <th scope="col">Title</th>
-                <th scope="col">Status</th>
-                <th scope="col">Description</th>
-                <th scope="col">User</th>
-                <th scope="col">Project</th>
-                <th scope="col">Date Created</th>
-                <th scope="col">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {
-                tasks?.length > 0 ? (
-                  tasks.map((task: any) => (
+          {
+            tasks?.length > 0 ? (
+              <table className="table">
+                <thead className="table-head table-bg ">
+                  <tr>
+                    <th scope="col">Title</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">User</th>
+                    <th scope="col">Project</th>
+                    <th scope="col">Date Created</th>
+                    <th scope="col">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {tasks.map((task: any) => (
                     <tr key={task?.id}>
                       <th scope="row">{task?.title}</th>
                       <td>{task?.status}</td>
@@ -234,27 +228,33 @@ const Tasks: React.FC = () => {
                       <td>{task.project.title}</td>
                       <td>{new Date(task.creationDate).toLocaleDateString()}</td>
                       <td>
-                        <i
-                          onClick={() => showViewModal(task?.id)}
-                          className="fa fa-eye  text-info px-2"
-                        ></i>
-                        <i
-                          onClick={() => showUpdateModal(task)}
-                          className="fa fa-pen  text-warning px-2"
-                        ></i>
-                        <i
-                          onClick={() => showDeleteModal(task.id)}
-                          className="fa fa-trash  text-danger"
-                        ></i>
+                        <button className="p-0 border-0 bg-white">
+                          <i
+                            onClick={() => showViewModal(task?.id)}
+                            className="fa fa-eye  text-info px-1"
+                          ></i>
+                        </button>
+                        <button className="p-0 border-0 bg-white">
+                          <i
+                            onClick={() => showUpdateModal(task)}
+                            className="fa fa-pen  text-warning px-1"
+                          ></i>
+                        </button >
+                        <button className="p-0 border-0 bg-white">
+                          <i
+                            onClick={() => showDeleteModal(task.id)}
+                            className="fa fa-trash  text-danger px-1"
+                          ></i>
+                        </button>
+
                       </td>
                     </tr>
-                  ))
-                ) : (
-                  <NoData />
-                )
-              }
-            </tbody>
-          </table>
+                  ))}
+                </tbody>
+              </table>) : (
+              <NoData />
+            )
+          }
 
           {/* ******************** view modal ***************************/}
           <Modal show={modalState == "view-modal"} onHide={handleClose}>
@@ -286,7 +286,7 @@ const Tasks: React.FC = () => {
           {/* ****************update modal *****************/}
           <Modal show={modalState == "update-modal"} onHide={handleClose}>
             <Modal.Header closeButton>
-              <h3>Update project</h3>
+              <h3>Update Task</h3>
             </Modal.Header>
             <Modal.Body>
               <p>Welcome Back! Please enter your details</p>
@@ -382,7 +382,7 @@ const Tasks: React.FC = () => {
           {/* **************** * delete modal *****************/}
           <Modal show={modalState == "delete-modal"} onHide={handleClose}>
             <Modal.Header closeButton>
-              <h3>delete this Project?</h3>
+              <h3>delete this Task?</h3>
             </Modal.Header>
             <Modal.Body>
               <div className="text-center">
