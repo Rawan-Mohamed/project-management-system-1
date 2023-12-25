@@ -1,67 +1,118 @@
 
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "./../../Context/AuthContext";
 import { ToastContext } from "../../Context/ToastContext";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { ProjectContext } from '../../Context/ProjectContext';
-import { FormValues, projectType ,IAuth} from './../../Types/Types';
+import { FormValues, projectType, IAuth } from './../../Types/Types';
 
 
 const AddTask: React.FC = () => {
-  const { baseUrl, requestHeaders }:any
-  //Pick<IAuth, 'baseUrl','requestHeaders'> 
-  = useContext(AuthContext);
+  const { baseUrl, requestHeaders }: any
+    //Pick<IAuth, 'baseUrl','requestHeaders'>
+    = useContext(AuthContext);
   const { getToastValue }: void = useContext(ToastContext);
-  const {  projects }: projectType[] = useContext(ProjectContext);
+  // const { projects }: projectType[] = useContext(ProjectContext);
   // console.log(projects, "from addtasks");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const [userList, setUserList] = useState([])
+  const [projectList,setProjectList]=useState([])
 
-  
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<FormValues>();
 
-  const goBack=()=>{
-    navigate("/dashboard/tasks");
+  const goBack = () => {
+    navigate(-1);
   }
   const onSubmit: SubmitHandler<FormValues> = async (data: FormValues) => {
     // setIsLoading(true)
     console.log(data);
-    // axios
-    //   .post(`${baseUrl}/Task`, data, { headers: requestHeaders })
-    //   .then((response) => {
-    //     setIsLoading(false)
-    //     getToastValue(
-    //       "success",
-    //       response?.data?.message || "Project added suceessfully"
-    //     );
-    //     navigate("/dashboard/projects");
-    //   })
-    //   .catch((error) => {
-    //     setIsLoading(false)
-    //     getToastValue(
-    //       "error",
-    //       error?.response?.data?.message ||
-    //         "An error occurred. Please try again."
-    //     );
-    //   });
+    axios
+      .post(`${baseUrl}/Task`, data, { headers: requestHeaders })
+      .then((response) => {
+        // setIsLoading(false)
+        getToastValue(
+          "success",
+          response?.data?.message || "Project added suceessfully"
+        );
+        navigate("/dashboard/tasks");
+      })
+      .catch((error) => {
+        // setIsLoading(false)
+        getToastValue(
+          "error",
+          error?.response?.data?.message ||
+            "An error occurred. Please try again."
+        );
+      })
+      .finally(() => setIsLoading(false));
+
   }
+
+  // Get users list
+  const getUsersList = () => {
+
+    axios.get(`${baseUrl}/Users/`, {
+      headers: requestHeaders,
+      params: {
+        pageSize: 40,
+
+      }
+
+    })
+      .then((response) => {
+        setUserList(response?.data?.data);
+      })
+      .catch((error) => {
+        getToastValue(
+          "error",
+          error?.response?.data?.message ||
+            "An error occurred. Please try again."
+        );
+      })
+  }
+  const getAllProjectsList = () => {
+    axios
+      .get(`${baseUrl}/Project/manager`, { headers: requestHeaders })
+      .then((response) => {
+        setProjectList(response?.data?.data);
+      })
+      .catch((error) => {
+        getToastValue(
+          "error",
+          error?.response?.data?.message ||
+            "An error occurred. Please try again."
+        );
+      });
+  };
+
+  useEffect(() => {
+    getUsersList();
+    getAllProjectsList()
+
+  }, [])
 
   return (
     <>
       <div className="header d-flex justify-content-between p-3 bg-light">
         <div className="">
-          <button 
-          onClick={goBack}
-          className="btn ">&laquo; View All Tasks</button>
+        <Link to='/dashboard/tasks'
+            className="btn ">&laquo; View All Tasks
+            </Link>
+          {/* <button
+            onClick={goBack}
+            className="btn ">&laquo; View All Tasks
+            </button> */}
           <h2>Add New Task</h2>
         </div>
-        
+
       </div>
       <div className="vh-50 w-75  bg-light shadow-lg rounded-4">
         <form
@@ -104,57 +155,55 @@ const AddTask: React.FC = () => {
           </div>
           <div className="row">
             <div className="col-md-6">
-                <select
+              <select
                 {...register("employeeId", { required: true, valueAsNumber: true })}
                 aria-label="Default select example"
-                type="number"
+                // type="number"
                 className="form-select"
               >
-                <option value="" className="text-muted">
+                <option  className="text-muted">
                   User
                 </option>
-                <option >name</option>
-                {/* {
-                    tagsList?.map((tag) =>(
-                      <>
-                      <option key={tag.id} value={tag.id}>{tag.name}</option>
-                      </>
-                    ))
-                  } */}
+                {userList.map(({id, userName})=>(
+                <option key={id} value={id} >
+                  {userName}
+                </option>
+
+                ))}
               </select>
-                {errors.employeeId && errors.employeeId.type === "required" && (
-                  <span className="text-danger ">No User Selected</span>
-                )}
+              {errors.employeeId && errors.employeeId.type === "required" && (
+                <span className="text-danger ">No User Selected</span>
+              )}
             </div>
             <div className="col-md-6 ">
-                  <select
-                  {...register("projectId", { required: true, valueAsNumber: true })}
-                  aria-label="Default select example"
-                  type="number"
-                  className="form-select mt-sm-3 mt-md-0"
-                >
-                  <option value="" className="text-muted">
-                    Project
-                  </option>
+              <select
+                {...register("projectId", { required: true, valueAsNumber: true })}
+                aria-label="Default select example"
+                // type="number"
+                className="form-select mt-sm-3 mt-md-0"
+              >
+                <option className="text-muted">
+                  Project
+                </option>
 
-                  {
-                       projects?.map((project:projectType) =>(
-                        <>
-                        <option key={project?.id} value={project.id}>{project?.title}</option>
-                        </>
-                      ))
-                    }
-                </select>
-                {errors.projectId && errors.projectId.type === "required" && (
-                  <span className="text-danger ">No Status Selected</span>
-                )}
+                {
+                  projectList?.map((project: projectType) => (
+                    <>
+                      <option key={project?.id} value={project.id}>{project?.title}</option>
+                    </>
+                  ))
+                }
+              </select>
+              {errors.projectId && errors.projectId.type === "required" && (
+                <span className="text-danger ">No Status Selected</span>
+              )}
             </div>
           </div>
 
           <div className="form-group my-3 d-flex justify-content-between align-items-center">
             <button
-            onClick={goBack}
-             className="btn btn-outline-danger rounded-5">
+              onClick={goBack}
+              className="btn btn-outline-danger rounded-5">
               Cancel
             </button>
             <button

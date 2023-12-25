@@ -53,6 +53,7 @@ function App() {
         { path: "projects/add-project", element: <AddProject /> },
         { path: "users", element: <Users /> },
         { path: "tasks", element: <Tasks /> },
+        { path: "tasks/add-task", element: <AddTask /> },
       ],
     },
   ]);
