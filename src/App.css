@@ -141,6 +141,27 @@ table td {
   color: #ef9b28 !important;
   transition: 0.5s ease-in-out;
 }
+/********** pagination ***********/
+.pagination > li > a,
+.pagination > li > span,.pagination .page-link:hover {
+  color: rgba(49, 89, 81, 0.9);
+}
+
+.pagination  .page-link:focus, .pagination  .page-link:active,.active>.page-link, .page-link.active{
+  background-color: rgba(49, 89, 81, 0.9) !important;
+  border-color: rgba(49, 89, 81, 0.9) !important;
+  color: #fff !important;
+}
+/* *****loader ************/
+.centered {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transform: -webkit-translate(-50%, -50%);
+  transform: -moz-translate(-50%, -50%);
+  transform: -ms-translate(-50%, -50%);
+}
 /* **************screens************* */
 /* small screen*/
 

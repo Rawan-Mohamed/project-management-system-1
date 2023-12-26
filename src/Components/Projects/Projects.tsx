@@ -7,17 +7,21 @@ import { AuthContext } from "./../../Context/AuthContext";
 import { Link } from "react-router-dom";
 import { ToastContext } from "../../Context/ToastContext";
 import { useForm } from "react-hook-form";
+import CustomPagination from "../../Shared/CustomPagination/CustomPagination";
 import style from "../Projects/Projects.module.css";
+import Loading from "../../Shared/Loading/Loading";
 
 const Projects: React.FC = () => {
-  const { baseUrl, requestHeaders }: any = useContext(AuthContext);
+  const { baseUrl, requestHeaders, userRole }: any = useContext(AuthContext);
   const { getToastValue }: any = useContext(ToastContext);
   const [project, setProject] = useState({});
   const [projectDetails, setProjectDetails] = useState({});
   const [projects, setProjects] = useState([]);
-
   let [itemId, setItemId]: any = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  // *******pagination*******
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pagesArray, setPagesArray] = useState([]);
 
   interface FormValues {
     title: string;
@@ -55,17 +59,28 @@ const Projects: React.FC = () => {
     setModalState("delete-modal");
   };
   // **********get all projects*****************
-  const getAllProjectsList = (pageNo: number = 1) => {
+  const getAllProjectsList = (pageNo: number) => {
+    setIsLoading(true);
     axios
-      .get(`${baseUrl}/Project/manager`, {
-        headers: requestHeaders,
-        params: {
-          pageSize: 5,
-          pageNumber: pageNo,
-        },
-      })
+      .get(
+        userRole == "Manager"
+          ? `${baseUrl}/Project/manager`
+          : `${baseUrl}/Project/employee`,
+        {
+          headers: requestHeaders,
+          params: {
+            pageSize: 5,
+            pageNumber: pageNo,
+          },
+        }
+      )
       .then((response) => {
-        console.log("list", response?.data?.data);
+        // console.log("list", response?.data?.data);
+        setPagesArray(
+          Array(response?.data?.totalNumberOfPages)
+            .fill()
+            .map((_, i) => i + 1)
+        );
         setProjects(response?.data?.data);
       })
       .catch((error) => {
@@ -74,6 +89,9 @@ const Projects: React.FC = () => {
           error?.response?.data?.message ||
             "An error occurred. Please try again."
         );
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   };
 
@@ -148,21 +166,24 @@ const Projects: React.FC = () => {
   // *****************************************************
 
   useEffect(() => {
-    getAllProjectsList(1);
-  }, []);
+    getAllProjectsList(currentPage);
+  }, [currentPage]);
 
   return (
     <>
       <div className="header d-flex justify-content-between p-3">
         <h3>projects</h3>
-
-        <Link
-          to={"/dashboard/projects/add-project"}
-          className="btn btn-warning rounded-5 px-4 customize-link"
-        >
-          <i className="fa fa-plus" aria-hidden="true"></i> &nbsp;Add New
-          Project
-        </Link>
+        {userRole == "Manager" ? (
+          <Link
+            to={"/dashboard/projects/add-project"}
+            className="btn btn-warning rounded-5 px-4 customize-link"
+          >
+            <i className="fa fa-plus" aria-hidden="true"></i>
+            &nbsp;Add New Project
+          </Link>
+        ) : (
+          ""
+        )}
       </div>
       {/* table */}
       <>
@@ -173,38 +194,48 @@ const Projects: React.FC = () => {
                 <th scope="col">Title</th>
                 <th scope="col">Description</th>
                 <th scope="col">Num Task</th>
-                <th scope="col">Actions</th>
+                {userRole == "Manager" ? <th scope="col">Actions</th> : ""}
               </tr>
             </thead>
             <tbody>
-              {projects?.length > 0 ? (
-                projects.map((project: any) => (
-                  <tr key={project?.id}>
-                    <td>{project?.title}</td>
-                    <td>{project?.description}</td>
-                    <td>{project?.task?.length}</td>
-                    <td>
-                      <i
-                        onClick={() => showViewModal(project?.id)}
-                        className="fa fa-eye  text-info px-2"
-                      ></i>
-                      <i
-                        onClick={() => showUpdateModal(project)}
-                        className="fa fa-pen  text-warning px-2"
-                      ></i>
-                      <i
-                        onClick={() => showDeleteModal(project.id)}
-                        className="fa fa-trash  text-danger"
-                      ></i>
-                    </td>
-                  </tr>
-                ))
+              {!isLoading ? (
+                <>
+                  {projects?.length > 0 ? (
+                    projects.map((project: any) => (
+                      <tr key={project?.id}>
+                        <td>{project?.title}</td>
+                        <td>{project?.description}</td>
+                        <td>{project?.task?.length}</td>
+                        {userRole == "Manager" ? (
+                          <td>
+                            <i
+                              onClick={() => showViewModal(project?.id)}
+                              className="fa fa-eye  text-info px-2"
+                            ></i>
+                            <i
+                              onClick={() => showUpdateModal(project)}
+                              className="fa fa-pen  text-warning px-2"
+                            ></i>
+                            <i
+                              onClick={() => showDeleteModal(project.id)}
+                              className="fa fa-trash  text-danger"
+                            ></i>
+                          </td>
+                        ) : (
+                          ""
+                        )}
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colspan="4">
+                        <NoData />
+                      </td>
+                    </tr>
+                  )}
+                </>
               ) : (
-                <tr>
-                  <td colspan="4">
-                    <NoData />
-                  </td>
-                </tr>
+                <tr> <td colspan="4"><Loading /></td></tr> 
               )}
             </tbody>
           </table>
@@ -225,7 +256,7 @@ const Projects: React.FC = () => {
                 </p>
                 <p>
                   <span className="text-warning">creation Date :&nbsp;</span>
-                  {projectDetails?.creationDate}
+                  {new Date(projectDetails?.creationDate).toLocaleDateString()}
                 </p>
               </>
             </Modal.Body>
@@ -323,6 +354,12 @@ const Projects: React.FC = () => {
             </Modal.Body>
           </Modal>
           {/************************* * //delete modal*************** */}
+          {/* pagination */}
+          <CustomPagination
+            totalPages={pagesArray.length}
+            currentPage={currentPage}
+            onPageChange={setCurrentPage}
+          />
         </div>
       </>
       {/* table */}

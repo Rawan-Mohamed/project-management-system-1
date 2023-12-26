@@ -13,11 +13,11 @@ import { ProjectContextProvider } from './Context/ProjectContext';
 ReactDOM.createRoot(document.getElementById("root")!).render(
   // <React.StrictMode>
     <AuthContextProvider>
-       <ProjectContextProvider>
+       {/* <ProjectContextProvider> */}
       <ToastContextProvider>
         <App />
       </ToastContextProvider>
-      </ProjectContextProvider>
+      {/* </ProjectContextProvider> */}
     </AuthContextProvider>
   // </React.StrictMode>
 );
