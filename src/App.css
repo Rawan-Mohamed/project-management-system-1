@@ -156,3 +156,75 @@ table td {
     font-size: 1rem !important;
   }
 }
+
+
+/* dashboard */
+.bg-header {
+  background-image: url('./assets/images/header.png');
+  background-size: cover;
+  background-position: 100% 100%;
+  border-radius: 20px;
+
+}
+.bg-overlay{
+  background: linear-gradient(to left, rgba(0,0,0,0.2), #0e382f);
+  border-radius: 20px;
+}
+.titles{
+  position: relative;
+}
+.titles::after{
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -15px;
+  width: 5px;
+  height: 100%;
+  background-color: var(--main-color);
+}
+  .tasks-count>div:first-child .tasks-status {
+  background-color: #E5E6F4;
+}
+.tasks-count >div:first-child .tasks-status i::before, 
+.users-count>div:first-child .tasks-status i::before,
+.users-count>:first-child .status  i::before{
+  background-color: #CFD1EC;
+  border-radius: 10px;
+  padding: .8rem;
+  font-size: 1.5rem;
+}
+.tasks-count >div:nth-child(2n) .tasks-status{
+  background-color: #F4F4E5;
+}
+.tasks-count>div:nth-child(2n) .tasks-status i::before,
+.users-count>div:nth-child(2n) .tasks-status i::before,
+.users-count>:nth-child(2n) .status i::before{
+  background-color: #E4E4BC;
+  border-radius: 10px;
+  padding: .8rem;
+  font-size: 1.5rem;
+}
+.tasks-count>div:nth-child(3) .tasks-status{
+  background-color: #F4E5ED;
+}
+.tasks-count>div:nth-child(3) .tasks-status i::before{
+  background-color: #E7C3D7;
+  border-radius: 10px;
+  padding: .8rem;
+  font-size: 1.5rem;
+}
+.users-count>:first-child .status{
+  background-color: #E5E6F4;
+}
+.users-count>:nth-child(2n) .status{
+  background-color: #F4F4E5;
+}  
+.tasks-chart{
+  background-color: rgb(216, 241, 242);
+}
+.donutchart-legend{
+  padding: 0 10px 0 0;
+}
+/* .donutchart-legend-item-label{
+  padding:0 10px 0 0;
+} */
