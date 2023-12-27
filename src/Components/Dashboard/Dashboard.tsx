@@ -6,7 +6,8 @@ import DonutChart from "react-donut-chart";
 
 const Dashboard = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const { userData, baseUrl, requestHeaders }: any = useContext(AuthContext);
+  const { userData, baseUrl, requestHeaders, userRole }: any =
+    useContext(AuthContext);
   const { getToastValue }: any = useContext(ToastContext);
   const [todoCount, setTodoCount] = useState(0);
   const [progressCount, setProgressCount] = useState(0);
@@ -67,9 +68,9 @@ const Dashboard = () => {
       </div>
       <div className="container">
         <div className="row">
-          <div className="col-md-6">
-            <div className="titles">
-              <h3>Tasks</h3>
+          <div className="col-md-6 px-5">
+            <div className="titles ">
+              <h3  className="">Tasks</h3>
               <p>List of all tasks</p>
             </div>
             <div className="row tasks-count mt-5">
@@ -96,58 +97,71 @@ const Dashboard = () => {
               </div>
             </div>
           </div>
-          <div className="col-md-6">
-            <div className="titles">
-              <h3>Users</h3>
-              <p>List of all users</p>
-            </div>
-            <div className="row users-count mt-5">
-              <div className="col-md-6">
-                <div className="  status d-flex flex-column text-center rounded-4 p-3">
-                  <i className="fa-brands fa-creative-commons-by my-3"></i>
-                  <span className="py-3">Active users</span>
-                  <h3>{activeUserCount}</h3>
+          {userRole == "Manager" ? (
+            <div className="col-md-6">
+              <div className="titles">
+                <h3>Users</h3>
+                <p>List of all users</p>
+              </div>
+              <div className="row users-count mt-5">
+                <div className="col-md-6">
+                  <div className="  status d-flex flex-column text-center rounded-4 p-3">
+                    <i className="fa-brands fa-creative-commons-by my-3"></i>
+                    <span className="py-3">Active users</span>
+                    <h3>{activeUserCount}</h3>
+                  </div>
+                </div>
+                <div className="col-md-6">
+                  <div className=" status d-flex flex-column text-center rounded-4 p-3">
+                    <i className="fa-brands fa-creative-commons-pd my-3"></i>
+                    <span className="py-3">De-active users</span>
+                    <h3>{inActiveUserCount}</h3>
+                  </div>
                 </div>
               </div>
-              <div className="col-md-6">
-                <div className=" status d-flex flex-column text-center rounded-4 p-3">
-                  <i className="fa-brands fa-creative-commons-pd my-3"></i>
-                  <span className="py-3">De-active users</span>
-                  <h3>{inActiveUserCount}</h3>
-                </div>
-              </div>
             </div>
-          </div>
+          ) : (
+            ""
+          )}
         </div>
-        <div className="row chart my-5 ">
-          <div className="col-md-6 ">
+        <div className="row chart my-4 ">
+          <div className="col-md-6  px-5">
             <div className="tasks-chart rounded-5 d-flex align-items-center justify-content-center pt-5">
               <DonutChart
-              data={[
-                { label: 'To Do', value: todoCount },
-                { label: 'In Progress', value: progressCount},
-                { label: 'Done', value: doneCount},
-              ]}
-            
-                // height={450}
-                // width={450}
-                colors={['#CFD1EC', '#E4E4BC', '#E7C3D7']}
-              /> 
+                data={[
+                  { label: "To Do", value: todoCount },
+                  { label: "In Progress", value: progressCount },
+                  { label: "Done", value: doneCount },
+                ]}
+                height={280}
+                width={400}
+                clickToggle={true}
+                interactive={true}
+                innerRadius= {0.6}
+                colors={["#CFD1EC", "#E4E4BC", "#E7C3D7"]}
+              />
             </div>
           </div>
-          <div className="col-md-6">
-            <div className="tasks-chart rounded-5 d-flex align-items-center justify-content-center pt-5"><DonutChart
-              data={[
-                { label: 'Active Users', value: activeUserCount },
-                { label: 'inactive Users', value: inActiveUserCount},
-              ]}
-            
-                // height={450}
-                // width={450}
-                colors={['#55ce63', '#EA5446']}
-               
-              /> </div>
+          {userRole == "Manager" ?(
+            <div className="col-md-6">
+            <div className="tasks-chart rounded-5 d-flex align-items-center justify-content-center pt-5">
+              <DonutChart
+                data={[
+                  { label: "Active Users", value: activeUserCount },
+                  { label: "inactive Users", value: inActiveUserCount },
+                ]}
+                height={280}
+                width={400}
+                // legend={false}
+                clickToggle={true}
+                interactive={true}
+                innerRadius= {0.6}
+                colors={["#55ce63", "#EA5446"]}
+              />{" "}
+            </div>
           </div>
+          ):''}
+          
         </div>
       </div>
     </>
