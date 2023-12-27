@@ -194,7 +194,11 @@ const Projects: React.FC = () => {
                 <th scope="col">Title</th>
                 <th scope="col">Description</th>
                 <th scope="col">Num Task</th>
-                {userRole == "Manager" ? <th scope="col">Actions</th> : ""}
+                {userRole == "Manager" ? (
+                  <th scope="col">Actions</th>
+                ) : (
+                  <th scope="col">Date created</th>
+                )}
               </tr>
             </thead>
             <tbody>
@@ -208,21 +212,24 @@ const Projects: React.FC = () => {
                         <td>{project?.task?.length}</td>
                         {userRole == "Manager" ? (
                           <td>
-                            <i
-                              onClick={() => showViewModal(project?.id)}
-                              className="fa fa-eye  text-info px-2"
-                            ></i>
-                            <i
-                              onClick={() => showUpdateModal(project)}
-                              className="fa fa-pen  text-warning px-2"
-                            ></i>
-                            <i
+                            <button className="btn-hover-custom bg-white border-0"  onClick={() => showViewModal(project?.id)}>
+                              <i className="fa fa-eye  text-info px-2"></i>
+                            </button>
+
+                            <button className="btn-hover-custom bg-white border-0"  onClick={() => showUpdateModal(project)}>
+                              <i className="fa fa-pen  text-warning px-2"></i>
+                            </button>
+                            <button className="btn-hover-custom bg-white border-0" 
                               onClick={() => showDeleteModal(project.id)}
-                              className="fa fa-trash  text-danger"
-                            ></i>
+                            ><i className="fa fa-trash  text-danger"></i></button>
+                            
                           </td>
                         ) : (
-                          ""
+                          <td>
+                            {new Date(
+                              project?.creationDate
+                            ).toLocaleDateString()}
+                          </td>
                         )}
                       </tr>
                     ))
@@ -235,7 +242,12 @@ const Projects: React.FC = () => {
                   )}
                 </>
               ) : (
-                <tr> <td colspan="4"><Loading /></td></tr> 
+                <tr>
+                  {" "}
+                  <td colspan="4">
+                    <Loading />
+                  </td>
+                </tr>
               )}
             </tbody>
           </table>

@@ -26,18 +26,18 @@ const Login: React.FC = ()=> {
 
   const onSubmit: SubmitHandler<FormValues> = async(data) =>{
     setIsLoading(true)
-    console.log(data);
+    // console.log(data);
     await axios
     .post(`${baseUrl}/Users/Login`, data)
     .then((response) => {
-      console.log(response);
+      // console.log(response);
       localStorage.setItem('userToken', response.data.token )
       saveUserData();
       navigate('/dashboard');
       getToastValue("success", "Login successfully!")
     })
     .catch((error)=>{
-      console.log(error);
+      // console.log(error);
       getToastValue("error", error.response?.data.message || "An error occurred");
     }).finally(()=>{setIsLoading(false)})
   }
