@@ -9,9 +9,11 @@ import "./index.css";
 import { AuthContextProvider } from "./Context/AuthContext.tsx";
 import ToastContextProvider from "./Context/ToastContext";
 import { ProjectContextProvider } from './Context/ProjectContext';
+import  ThemeContext  from './Context/ThemeContext.tsx';
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   // <React.StrictMode>
+  <ThemeContext>
     <AuthContextProvider>
        <ProjectContextProvider>
       <ToastContextProvider>
@@ -19,6 +21,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       </ToastContextProvider>
       </ProjectContextProvider>
     </AuthContextProvider>
+    </ThemeContext>
   // </React.StrictMode>
 );
 
