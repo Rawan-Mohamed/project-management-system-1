@@ -367,11 +367,12 @@ const Projects: React.FC = () => {
           </Modal>
           {/************************* * //delete modal*************** */}
           {/* pagination */}
+          {!isLoading ? (
           <CustomPagination
             totalPages={pagesArray.length}
             currentPage={currentPage}
             onPageChange={setCurrentPage}
-          />
+          />):('')}
         </div>
       </>
       {/* table */}

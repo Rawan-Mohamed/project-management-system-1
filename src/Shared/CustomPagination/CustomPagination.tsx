@@ -47,37 +47,31 @@ const CustomPagination: React.FC<CustomPaginationProps> = ({
   return (
     <nav aria-label="..." className="">
       <ul className=" m-0 pagination justify-content-center pagination-sm">
-        {currentPage > 1 && (
-          <button className="paginate btn-hover-custom bg-white p-0 m-0 border-0" onClick={() => onPageChange(currentPage - 1)}>
-            <li className="page-item">
-              <a className="page-link">Prev</a>
-            </li>
-          </button>
-        )}
+        <button
+          className="page-link btn-hover-custom bg-white px-2 border-0"
+          onClick={() => onPageChange(currentPage - 1)}
+        >
+          Prev
+        </button>
 
         {pages.map((page) => (
-          <button className="paginate btn-hover-custom bg-white p-0 m-0 border-0" onClick={() => onPageChange(page)}>
-            <li
-              key={page}
-              className={`page-item ${page === currentPage ? "active" : ""}`}
-              
-            >
-              <a className="page-link">{page}</a>
-            </li>
+          <button
+            key={page}
+            className={`page-item ${
+              page === currentPage ? "active" : ""
+            } page-link btn-hover-custom bg-white  px-3 border-0`}
+            onClick={() => onPageChange(page)}
+          >
+            {page}
           </button>
         ))}
 
-        {currentPage < totalPages && (
-            <button className="paginate btn-hover-custom bg-white p-0 m-0 border-0" onClick={() => onPageChange(currentPage + 1)}>
-                  <li
-            className="page-item"
-           
-          >
-            <a className="page-link">Next</a>
-          </li>
-            </button>
-        
-        )}
+        <button
+          className="page-link btn-hover-custom bg-white  px-2 border-0"
+          onClick={() => onPageChange(currentPage + 1)}
+        >
+          Next
+        </button>
       </ul>
 
       <div className="input-group mb-3 w-50  d-flex justify-content-center align-items-center  m-auto">
