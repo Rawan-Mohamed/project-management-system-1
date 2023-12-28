@@ -1,0 +1,74 @@
+
+
+
+.columnCont {
+
+  /* max-height: 400px;
+  overflow-y: auto;
+  padding: 10px;
+  border: 1px solid #ddd;
+  margin-right: 10px;
+  background-color: #005ebc; */
+
+}
+
+/* td .statusColor{
+  color: #ffffff;
+  font-family: "Montserrat-Regular", Helvetica;
+  font-size: 16px;
+  font-weight: 250;
+  border-radius: 15px;
+  text-align: center;
+  transition: background-color 0.5s ease;
+padding: 5px;
+} */
+
+/* .bgStatus{
+  background-color: hsla(168, 29%, 27%, 0.898);
+  height: 400px;
+  width: 300px;
+} */
+
+/* .taskItem {
+
+  margin-bottom: 10px;
+} */
+/* .taskContent {
+  display: flex;
+  align-items: center;
+  background-color: #EF9B28;
+  border-radius: 15px;
+  padding-right: 10px;
+
+} */
+
+/* .taskTitleBackground {
+  position: relative;
+  padding: 10px;
+  color: white;
+  flex-grow: 1;
+} */
+.editIcon {
+  cursor: pointer;
+  color: #fff;
+  display: block;
+}
+
+.bgStatus{
+  margin: 8px;
+  width: 270px;
+  background-color: #024337;
+  /* display: flex;
+  flex-direction: column; */
+  min-height: 500px;
+}
+
+/* .taskContent{
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 8px;
+  transition: background-color 0.5s ease;
+  flex-grow: 1;
+
+
+} */
