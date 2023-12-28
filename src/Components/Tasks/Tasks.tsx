@@ -575,10 +575,12 @@ const Tasks: React.FC = () => {
 
             <DragDropContext onDragEnd={handleDragEnd} >
               <div
-                className="d-flex justify-content-between columnCont m-4 p-5"
+                className={`d-flex justify-content-between columnCont m-4 p-5 ${style.columnContainer}`}
               >
                 {/* ToDo column */}
                 <div
+
+                  className={style.column}
                 >
                   <Droppable droppableId="todo" direction="vertical"  >
                     {(provided, snapshot) => (
@@ -632,6 +634,9 @@ const Tasks: React.FC = () => {
 
 
                 {/* InProgress column */}
+                <div
+                className={style.column}
+                >
                 <Droppable droppableId="inProgress" direction="vertical">
                   {(provided, snapshot) => (
                     <div ref={provided.innerRef} {...provided.droppableProps}
@@ -675,7 +680,11 @@ const Tasks: React.FC = () => {
                   )}
                 </Droppable>
 
+                </div>
+
                 {/* Done column */}
+
+                <div  className={style.column}>
                 <Droppable droppableId="done" direction="vertical">
                   {(provided, snapshot) => (
                     <div ref={provided.innerRef}
@@ -720,6 +729,8 @@ const Tasks: React.FC = () => {
                     </div>
                   )}
                 </Droppable>
+                </div>
+
               </div>
             </DragDropContext>
           </div>
