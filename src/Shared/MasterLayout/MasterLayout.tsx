@@ -10,10 +10,8 @@ export default function MasterLayout() {
       <div className="container-fluid">
         <div className="row">
           {/* Navbar at the top */}
-          <div className="col-12">
-            <div className="">
+          <div className="col-12 p-0">            
               <NavBar/>
-            </div>
           </div>
         </div>
 

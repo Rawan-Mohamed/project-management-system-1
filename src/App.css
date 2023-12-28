@@ -181,3 +181,19 @@ table td {
 #dark .fa-bell{
   color:#121826;
 }
+#dark .navbar{
+  background-color: #394251;
+  color: #fff;
+}
+#dark .nav-text,#dark  .badge,#dark  .fa-bell {
+  color: #fff;
+}
+#dark table th {
+  background-color: var(--main-color)!important;
+}
+/* #dark .login-wrapper{
+  background-color: #394251 !important;
+} */
+.logo{
+  width: 15rem;
+}

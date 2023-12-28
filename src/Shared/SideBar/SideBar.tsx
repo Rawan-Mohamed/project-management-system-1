@@ -10,7 +10,7 @@ import { ThemeContext, ITheme } from "./../../Context/ThemeContext";
 
 const SideBar: React.FC = () => {
   let { userRole } = useContext(AuthContext);
-  console.log(userRole);
+  // console.log(userRole);
   const { toggleTheme, theme }:ITheme = useContext(ThemeContext);
                     
   //*************sidebar collapse***************
@@ -104,7 +104,11 @@ const SideBar: React.FC = () => {
             icon={
               theme ==='light' ? (<i className="fa-solid fa-toggle-on"></i>) : (<i className="fa-solid fa-toggle-off"></i>)
             }
-          ></MenuItem>
+          >
+            {
+              theme ==='light' ? ("Light theme") : ("Dark theme")
+            }
+          </MenuItem>
         </Menu>
       </Sidebar>
     </div>
