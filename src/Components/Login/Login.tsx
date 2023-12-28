@@ -1,13 +1,15 @@
 import axios from 'axios';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../../assets/images/pms.png';
 import { AuthContext } from './../../Context/AuthContext';
 import { ToastContext } from '../../Context/ToastContext';
+import Loading from '../../Shared/Loading/Loading';
 
 
 const Login: React.FC = ()=> {
+  const [isLoading, setIsLoading] = useState(false);
   let { saveUserData, baseUrl} = useContext(AuthContext);
   let {getToastValue} = useContext(ToastContext);
   const navigate = useNavigate();
@@ -23,24 +25,27 @@ const Login: React.FC = ()=> {
   } = useForm<FormValues>();
 
   const onSubmit: SubmitHandler<FormValues> = async(data) =>{
-    console.log(data);
+    setIsLoading(true)
+    // console.log(data);
     await axios
     .post(`${baseUrl}/Users/Login`, data)
     .then((response) => {
-      console.log(response);
+      // console.log(response);
       localStorage.setItem('userToken', response.data.token )
       saveUserData();
       navigate('/dashboard');
       getToastValue("success", "Login successfully!")
     })
     .catch((error)=>{
-      console.log(error);
+      // console.log(error);
       getToastValue("error", error.response?.data.message || "An error occurred");
-    })
+    }).finally(()=>{setIsLoading(false)})
   }
 
 
-  return (
+  return isLoading ? (
+    <div className="centered"> <Loading/></div>
+   ) :(
     <div className='vh-100 auth-container d-flex justify-content-center align-items-center flex-column'>
         <div className="text-center">
           <img src={logo} alt="logo" className='img-fluid' />
