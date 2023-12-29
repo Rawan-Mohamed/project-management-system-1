@@ -333,6 +333,24 @@ table td {
 #dark table th {
   background-color: var(--main-color)!important;
 }
+#dark .custom-input {
+  background-color: #fff !important;
+  color: #000 !important;
+}
+#dark .custom-input::placeholder {
+  color:#000 !important; /* Set the desired color */
+}
+#dark .pagination .page-link:focus, .pagination .page-link:active,.active>.page-link, .page-link.active{
+  background-color: var(--main-color) !important;
+  border-color: var(--main-color) !important;
+}
+#dark td{
+  background-color: #121826;
+  color: #fff;
+}
+/* .btn-hover-custom{
+  background-color: #121826 !important;
+} */
 /* #dark .login-wrapper{
   background-color: #394251 !important;
 } */

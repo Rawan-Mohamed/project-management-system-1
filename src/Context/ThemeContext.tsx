@@ -12,8 +12,8 @@ interface ThemeContextProviderProps {
 export const ThemeContext = createContext<ITheme | null>(null);
 
 const ThemeContextProvider: React.FC<ThemeContextProviderProps>= (props)=>{
-    const [theme, setTheme] = useState('light');
-
+    const [theme, setTheme] = useState(()=> localStorage.getItem("theme") || "light");
+    // const [isDarkMode, setIsDarkMode] = useState(false); 
    const toggleTheme = () =>{
         setTheme((current)=> (current === 'light' ? 'dark' : 'light' ))
     }

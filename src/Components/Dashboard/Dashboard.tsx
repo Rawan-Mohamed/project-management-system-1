@@ -77,22 +77,22 @@ const Dashboard = () => {
               <div className="col-md-4 ">
                 <div className="tasks-status d-flex flex-column text-center p-3  rounded-4">
                   <i className="fa fa-tasks my-3"> </i>
-                  <span className="py-3">To do</span>
-                  <h3>{todoCount}</h3>
+                  <span className="py-3 text-dark">To do</span>
+                  <h3 className="text-dark">{todoCount}</h3>
                 </div>
               </div>
               <div className="col-md-4 ">
                 <div className="tasks-status d-flex flex-column text-center p-3 rounded-4">
                   <i className="fa-solid fa-hourglass-end my-3"></i>
-                  <span className="py-3">In-progress</span>
-                  <h3>{progressCount}</h3>
+                  <span className="py-3 text-dark">In-progress</span>
+                  <h3 className="text-dark">{progressCount}</h3>
                 </div>
               </div>
               <div className="col-md-4">
                 <div className="tasks-status d-flex flex-column text-center  p-3  rounded-4">
                   <i className="fa-solid fa-clipboard-check my-3"></i>
-                  <span className="py-3">Done</span>
-                  <h3>{doneCount}</h3>
+                  <span className="py-3 text-dark">Done</span>
+                  <h3 className="text-dark">{doneCount}</h3>
                 </div>
               </div>
             </div>
@@ -107,15 +107,15 @@ const Dashboard = () => {
                 <div className="col-md-6">
                   <div className="  status d-flex flex-column text-center rounded-4 p-3">
                     <i className="fa-brands fa-creative-commons-by my-3"></i>
-                    <span className="py-3">Active users</span>
-                    <h3>{activeUserCount}</h3>
+                    <span className="py-3 text-dark">Active users</span>
+                    <h3 className="text-dark">{activeUserCount}</h3>
                   </div>
                 </div>
                 <div className="col-md-6">
                   <div className=" status d-flex flex-column text-center rounded-4 p-3">
                     <i className="fa-brands fa-creative-commons-pd my-3"></i>
-                    <span className="py-3">De-active users</span>
-                    <h3>{inActiveUserCount}</h3>
+                    <span className="py-3 text-dark">De-active users</span>
+                    <h3 className="text-dark">{inActiveUserCount}</h3>
                   </div>
                 </div>
               </div>
