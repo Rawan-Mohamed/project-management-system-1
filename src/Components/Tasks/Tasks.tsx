@@ -26,7 +26,7 @@ const Tasks: React.FC = () => {
   const [tasks, setTasks] = useState([]);
   const [taskDetails, setTaskDetails] = useState({});
   const [todoTasks, setTodoTasks] = useState([])
-  const [progressTasks, setProgressTasks] = useState([])
+  const [inProgressTasks, setInProgressTasks] = useState([])
   const [doneTasks, setDoneTasks] = useState([])
   // const [selectedUser, setSelectedUser] = useState(null);
 
@@ -87,37 +87,37 @@ const Tasks: React.FC = () => {
   };
   // **********get all Employee tasks**********pageSize:number, pageNumber:number*******
   const getEmployeeTasksList = async () => {
-    await axios
-      .get(`${baseUrl}/Task`,
-        {
-          headers: requestHeaders,
-          // params:{
-          //   pageSize: 5,
-          //   pageNumber: pageNumber,
-          // }
-        })
-      .then((response) => {
-        // setTasks(response?.data?.data);
-        const todoTasks = response.data.data.filter((task: Itasks) => task.status == 'ToDo')
-        const progressTasks = response.data.data.filter((task: Itasks) => task.status == 'InProgress')
-        const doneTasks = response.data.data.filter((task: Itasks) => task.status == 'Done')
-
-
-        // Update state with categorized tasks
-        setTodoTasks(todoTasks);
-        setProgressTasks(progressTasks);
-        setDoneTasks(doneTasks);
-
-      })
-      .catch((error) => {
-        getToastValue(
-          "error",
-          error?.response?.data?.message ||
-          "An error occurred. Please try again."
-        );
+    try {
+      const response = await axios.get(`${baseUrl}/Task`, {
+        headers: requestHeaders,
+        // params:{
+        //   pageSize: 5,
+        //   pageNumber: pageNumber,
+        // }
       });
-  };
 
+      const filterTaskByStatus = (status) =>
+        response?.data?.data.filter((task: Itasks) => task.status === status);
+
+      const todoTasks = filterTaskByStatus('ToDo');
+      const inProgressTasks = filterTaskByStatus('InProgress');
+      const doneTasks = filterTaskByStatus('Done');
+      // const todoTasks = response.data.data.filter((task: Itasks) => task.status == 'ToDo')
+      // const inProgressTasks = response.data.data.filter((task: Itasks) => task.status == 'InProgress')
+      // const doneTasks = response.data.data.filter((task: Itasks) => task.status == 'Done')
+
+      // Update state with categorized tasks
+      setTodoTasks(todoTasks);
+      setInProgressTasks(inProgressTasks);
+      setDoneTasks(doneTasks);
+    } catch (error) {
+      getToastValue(
+        'error',
+        error?.response?.data?.message ||
+        'An error occurred. Please try again.'
+      );
+    }
+  };
 
   // Get All users
   const getAllUsers = () => {
@@ -258,7 +258,7 @@ const Tasks: React.FC = () => {
     if (result.source.droppableId === 'todo') {
       setTodoTasks(sourceTasks);
     } else if (result.source.droppableId === 'inProgress') {
-      setProgressTasks(sourceTasks);
+      setInProgressTasks(sourceTasks);
     } else if (result.source.droppableId === 'done') {
       setDoneTasks(sourceTasks);
     }
@@ -266,7 +266,7 @@ const Tasks: React.FC = () => {
     if (result.destination.droppableId === 'todo') {
       setTodoTasks(destinationTasks);
     } else if (result.destination.droppableId === 'inProgress') {
-      setProgressTasks(destinationTasks);
+      setInProgressTasks(destinationTasks);
     } else if (result.destination.droppableId === 'done') {
       setDoneTasks(destinationTasks);
     }
@@ -290,7 +290,7 @@ const Tasks: React.FC = () => {
     if (status === 'todo') {
       return todoTasks;
     } else if (status === 'inProgress') {
-      return progressTasks;
+      return inProgressTasks;
     } else if (status === 'done') {
       return doneTasks;
     }
@@ -387,9 +387,10 @@ const Tasks: React.FC = () => {
                         <td>{task.project.title}</td>
                         <td>{new Date(task.creationDate).toLocaleDateString()}</td>
                         <td>
-                          <button className="p-0 border-0 bg-white">
+                          <button onClick={() => showViewModal(task?.id)}
+                            className="p-0 border-0 bg-white">
                             <i
-                              onClick={() => showViewModal(task?.id)}
+
                               className="fa fa-eye  text-info px-1"
                             ></i>
                           </button>
@@ -399,9 +400,10 @@ const Tasks: React.FC = () => {
                               className="fa fa-pen  text-warning px-1"
                             ></i>
                           </button >
-                          <button className="p-0 border-0 bg-white">
+                          <button onClick={() => showDeleteModal(task.id)}
+                            className="p-0 border-0 bg-white">
                             <i
-                              onClick={() => showDeleteModal(task.id)}
+
                               className="fa fa-trash  text-danger px-1"
                             ></i>
                           </button>
@@ -635,100 +637,100 @@ const Tasks: React.FC = () => {
 
                 {/* InProgress column */}
                 <div
-                className={style.column}
+                  className={style.column}
                 >
-                <Droppable droppableId="inProgress" direction="vertical">
-                  {(provided, snapshot) => (
-                    <div ref={provided.innerRef} {...provided.droppableProps}
-                      className=""
-                      style={{
-                        backgroundColor: (snapshot.isDraggingOver ? "#024337" : '#315951'),
-                        padding: 5,
-                        width: 270,
-                        minHeight: 500
-                      }}>
-                      <h4 className="text-white">In Progress</h4>
-                      {progressTasks.map((task, index) => (
-                        <Draggable key={task.id} draggableId={task.id.toString()} index={index}>
-                          {(provided, snapshot) => (
-                            <div
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              {...provided.dragHandleProps}
-                              style={{
-                                userSelect: 'none',
-                                padding: 3,
-                                margin: '0 0 8px 0',
-                                minHeight: '20px',
-                                backgroundColor: snapshot.isDragging ? "#b26b07" : '#EF9B28',
-                                color: 'white',
-                                borderRadius: '10px',
-                                ...provided.draggableProps.style
-                              }}
+                  <Droppable droppableId="inProgress" direction="vertical">
+                    {(provided, snapshot) => (
+                      <div ref={provided.innerRef} {...provided.droppableProps}
+                        className=""
+                        style={{
+                          backgroundColor: (snapshot.isDraggingOver ? "#024337" : '#315951'),
+                          padding: 5,
+                          width: 270,
+                          minHeight: 500
+                        }}>
+                        <h4 className="text-white">In Progress</h4>
+                        {inProgressTasks.map((task, index) => (
+                          <Draggable key={task.id} draggableId={task.id.toString()} index={index}>
+                            {(provided, snapshot) => (
+                              <div
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                                style={{
+                                  userSelect: 'none',
+                                  padding: 3,
+                                  margin: '0 0 8px 0',
+                                  minHeight: '20px',
+                                  backgroundColor: snapshot.isDragging ? "#b26b07" : '#EF9B28',
+                                  color: 'white',
+                                  borderRadius: '10px',
+                                  ...provided.draggableProps.style
+                                }}
 
-                            >
-                              <div className={`${style.taskContent} `}>
-                                <p className={`${style.taskTitleBackground}`}>{task.title}
-                                </p>
+                              >
+                                <div className={`${style.taskContent} `}>
+                                  <p className={`${style.taskTitleBackground}`}>{task.title}
+                                  </p>
+                                </div>
                               </div>
-                            </div>
-                          )}
-                        </Draggable>
-                      ))}
-                      {provided.placeholder}
-                    </div>
-                  )}
-                </Droppable>
+                            )}
+                          </Draggable>
+                        ))}
+                        {provided.placeholder}
+                      </div>
+                    )}
+                  </Droppable>
 
                 </div>
 
                 {/* Done column */}
 
-                <div  className={style.column}>
-                <Droppable droppableId="done" direction="vertical">
-                  {(provided, snapshot) => (
-                    <div ref={provided.innerRef}
-                      {...provided.droppableProps}
+                <div className={style.column}>
+                  <Droppable droppableId="done" direction="vertical">
+                    {(provided, snapshot) => (
+                      <div ref={provided.innerRef}
+                        {...provided.droppableProps}
 
-                      style={{
-                        backgroundColor: (snapshot.isDraggingOver ? "#024337" : '#315951'),
-                        padding: 5,
-                        width: 270,
-                        minHeight: 500
-                      }}
-                    >
-                      <h4 className="text-white">Done</h4>
-                      {doneTasks.map((task, index) => (
-                        <Draggable key={task.id} draggableId={task.id.toString()} index={index}>
-                          {(provided) => (
-                            <div
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              {...provided.dragHandleProps}
-                              className={`${style.taskItem}`}
-                              style={{
-                                userSelect: 'none',
-                                padding: 3,
-                                margin: '0 0 8px 0',
-                                minHeight: '20px',
-                                backgroundColor: snapshot.isDragging ? "#b26b07" : '#EF9B28',
-                                color: 'white',
-                                borderRadius: '10px',
-                                ...provided.draggableProps.style
-                              }}
-                            >
-                              <div className={`${style.taskContent} `}>
-                                <p className={`${style.taskTitleBackground} text-decoration-line-through`}>{task.title}
-                                </p>
+                        style={{
+                          backgroundColor: (snapshot.isDraggingOver ? "#024337" : '#315951'),
+                          padding: 5,
+                          width: 270,
+                          minHeight: 500
+                        }}
+                      >
+                        <h4 className="text-white">Done</h4>
+                        {doneTasks.map((task, index) => (
+                          <Draggable key={task.id} draggableId={task.id.toString()} index={index}>
+                            {(provided,snapshot) => (
+                              <div
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                                className={`${style.taskItem}`}
+                                style={{
+                                  userSelect: 'none',
+                                  padding: 3,
+                                  margin: '0 0 8px 0',
+                                  minHeight: '20px',
+                                  backgroundColor: snapshot.isDragging ? "#b26b07" : '#EF9B28',
+                                  color: 'white',
+                                  borderRadius: '10px',
+                                  ...provided.draggableProps.style
+                                }}
+                              >
+                                <div className={`${style.taskContent} `}>
+                                  <p className={`${style.taskTitleBackground} text-decoration-line-through`}>{task.title}
+                                  </p>
+                                </div>
                               </div>
-                            </div>
-                          )}
-                        </Draggable>
-                      ))}
-                      {provided.placeholder}
-                    </div>
-                  )}
-                </Droppable>
+                            )}
+                          </Draggable>
+                        ))}
+                        {provided.placeholder}
+                      </div>
+                    )}
+                  </Droppable>
                 </div>
 
               </div>
