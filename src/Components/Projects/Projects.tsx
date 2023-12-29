@@ -212,7 +212,7 @@ const Projects: React.FC = () => {
                         <td>{project?.task?.length}</td>
                         {userRole == "Manager" ? (
                           <td>
-                            <button className="btn-hover-custom bg-white border-0"  onClick={() => showViewModal(project?.id)}>
+                            <button className="btn-hover-custom bg-none border-0"  onClick={() => showViewModal(project?.id)}>
                               <i className="fa fa-eye  text-info px-2"></i>
                             </button>
 
