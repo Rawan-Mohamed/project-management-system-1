@@ -253,7 +253,7 @@ table td {
   height: 100%;
   background-color: var(--main-color);
 }
-  .tasks-count>div:first-child .tasks-status {
+.tasks-count>div:first-child .tasks-status {
   background-color: #E5E6F4;
 }
 .tasks-count >div:first-child .tasks-status i::before, 
@@ -348,12 +348,34 @@ table td {
   background-color: #121826 !important;
   color: #fff  !important;
 }
-/* .btn-hover-custom{
+.btn-hover-custom{
   background-color: #121826 !important;
-} */
+}
 /* .dark-theme .login-wrapper{
   background-color: #394251 !important;
 } */
 .logo{
   width: 15rem;
+}
+
+/* ******chart in dark mode */
+.dark-theme .tasks-count>div:first-child .tasks-status,
+.dark-theme .tasks-count >div:nth-child(2n) .tasks-status,
+.dark-theme .tasks-count >div:nth-child(3n) .tasks-status,
+.dark-theme .users-count>:first-child .status, 
+.dark-theme .users-count>:nth-child(2n) .status{
+  background-color:  #121826 !important;
+}
+.dark-theme .tasks-status > i,
+.dark-theme .status > i{
+  color: #000;
+}
+.dark-theme .tasks-chart{
+  background-color: #121826 !important;
+}
+.dark-theme .text-dark-light{
+  color: #fff !important; 
+}
+.dark-theme .recharts-label {
+  fill: #FFFFFF; /* Set the label color for dark mode */
 }
