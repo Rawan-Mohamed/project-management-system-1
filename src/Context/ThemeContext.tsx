@@ -1,10 +1,11 @@
 
-import { createContext, useState , ReactNode} from 'react';
+import { createContext, useState , ReactNode, useEffect} from 'react';
 
 export interface ITheme{
-    theme: string;
-    setTheme: React.Dispatch<React.SetStateAction<string>>;
+    isDarkMode: boolean;
+    setIsDarkMode: React.Dispatch<React.SetStateAction<boolean>>;
     toggleTheme: () => void;
+    themeClass: string;
 }
 interface ThemeContextProviderProps {
     children: ReactNode;
@@ -12,16 +13,27 @@ interface ThemeContextProviderProps {
 export const ThemeContext = createContext<ITheme | null>(null);
 
 const ThemeContextProvider: React.FC<ThemeContextProviderProps>= (props)=>{
-    const [theme, setTheme] = useState(()=> localStorage.getItem("theme") || "light");
-    // const [isDarkMode, setIsDarkMode] = useState(false); 
+    const [isDarkMode, setIsDarkMode] = useState(() => {
+        const savedTheme =localStorage.getItem("theme");
+        return savedTheme === 'dark';
+    });
    const toggleTheme = () =>{
-        setTheme((current)=> (current === 'light' ? 'dark' : 'light' ))
+        // setTheme((current)=> (current === 'light' ? 'dark' : 'light' ))
+        setIsDarkMode((previousValue) => !previousValue); 
     }
+    useEffect(() => {
+        // Save the theme preference to localStorage
+        localStorage.setItem("theme", isDarkMode ? "dark" : "light");
+      }, [isDarkMode]);
+
+      // j'ai utilisé la variable isDarkMode pour conditionner le rendu en fonction du thème.
+      const themeClass = isDarkMode ? 'dark-theme' : 'light-theme';
 
     const contextValue:ITheme={
-        theme,
-         setTheme, 
-         toggleTheme
+        isDarkMode, 
+        setIsDarkMode,
+         toggleTheme,
+         themeClass
     }
     return(
         

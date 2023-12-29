@@ -7,11 +7,17 @@ import { ThemeContext, ITheme } from '../../Context/ThemeContext';
 
 export default function NavBar() {
   const { userData }: any = useContext(AuthContext);
-  const { theme }:ITheme = useContext(ThemeContext);
+  const { isDarkMode }:ITheme = useContext(ThemeContext);
   return (
     <nav className="navbar navbar-expand-lg nav-bg p-0 ">
       <div className="container-fluid p-0">
-        {theme ==='light' ?(<img src={logo} alt="" className='logo' />):(<img src={logo1} alt=""  className='logo' />)}
+        {/* {isDarkMode && <img src={logo} alt="" className='logo' />}
+        {!isDarkMode && <img src={logo1} alt=""  className='logo' />} */}
+        {isDarkMode ? (
+        <img src={logo1} alt="Dark Logo" className="logo" />
+      ) : (
+        <img src={logo} alt="Light Logo" className="logo" />
+      )}
         
         <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span className="navbar-toggler-icon"></span>

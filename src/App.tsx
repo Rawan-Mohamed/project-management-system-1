@@ -24,7 +24,7 @@ import { ThemeContext, ITheme } from './Context/ThemeContext';
 
 function App() {
   let { userData, saveUserData, userRole } = useContext(AuthContext);
-  const {theme}:ITheme = useContext(ThemeContext);
+  const {isDarkMode, themeClass}:ITheme = useContext(ThemeContext);
 
   const routes = createBrowserRouter([
     {
@@ -65,7 +65,7 @@ function App() {
     <>
    
     
-      <div className="app" id={theme}>
+      <div className={`app ${themeClass}`}>
       {/* <div className="app" id="light"> */}
       {/* <div className="app" id="dark"> */}
         <ToastContainer />
