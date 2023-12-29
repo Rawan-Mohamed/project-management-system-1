@@ -118,7 +118,7 @@ button[type="submit"] {
 }
 /* table css */
 .table-container1 {
-  background-color: rgba(245, 245, 245, 1);
+  /* background-color: rgba(245, 245, 245, 1); */
   padding: 30px;
 }
 table th {
@@ -298,3 +298,27 @@ table td {
 /* .donutchart-legend-item-label{
   padding:0 10px 0 0;
 } */
+/* start dark & light mode ******/
+#light{
+  background-color: #fff;
+}
+#dark{
+  background-color: #060f20;
+  /* background-color: #121826; */
+  color: #fff;
+}
+.fa-toggle-on, .fa-toggle-off{
+ font-size: 2rem;
+}
+/* side bar dark mode */
+#dark .sidebar-container .ps-sidebar-container,
+._sidebar_gufjs_21 {
+  background-color: #121826;
+}
+#dark .sidebar-container .ps-sidebar-container .ps-menu-button:hover {
+  /* background-color: #292f3b; */
+  background-color: #ef9b28;
+}
+#dark .fa-bell{
+  color:#121826;
+}

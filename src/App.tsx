@@ -19,9 +19,12 @@ import { ToastContainer } from "react-toastify";
 import AddProject from "./Components/AddProject/AddProject";
 import AddTask from "./Components/AddTask/AddTask";
 import "./App.css";
+import { ThemeContext, ITheme } from './Context/ThemeContext';
+
 
 function App() {
   let { userData, saveUserData, userRole } = useContext(AuthContext);
+  const {theme}:ITheme = useContext(ThemeContext);
 
   const routes = createBrowserRouter([
     {
@@ -60,8 +63,14 @@ function App() {
 
   return (
     <>
-      <ToastContainer />
-      <RouterProvider router={routes} />
+   
+    
+      <div className="app" id={theme}>
+      {/* <div className="app" id="light"> */}
+      {/* <div className="app" id="dark"> */}
+        <ToastContainer />
+        <RouterProvider router={routes} />
+      </div>
     </>
   );
 }
