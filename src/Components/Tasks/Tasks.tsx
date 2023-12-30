@@ -336,7 +336,6 @@ const Tasks: React.FC = () => {
         }
       })
       .then((response) => {
-        console.log('Tasks by Project ID:', response.data);
         setTasks(response?.data?.data);
         setPagesArray(
           Array(response?.data?.totalNumberOfPages)
@@ -369,9 +368,7 @@ const Tasks: React.FC = () => {
         getEmployeeTasksList();
       }
     }
-    console.log('selectedProjectId:', selectedProjectId);
-    console.log('options:', projectList.map((project) => ({ value: project.id, label: project.title })));
-  };
+     };
 
   // const handleProjectSelection = (selectedOption) => {
   //   const projectId = selectedOption.value;
@@ -677,7 +674,7 @@ const Tasks: React.FC = () => {
 
             <DragDropContext onDragEnd={handleDragEnd} >
               <div
-                className={`d-flex justify-content-between columnCont m-4 p-5 ${style.columnContainer}`}
+                className={`d-flex justify-content-around  m-4 p-2 ${style.columnContainer}`}
               >
                 {/* ToDo column */}
                 <div
@@ -692,7 +689,7 @@ const Tasks: React.FC = () => {
                         style={{
                           backgroundColor: (snapshot.isDraggingOver ? "#024337" : '#315951'),
                           padding: 5,
-                          width: 270,
+                          width: 310,
                           minHeight: 500
                         }}
                       >
@@ -746,7 +743,7 @@ const Tasks: React.FC = () => {
                         style={{
                           backgroundColor: (snapshot.isDraggingOver ? "#024337" : '#315951'),
                           padding: 5,
-                          width: 270,
+                          width: 310,
                           minHeight: 500
                         }}>
                         <h4 className="text-white">In Progress</h4>
@@ -795,7 +792,7 @@ const Tasks: React.FC = () => {
                         style={{
                           backgroundColor: (snapshot.isDraggingOver ? "#024337" : '#315951'),
                           padding: 5,
-                          width: 270,
+                          width: 310,
                           minHeight: 500
                         }}
                       >
