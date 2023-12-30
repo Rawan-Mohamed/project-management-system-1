@@ -11,7 +11,8 @@ import NoData from "../../Shared/NoData/NoData";
 // import AddTask from "../AddTask/AddTask";
 import noData from "./../../assets/images/no-data.png";
 import style from "./Tasks.module.css"
-// import Select from 'react-select';
+import CustomPagination from "../../Shared/CustomPagination/CustomPagination";
+import Select from 'react-select';
 interface Itasks {
   id: number;
   status: string;
@@ -29,7 +30,10 @@ const Tasks: React.FC = () => {
   const [inProgressTasks, setInProgressTasks] = useState([])
   const [doneTasks, setDoneTasks] = useState([])
   // const [selectedUser, setSelectedUser] = useState(null);
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pagesArray, setPagesArray] = useState([]);
+  const [projectList, setProjectList] = useState([])
+  const [selectedProjectId, setSelectedProjectId] = useState<number | null>(null);
 
   const [taskId, setTaskId]: any = useState(0);
   const {
@@ -64,17 +68,22 @@ const Tasks: React.FC = () => {
     setModalState("delete-modal");
   };
   // **********get all tasks**********pageSize:number, pageNumber:number*******
-  const getManagerTasksList = async () => {
+  const getManagerTasksList = async (pageNumber) => {
     await axios
       .get(`${baseUrl}/Task/manager`,
         {
           headers: requestHeaders,
-          // params:{
-          //   pageSize: 5,
-          //   pageNumber: pageNumber,
-          // }
+          params:{
+            pageSize: 5,
+            pageNumber: pageNumber,
+          }
         })
       .then((response) => {
+        setPagesArray(
+          Array(response?.data?.totalNumberOfPages)
+            .fill()
+            .map((_, i) => i + 1)
+        );
         setTasks(response?.data?.data);
       })
       .catch((error) => {
@@ -207,38 +216,19 @@ const Tasks: React.FC = () => {
 
 
   // *********Search in dropdown **************
-  // const handleUserChange = (selectedOption) => {
-  //   setSelectedUser(selectedOption);
-  //   getAllUsers(selectedOption?.label);
-  // };
-  // const filterOptions = (options, { inputValue }) => {
-  //   return options.filter((user) =>
-  //     user.label.toLowerCase().includes(inputValue.toLowerCase())
-  //   ).slice(0, 5); // Limit the results to 5 items
-  // };
-  // const userOptions = userList.map((user) => ({
-  //   value: user.id,
-  //   label: user.userName,
-  // }));
-  // const renderTask = (task: Itasks, index: number) => (
-  //   <Draggable key={task.id} draggableId={task.id.toString()} index={index}>
-  //     {(provided) => (
-  //       <div
-  //         ref={provided.innerRef}
-  //         {...provided.draggableProps}
-  //         {...provided.dragHandleProps}
-  //       >
-  //         <div>
-  //           <p>{task.title}</p>
-  //           <p>{task.description}</p>
-  //         </div>
-  //       </div>
-  //     )}
-  //   </Draggable>
-  // );
-
-
-
+  const handleUserChange = (selectedOption) => {
+    setSelectedUser(selectedOption);
+    getAllUsers(selectedOption?.label);
+  };
+  const filterOptions = (options, { inputValue }) => {
+    return options.filter((user) =>
+      user.label.toLowerCase().includes(inputValue.toLowerCase())
+    ).slice(0, 5); // Limit the results to 5 items
+  };
+  const userOptions = userList.map((user) => ({
+    value: user.id,
+    label: user.userName,
+  }));
 
 
   // ***Handle drag and drop
@@ -309,10 +299,102 @@ const Tasks: React.FC = () => {
       });
   };
 
+   // ************** get all project for mangaer */
+   const getAllProjectsList = () => {
+    axios
+      .get(`${baseUrl}/Project`, {
+        headers: requestHeaders,
+        params: {
+          pageSize: 30,
+
+        }
+      })
+      .then((response) => {
+
+        setProjectList(response?.data?.data);
+      })
+      .catch((error) => {
+        getToastValue(
+          "error",
+          error?.response?.data?.message ||
+          "An error occurred. Please try again."
+        );
+      });
+  };
+
+  const getTasksByProjectId = (projectId) => {
+    const apiUrl = projectId
+      ? `${baseUrl}/Task/project/${projectId}`
+      : `${baseUrl}/Task/manager`;
+
+    axios
+      .get(apiUrl, {
+        headers: requestHeaders,
+        params: {
+          pageSize: 50,
+          // pageNumber: pageNumber,
+        }
+      })
+      .then((response) => {
+        console.log('Tasks by Project ID:', response.data);
+        setTasks(response?.data?.data);
+        setPagesArray(
+          Array(response?.data?.totalNumberOfPages)
+            .fill()
+            .map((_, i) => i + 1)
+        );
+      })
+      .catch((error) => {
+        getToastValue(
+          "error",
+          error?.response?.data?.message ||
+          "An error occurred. Please try again."
+        );
+      });
+  };
+
+  const handleProjectSelection = (selectedValue) => {
+    const projectId = selectedValue ? selectedValue.value : null;
+
+    setSelectedProjectId(selectedValue);
+
+    if (selectedValue !== null) {
+      // If a specific project is selected, filter tasks by project
+      getTasksByProjectId(selectedValue);
+    } else {
+      // If no project is selected, fetch all tasks
+      if (userRole === 'Manager') {
+        getManagerTasksList();
+      } else if (userRole === 'Employee') {
+        getEmployeeTasksList();
+      }
+    }
+    console.log('selectedProjectId:', selectedProjectId);
+    console.log('options:', projectList.map((project) => ({ value: project.id, label: project.title })));
+  };
+
+  // const handleProjectSelection = (selectedOption) => {
+  //   const projectId = selectedOption.value;
+
+  //   setSelectedProjectId(projectId);
+  //   getTasksByProjectId(projectId);
+  //   // if (projectId !== null) {
+  //   //   getTasksByProjectId(projectId);
+  //   // } else {
+  //   //   if (userRole === 'Manager') {
+  //   //     getManagerTasksList();
+  //   //   } else if (userRole === 'Employee') {
+  //   //     getEmployeeTasksList();
+  //   //   }
+  //   // }
+  // };
+
+
   useEffect(() => {
     if (userRole == 'Manager') {
-      getManagerTasksList()
+      getManagerTasksList(currentPage)
       getAllUsers();
+      getAllProjectsList()
 
 
     }
@@ -321,7 +403,7 @@ const Tasks: React.FC = () => {
     }
 
 
-  }, [userRole])
+  }, [userRole,currentPage])
 
   return (
     <>
@@ -344,6 +426,20 @@ const Tasks: React.FC = () => {
       <>
         {userRole == 'Manager' ?
           <div className="table-container1 vh-100">
+             <div className="w-50">
+              <Select
+                options={projectList.map((project) => ({ value: project.id, label: project.title }))}
+                value={
+                  selectedProjectId
+                    ? { value: selectedProjectId, label: projectList.find((project) => project.id === selectedProjectId)?.title || '' }
+                    : null
+                }
+                onChange={(selectedOption) => handleProjectSelection(selectedOption?.value)}
+                placeholder="Search or select a project"
+                isSearchable
+                isClearable
+              />
+            </div>
             {
               tasks?.length > 0 ? (
                 <table className="table">
@@ -383,8 +479,8 @@ const Tasks: React.FC = () => {
                           </div>
                         </td>
                         <td>{task?.description}</td>
-                        <td>{task.employee.userName}</td>
-                        <td>{task.project.title}</td>
+                        <td>{task?.employee?.userName}</td>
+                        <td>{task?.project?.title}</td>
                         <td>{new Date(task.creationDate).toLocaleDateString()}</td>
                         <td>
                           <button onClick={() => showViewModal(task?.id)}
@@ -571,7 +667,11 @@ const Tasks: React.FC = () => {
               </Modal.Body>
             </Modal>
             {/************************* * //delete modal*************** */}
-
+            <CustomPagination
+            totalPages={pagesArray.length}
+            currentPage={currentPage}
+            onPageChange={setCurrentPage}
+          />
           </div> :
           <div >
 
