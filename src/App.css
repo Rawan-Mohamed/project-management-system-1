@@ -154,7 +154,10 @@ table td {
   color: #fff !important;
 }
 /* btn icon hover */
-.btn-hover-custom:hover{
+.icon-bg-custom{
+  background-color: #fff !important;
+}
+.icon-bg-custom:hover{
   box-shadow:none !important
 }
 /* *****loader ************/
