@@ -16,7 +16,8 @@ const ThemeContextProvider: React.FC<ThemeContextProviderProps>= (props)=>{
     const [isDarkMode, setIsDarkMode] = useState(() => {
         // const savedTheme =localStorage.getItem("theme");
         const savedTheme =localStorage.getItem("isDarkMode");
-        return savedTheme === 'dark';
+        // return savedTheme === 'dark';
+        return savedTheme === 'true'; // Convert the stored string to a boolean
     });
    const toggleTheme = () =>{
         // setTheme((current)=> (current === 'light' ? 'dark' : 'light' ))
@@ -25,7 +26,8 @@ const ThemeContextProvider: React.FC<ThemeContextProviderProps>= (props)=>{
     useEffect(() => {
         // Save the theme preference to localStorage
         // localStorage.setItem("theme", isDarkMode ? "dark" : "light");
-        localStorage.setItem("isDarkMode", isDarkMode )
+        // localStorage.setItem("isDarkMode", isDarkMode )
+        localStorage.setItem('isDarkMode', String(isDarkMode));
     }, [isDarkMode]);
 
       // j'ai utilisé la variable isDarkMode pour conditionner le rendu en fonction du thème.
