@@ -17,7 +17,7 @@ export default function Notfound() {
           to={"/dashboard"}
           className="mt-4 btn btn-warning rounded-5 px-4 customize-link"
         >
-          Go to Home
+          Back to Home
         </Link>
         </>
         
@@ -30,7 +30,7 @@ export default function Notfound() {
         to={"/login"}
         className="mt-4 btn btn-warning rounded-5 px-4 customize-link"
       >
-        Go to Login
+        Back to Login
       </Link>
       </>
       )}
