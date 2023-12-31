@@ -13,6 +13,7 @@ import noData from "./../../assets/images/no-data.png";
 import style from "./Tasks.module.css"
 import CustomPagination from "../../Shared/CustomPagination/CustomPagination";
 import Select from 'react-select';
+import Loading from "../../Shared/Loading/Loading";
 interface Itasks {
   id: number;
   status: string;
@@ -69,11 +70,12 @@ const Tasks: React.FC = () => {
   };
   // **********get all tasks**********pageSize:number, pageNumber:number*******
   const getManagerTasksList = async (pageNumber) => {
+    setIsLoading(true);
     await axios
       .get(`${baseUrl}/Task/manager`,
         {
           headers: requestHeaders,
-          params:{
+          params: {
             pageSize: 5,
             pageNumber: pageNumber,
           }
@@ -92,10 +94,15 @@ const Tasks: React.FC = () => {
           error?.response?.data?.message ||
           "An error occurred. Please try again."
         );
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   };
   // **********get all Employee tasks**********pageSize:number, pageNumber:number*******
   const getEmployeeTasksList = async () => {
+    setIsLoading(true);
+
     try {
       const response = await axios.get(`${baseUrl}/Task`, {
         headers: requestHeaders,
@@ -125,6 +132,9 @@ const Tasks: React.FC = () => {
         error?.response?.data?.message ||
         'An error occurred. Please try again.'
       );
+    }
+    finally {
+      setIsLoading(false);
     }
   };
 
@@ -299,8 +309,8 @@ const Tasks: React.FC = () => {
       });
   };
 
-   // ************** get all project for mangaer */
-   const getAllProjectsList = () => {
+  // ************** get all project for mangaer */
+  const getAllProjectsList = () => {
     axios
       .get(`${baseUrl}/Project`, {
         headers: requestHeaders,
@@ -368,7 +378,7 @@ const Tasks: React.FC = () => {
         getEmployeeTasksList();
       }
     }
-     };
+  };
 
   // const handleProjectSelection = (selectedOption) => {
   //   const projectId = selectedOption.value;
@@ -400,7 +410,7 @@ const Tasks: React.FC = () => {
     }
 
 
-  }, [userRole,currentPage])
+  }, [userRole, currentPage])
 
   return (
     <>
@@ -421,420 +431,402 @@ const Tasks: React.FC = () => {
 
       {/* table */}
       <>
-        {userRole == 'Manager' ?
-          <div className="table-container1 vh-100">
-             <div className="w-50">
-              <Select
-                options={projectList.map((project) => ({ value: project.id, label: project.title }))}
-                value={
-                  selectedProjectId
-                    ? { value: selectedProjectId, label: projectList.find((project) => project.id === selectedProjectId)?.title || '' }
-                    : null
-                }
-                onChange={(selectedOption) => handleProjectSelection(selectedOption?.value)}
-                placeholder="Search or select a project"
-                isSearchable
-                isClearable
-              />
-            </div>
-            {
-              tasks?.length > 0 ? (
-                <table className="table">
-                  <thead className="table-head table-bg ">
-                    <tr>
-                      <th scope="col">Title</th>
-                      <th scope="col">Status</th>
-                      <th scope="col">Description</th>
-                      <th scope="col">User</th>
-                      <th scope="col">Project</th>
-                      <th scope="col">Date Created</th>
-                      <th scope="col">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {tasks.map((task: any) => (
-                      <tr key={task?.id}>
-                        <th scope="row">{task?.title}</th>
-
-                        <td className=' text-white' style={{ textAlign: 'center' }}>
-                          <div style={{
-                            backgroundColor:
-                              task?.status === 'ToDo'
-                                ? '#E4E1F5'
-                                : task?.status === 'InProgress'
-                                  ? '#EF9B28'
-                                  : task?.status === 'Done'
-                                    ? '#009247'
-                                    : 'inherit',
-                            borderRadius: '15px',
-                            fontSize: '16px',
-                            padding: '10px', // Adjust the padding as needed
-                            fontWeight: '250',
-                            fontFamily: 'Montserrat-Regular',
-                          }}>
-                            {task?.status}
-                          </div>
-                        </td>
-                        <td>{task?.description}</td>
-                        <td>{task?.employee?.userName}</td>
-                        <td>{task?.project?.title}</td>
-                        <td>{new Date(task.creationDate).toLocaleDateString()}</td>
-                        <td>
-                          <button onClick={() => showViewModal(task?.id)}
-                            className="p-0 border-0 bg-white">
-                            <i
-
-                              className="fa fa-eye  text-info px-1"
-                            ></i>
-                          </button>
-                          <button className="p-0 border-0 bg-white">
-                            <i
-                              onClick={() => showUpdateModal(task)}
-                              className="fa fa-pen  text-warning px-1"
-                            ></i>
-                          </button >
-                          <button onClick={() => showDeleteModal(task.id)}
-                            className="p-0 border-0 bg-white">
-                            <i
-
-                              className="fa fa-trash  text-danger px-1"
-                            ></i>
-                          </button>
-
+        {
+          userRole === 'Manager' ? (
+            <div className="table-container1 vh-100">
+              <div className="w-50">
+                <Select
+                  options={projectList.map((project) => ({ value: project.id, label: project.title }))}
+                  value={
+                    selectedProjectId
+                      ? { value: selectedProjectId, label: projectList.find((project) => project.id === selectedProjectId)?.title || '' }
+                      : null
+                  }
+                  onChange={(selectedOption) => handleProjectSelection(selectedOption?.value)}
+                  placeholder="Search or select a project"
+                  isSearchable
+                  isClearable
+                />
+              </div>
+              <table className="table">
+                <thead className="table-head table-bg ">
+                  <tr>
+                    <th scope="col">Title</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">User</th>
+                    <th scope="col">Project</th>
+                    <th scope="col">Date Created</th>
+                    <th scope="col">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {!isLoading ? (
+                    tasks?.length > 0 ? (
+                      tasks.map((task: any) => (
+                        <tr key={task?.id}>
+                          <th scope="row">{task?.title}</th>
+                          <td className=' text-white' style={{ textAlign: 'center' }}>
+                            <div style={{
+                              backgroundColor:
+                                task?.status === 'ToDo'
+                                  ? '#E4E1F5'
+                                  : task?.status === 'InProgress'
+                                    ? '#EF9B28'
+                                    : task?.status === 'Done'
+                                      ? '#009247'
+                                      : 'inherit',
+                              borderRadius: '15px',
+                              fontSize: '16px',
+                              padding: '10px',
+                              fontWeight: '250',
+                              fontFamily: 'Montserrat-Regular',
+                            }}>
+                              {task?.status}
+                            </div>
+                          </td>
+                          <td>{task?.description}</td>
+                          <td>{task?.employee?.userName}</td>
+                          <td>{task?.project?.title}</td>
+                          <td>{new Date(task.creationDate).toLocaleDateString()}</td>
+                          <td>
+                            <button onClick={() => showViewModal(task?.id)} className="p-0 border-0 bg-white">
+                              <i className="fa fa-eye text-info px-1"></i>
+                            </button>
+                            <button onClick={() => showUpdateModal(task)} className="p-0 border-0 bg-white">
+                              <i className="fa fa-pen text-warning px-1"></i>
+                            </button>
+                            <button onClick={() => showDeleteModal(task.id)} className="p-0 border-0 bg-white">
+                              <i className="fa fa-trash text-danger px-1"></i>
+                            </button>
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan="7">
+                          <NoData />
                         </td>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>) : (
-                <NoData />
-              )
-            }
-
-            {/* ******************** view modal ***************************/}
-            <Modal show={modalState == "view-modal"} onHide={handleClose}>
-              <Modal.Header closeButton>
-                <h3>Tasks Details</h3>
-              </Modal.Header>
-              <Modal.Body>
-                <>
-                  <p>
-                    <span className="text-warning">Title :&nbsp;</span>
-                    {taskDetails?.title}
-                  </p>
-                  <p>
-                    <span className="text-warning">description :&nbsp;</span>
-                    {taskDetails?.description}
-                  </p>
-                  <p>
-                    <span className="text-warning">status :&nbsp;</span>
-                    {taskDetails?.status}
-                  </p>
-                  <p>
-                    <span className="text-warning">Project :&nbsp;</span>
-                    {taskDetails?.project?.title}
-                  </p>
-                </>
-              </Modal.Body>
-            </Modal>
-            {/* //*****************view modal******************** */}
-            {/* ****************update modal *****************/}
-            <Modal show={modalState == "update-modal"} onHide={handleClose}>
-              <Modal.Header closeButton>
-                <h3>Update Task</h3>
-              </Modal.Header>
-              <Modal.Body>
-                <p>Welcome Back! Please enter your details</p>
-                <form
-                  onSubmit={handleSubmit(updateTask)}
-                  action=""
-                  className="form-wrapper m-auto   pt-5 pb-3 px-5"
-                >
-                  <div className="form-group my-3">
-                    <label className="label-title mb-2">Title</label>
-                    <input
-                      {...register("title", {
-                        required: true,
-                      })}
-                      type="text"
-                      name="title"
-                      className="form-control"
-                      placeholder="Enter Title..."
-                    />
-
-                    {errors.title && errors.title.type === "required" && (
-                      <span className="text-danger ">title is required</span>
-                    )}
+                    )
+                  ) : (
+                    <tr>
+                      <td colSpan="7">
+                        <Loading />
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+              {/* ******************** view modal ***************************/}
+              <Modal show={modalState === "view-modal"} onHide={handleClose}>
+                <Modal.Header closeButton>
+                  <h3>Tasks Details</h3>
+                </Modal.Header>
+                <Modal.Body>
+                  <>
+                    <p>
+                      <span className="text-warning">Title :&nbsp;</span>
+                      {taskDetails?.title}
+                    </p>
+                    <p>
+                      <span className="text-warning">description :&nbsp;</span>
+                      {taskDetails?.description}
+                    </p>
+                    <p>
+                      <span className="text-warning">status :&nbsp;</span>
+                      {taskDetails?.status}
+                    </p>
+                    <p>
+                      <span className="text-warning">Project :&nbsp;</span>
+                      {taskDetails?.project?.title}
+                    </p>
+                  </>
+                </Modal.Body>
+              </Modal>
+              {/* //*****************view modal******************** */}
+              {/* ****************update modal *****************/}
+              <Modal show={modalState === "update-modal"} onHide={handleClose}>
+                <Modal.Header closeButton>
+                  <h3>Update Task</h3>
+                </Modal.Header>
+                <Modal.Body>
+                  <p>Welcome Back! Please enter your details</p>
+                  <form
+                    onSubmit={handleSubmit(updateTask)}
+                    action=""
+                    className="form-wrapper m-auto   pt-5 pb-3 px-5"
+                  >
+                    <div className="form-group my-3">
+                      <label className="label-title mb-2">Title</label>
+                      <input
+                        {...register("title", {
+                          required: true,
+                        })}
+                        type="text"
+                        name="title"
+                        className="form-control"
+                        placeholder="Enter Title..."
+                      />
+                      {errors.title && errors.title.type === "required" && (
+                        <span className="text-danger ">title is required</span>
+                      )}
+                    </div>
+                    <div className="form-group my-3">
+                      <label className="label-title mb-2">Description</label>
+                      <textarea
+                        {...register("description", {
+                          required: true,
+                        })}
+                        rows={5}
+                        type="text"
+                        name="description"
+                        className="form-control"
+                        placeholder="Enter description..."
+                      ></textarea>
+                      {errors.title && errors.title.type === "required" && (
+                        <span className="text-danger ">desciption is required</span>
+                      )}
+                    </div>
+                    <div className="form-group my-3">
+                      <select
+                        {...register("employeeId", { required: true, valueAsNumber: true })}
+                        aria-label="Default select example"
+                        className="form-select"
+                      >
+                        <option className="text-muted">User</option>
+                        {userList.map((user) => (
+                          <option key={user.id} value={user.id} >
+                            {user.userName}
+                          </option>
+                        ))}
+                      </select>
+                      {errors.employeeId && errors.employeeId.type === "required" && (
+                        <span className="text-danger ">No User Selected</span>
+                      )}
+                    </div>
+                    <div className="form-group my-3 text-end">
+                      <button
+                        className={"btn my-3 px-4" + (isLoading ? " disabled" : "")}
+                      >
+                        {isLoading == true ? (
+                          <i className="fas fa-spinner fa-spin"></i>
+                        ) : (
+                          "Update"
+                        )}
+                      </button>
+                    </div>
+                  </form>
+                </Modal.Body>
+              </Modal>
+              {/* ***************** //update modal *****************/}
+              {/* **************** * delete modal *****************/}
+              <Modal show={modalState === "delete-modal"} onHide={handleClose}>
+                <Modal.Header closeButton>
+                  <h3>delete this Task?</h3>
+                </Modal.Header>
+                <Modal.Body>
+                  <div className="text-center">
+                    <img src={noData} />
+                    <p>
+                      are you sure you want to delete this item ? if you are sure
+                      just click on delete it
+                    </p>
                   </div>
-                  <div className="form-group my-3">
-                    <label className="label-title mb-2">Description</label>
-                    <textarea
-                      {...register("description", {
-                        required: true,
-                      })}
-                      rows={5}
-                      type="text"
-                      name="description"
-                      className="form-control"
-                      placeholder="Enter description..."
-                    ></textarea>
-
-                    {errors.title && errors.title.type === "required" && (
-                      <span className="text-danger ">desciption is required</span>
-                    )}
-                  </div>
-                  <div className="form-group my-3">
-                    <select
-                      {...register("employeeId", { required: true, valueAsNumber: true })}
-                      aria-label="Default select example"
-
-                      className="form-select"
-                    >
-                      <option className="text-muted">
-                        User
-                      </option>
-                      {userList.map((user) => (
-                        <option key={user.id} value={user.id} >
-                          <td>{user.userName}</td>
-
-                        </option>
-
-                      ))}
-
-                    </select>
-                    {errors.employeeId && errors.employeeId.type === "required" && (
-                      <span className="text-danger ">No User Selected</span>
-                    )}
-                  </div>
-                  {/* <div className="form-group my-3">
-         <Select
-           {...register("employeeId", { required: true, valueAsNumber: true })}
-           options={userOptions}
-           value={selectedUser}
-           onChange={handleUserChange}
-           placeholder="Search user..."
-
-         />
-         {errors.employeeId && errors.employeeId.type === "required" && (
-           <span className="text-danger ">No User Selected</span>
-         )}
-       </div> */}
-                  <div className="form-group my-3 text-end">
+                  <div className="text-end ">
                     <button
-                      className={"btn my-3 px-4" + (isLoading ? " disabled" : "")}
+                      onClick={deleteTask}
+                      className={
+                        "btn btn-outline-danger my-3" +
+                        (isLoading ? " disabled" : "")
+                      }
                     >
                       {isLoading == true ? (
                         <i className="fas fa-spinner fa-spin"></i>
                       ) : (
-                        "Update"
+                        "Delete this item"
                       )}
                     </button>
                   </div>
-                </form>
-              </Modal.Body>
-            </Modal>
-            {/***************** //update modal *****************/}
-            {/* **************** * delete modal *****************/}
-            <Modal show={modalState == "delete-modal"} onHide={handleClose}>
-              <Modal.Header closeButton>
-                <h3>delete this Task?</h3>
-              </Modal.Header>
-              <Modal.Body>
-                <div className="text-center">
-                  <img src={noData} />
-                  <p>
-                    are you sure you want to delete this item ? if you are sure
-                    just click on delete it
-                  </p>
-                </div>
-                <div className="text-end ">
-                  <button
-                    onClick={deleteTask}
-                    className={
-                      "btn btn-outline-danger my-3" +
-                      (isLoading ? " disabled" : "")
-                    }
+                </Modal.Body>
+              </Modal>
+              {/************************* * //delete modal*************** */}
+              {/* pagination */}
+              {!isLoading ? (
+                <CustomPagination
+                  totalPages={pagesArray.length}
+                  currentPage={currentPage}
+                  onPageChange={setCurrentPage}
+                />) : ('')}
+            </div>
+          ) : (
+            <div >
+
+              <DragDropContext onDragEnd={handleDragEnd} >
+                <div
+                  className={`d-flex justify-content-around  m-4 p-2 ${style.columnContainer}`}
+                >
+                  {/* ToDo column */}
+                  <div
+
+                    className={style.column}
                   >
-                    {isLoading == true ? (
-                      <i className="fas fa-spinner fa-spin"></i>
-                    ) : (
-                      "Delete this item"
-                    )}
-                  </button>
-                </div>
-              </Modal.Body>
-            </Modal>
-            {/************************* * //delete modal*************** */}
-            <CustomPagination
-            totalPages={pagesArray.length}
-            currentPage={currentPage}
-            onPageChange={setCurrentPage}
-          />
-          </div> :
-          <div >
+                    <Droppable droppableId="todo" direction="vertical"  >
+                      {(provided, snapshot) => (
+                        <div ref={provided.innerRef}
+                          {...provided.droppableProps}
+                          // className={`${style.bgStatus} p-5`}
+                          style={{
+                            backgroundColor: (snapshot.isDraggingOver ? "#024337" : '#315951'),
+                            padding: 5,
+                            width: 310,
+                            minHeight: 500
+                          }}
+                        >
+                          <h4 className="text-white">To-Do</h4>
+                          {todoTasks.map((task, index) => (
+                            <Draggable key={task.id} draggableId={task.id.toString()} index={index}>
+                              {(provided, snapshot) => (
+                                <div
 
-            <DragDropContext onDragEnd={handleDragEnd} >
-              <div
-                className={`d-flex justify-content-around  m-4 p-2 ${style.columnContainer}`}
-              >
-                {/* ToDo column */}
-                <div
+                                  ref={provided.innerRef}
+                                  {...provided.draggableProps}
+                                  {...provided.dragHandleProps}
+                                  style={{
+                                    userSelect: 'none',
+                                    padding: 3,
+                                    margin: '0 0 8px 0',
+                                    minHeight: '20px',
+                                    backgroundColor: snapshot.isDragging ? "#b26b07" : '#EF9B28',
+                                    color: 'white',
+                                    borderRadius: '10px',
+                                    ...provided.draggableProps.style
+                                  }}
 
-                  className={style.column}
-                >
-                  <Droppable droppableId="todo" direction="vertical"  >
-                    {(provided, snapshot) => (
-                      <div ref={provided.innerRef}
-                        {...provided.droppableProps}
-                        // className={`${style.bgStatus} p-5`}
-                        style={{
-                          backgroundColor: (snapshot.isDraggingOver ? "#024337" : '#315951'),
-                          padding: 5,
-                          width: 310,
-                          minHeight: 500
-                        }}
-                      >
-                        <h4 className="text-white">To-Do</h4>
-                        {todoTasks.map((task, index) => (
-                          <Draggable key={task.id} draggableId={task.id.toString()} index={index}>
-                            {(provided, snapshot) => (
-                              <div
-
-                                ref={provided.innerRef}
-                                {...provided.draggableProps}
-                                {...provided.dragHandleProps}
-                                style={{
-                                  userSelect: 'none',
-                                  padding: 3,
-                                  margin: '0 0 8px 0',
-                                  minHeight: '20px',
-                                  backgroundColor: snapshot.isDragging ? "#b26b07" : '#EF9B28',
-                                  color: 'white',
-                                  borderRadius: '10px',
-                                  ...provided.draggableProps.style
-                                }}
-
-                              >
-                                <div className={`${style.taskContent} `}>
-                                  <p className={`${style.taskTitleBackground}`}>{task.title}
-                                  </p>
+                                >
+                                  <div className={`${style.taskContent} `}>
+                                    <p className={`${style.taskTitleBackground}`}>{task.title}
+                                    </p>
+                                  </div>
                                 </div>
-                              </div>
-                            )}
-                          </Draggable>
+                              )}
+                            </Draggable>
 
 
-                        ))}
-                        {provided.placeholder}
+                          ))}
+                          {provided.placeholder}
 
-                      </div>
-                    )}
-                  </Droppable>
-                </div>
+                        </div>
+                      )}
+                    </Droppable>
+                  </div>
 
 
-                {/* InProgress column */}
-                <div
-                  className={style.column}
-                >
-                  <Droppable droppableId="inProgress" direction="vertical">
-                    {(provided, snapshot) => (
-                      <div ref={provided.innerRef} {...provided.droppableProps}
-                        className=""
-                        style={{
-                          backgroundColor: (snapshot.isDraggingOver ? "#024337" : '#315951'),
-                          padding: 5,
-                          width: 310,
-                          minHeight: 500
-                        }}>
-                        <h4 className="text-white">In Progress</h4>
-                        {inProgressTasks.map((task, index) => (
-                          <Draggable key={task.id} draggableId={task.id.toString()} index={index}>
-                            {(provided, snapshot) => (
-                              <div
-                                ref={provided.innerRef}
-                                {...provided.draggableProps}
-                                {...provided.dragHandleProps}
-                                style={{
-                                  userSelect: 'none',
-                                  padding: 3,
-                                  margin: '0 0 8px 0',
-                                  minHeight: '20px',
-                                  backgroundColor: snapshot.isDragging ? "#b26b07" : '#EF9B28',
-                                  color: 'white',
-                                  borderRadius: '10px',
-                                  ...provided.draggableProps.style
-                                }}
+                  {/* InProgress column */}
+                  <div
+                    className={style.column}
+                  >
+                    <Droppable droppableId="inProgress" direction="vertical">
+                      {(provided, snapshot) => (
+                        <div ref={provided.innerRef} {...provided.droppableProps}
+                          className=""
+                          style={{
+                            backgroundColor: (snapshot.isDraggingOver ? "#024337" : '#315951'),
+                            padding: 5,
+                            width: 310,
+                            minHeight: 500
+                          }}>
+                          <h4 className="text-white">In Progress</h4>
+                          {inProgressTasks.map((task, index) => (
+                            <Draggable key={task.id} draggableId={task.id.toString()} index={index}>
+                              {(provided, snapshot) => (
+                                <div
+                                  ref={provided.innerRef}
+                                  {...provided.draggableProps}
+                                  {...provided.dragHandleProps}
+                                  style={{
+                                    userSelect: 'none',
+                                    padding: 3,
+                                    margin: '0 0 8px 0',
+                                    minHeight: '20px',
+                                    backgroundColor: snapshot.isDragging ? "#b26b07" : '#EF9B28',
+                                    color: 'white',
+                                    borderRadius: '10px',
+                                    ...provided.draggableProps.style
+                                  }}
 
-                              >
-                                <div className={`${style.taskContent} `}>
-                                  <p className={`${style.taskTitleBackground}`}>{task.title}
-                                  </p>
+                                >
+                                  <div className={`${style.taskContent} `}>
+                                    <p className={`${style.taskTitleBackground}`}>{task.title}
+                                    </p>
+                                  </div>
                                 </div>
-                              </div>
-                            )}
-                          </Draggable>
-                        ))}
-                        {provided.placeholder}
-                      </div>
-                    )}
-                  </Droppable>
+                              )}
+                            </Draggable>
+                          ))}
+                          {provided.placeholder}
+                        </div>
+                      )}
+                    </Droppable>
 
-                </div>
+                  </div>
 
-                {/* Done column */}
+                  {/* Done column */}
 
-                <div className={style.column}>
-                  <Droppable droppableId="done" direction="vertical">
-                    {(provided, snapshot) => (
-                      <div ref={provided.innerRef}
-                        {...provided.droppableProps}
+                  <div className={style.column}>
+                    <Droppable droppableId="done" direction="vertical">
+                      {(provided, snapshot) => (
+                        <div ref={provided.innerRef}
+                          {...provided.droppableProps}
 
-                        style={{
-                          backgroundColor: (snapshot.isDraggingOver ? "#024337" : '#315951'),
-                          padding: 5,
-                          width: 310,
-                          minHeight: 500
-                        }}
-                      >
-                        <h4 className="text-white">Done</h4>
-                        {doneTasks.map((task, index) => (
-                          <Draggable key={task.id} draggableId={task.id.toString()} index={index}>
-                            {(provided,snapshot) => (
-                              <div
-                                ref={provided.innerRef}
-                                {...provided.draggableProps}
-                                {...provided.dragHandleProps}
-                                className={`${style.taskItem}`}
-                                style={{
-                                  userSelect: 'none',
-                                  padding: 3,
-                                  margin: '0 0 8px 0',
-                                  minHeight: '20px',
-                                  backgroundColor: snapshot.isDragging ? "#b26b07" : '#EF9B28',
-                                  color: 'white',
-                                  borderRadius: '10px',
-                                  ...provided.draggableProps.style
-                                }}
-                              >
-                                <div className={`${style.taskContent} `}>
-                                  <p className={`${style.taskTitleBackground} text-decoration-line-through`}>{task.title}
-                                  </p>
+                          style={{
+                            backgroundColor: (snapshot.isDraggingOver ? "#024337" : '#315951'),
+                            padding: 5,
+                            width: 310,
+                            minHeight: 500
+                          }}
+                        >
+                          <h4 className="text-white">Done</h4>
+                          {doneTasks.map((task, index) => (
+                            <Draggable key={task.id} draggableId={task.id.toString()} index={index}>
+                              {(provided, snapshot) => (
+                                <div
+                                  ref={provided.innerRef}
+                                  {...provided.draggableProps}
+                                  {...provided.dragHandleProps}
+                                  className={`${style.taskItem}`}
+                                  style={{
+                                    userSelect: 'none',
+                                    padding: 3,
+                                    margin: '0 0 8px 0',
+                                    minHeight: '20px',
+                                    backgroundColor: snapshot.isDragging ? "#b26b07" : '#EF9B28',
+                                    color: 'white',
+                                    borderRadius: '10px',
+                                    ...provided.draggableProps.style
+                                  }}
+                                >
+                                  <div className={`${style.taskContent} `}>
+                                    <p className={`${style.taskTitleBackground} text-decoration-line-through`}>{task.title}
+                                    </p>
+                                  </div>
                                 </div>
-                              </div>
-                            )}
-                          </Draggable>
-                        ))}
-                        {provided.placeholder}
-                      </div>
-                    )}
-                  </Droppable>
+                              )}
+                            </Draggable>
+                          ))}
+                          {provided.placeholder}
+                        </div>
+                      )}
+                    </Droppable>
+                  </div>
+
                 </div>
+              </DragDropContext>
+            </div>
 
-              </div>
-            </DragDropContext>
-          </div>
-
+          )
         }
+
 
       </>
       {/* table */}
