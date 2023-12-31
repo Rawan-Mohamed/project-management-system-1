@@ -13,21 +13,28 @@ interface ThemeContextProviderProps {
 export const ThemeContext = createContext<ITheme | null>(null);
 
 const ThemeContextProvider: React.FC<ThemeContextProviderProps>= (props)=>{
-    const [isDarkMode, setIsDarkMode] = useState(() => {
-        // const savedTheme =localStorage.getItem("theme");
-        const savedTheme =localStorage.getItem("isDarkMode");
-        // return savedTheme === 'dark';
-        return savedTheme === 'true'; // Convert the stored string to a boolean
-    });
+    // const [isDarkMode, setIsDarkMode] = useState(() => {
+      
+    //     const savedTheme =localStorage.getItem("isDarkMode");
+        
+   
+    //     return savedTheme === 'true'; // Convert the stored string to a boolean
+    // });
+    const [isDarkMode, setIsDarkMode] = useState<boolean>(() =>{
+    const savedTheme =localStorage.getItem("isDarkMode");
+    return savedTheme ? JSON.parse(savedTheme) : false;}
+    // JSON.parse(localStorage.getItem("isDarkMode")) 
+    );
+
    const toggleTheme = () =>{
         // setTheme((current)=> (current === 'light' ? 'dark' : 'light' ))
-        setIsDarkMode((previousValue) => !previousValue); 
+        setIsDarkMode((previousValue:boolean) => !previousValue); 
     }
     useEffect(() => {
         // Save the theme preference to localStorage
-        // localStorage.setItem("theme", isDarkMode ? "dark" : "light");
-        // localStorage.setItem("isDarkMode", isDarkMode )
+        
         localStorage.setItem('isDarkMode', String(isDarkMode));
+        
     }, [isDarkMode]);
 
       // j'ai utilisé la variable isDarkMode pour conditionner le rendu en fonction du thème.
