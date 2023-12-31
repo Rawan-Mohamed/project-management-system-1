@@ -14,7 +14,8 @@ export const ThemeContext = createContext<ITheme | null>(null);
 
 const ThemeContextProvider: React.FC<ThemeContextProviderProps>= (props)=>{
     const [isDarkMode, setIsDarkMode] = useState(() => {
-        const savedTheme =localStorage.getItem("theme");
+        // const savedTheme =localStorage.getItem("theme");
+        const savedTheme =localStorage.getItem("isDarkMode");
         return savedTheme === 'dark';
     });
    const toggleTheme = () =>{
@@ -23,8 +24,9 @@ const ThemeContextProvider: React.FC<ThemeContextProviderProps>= (props)=>{
     }
     useEffect(() => {
         // Save the theme preference to localStorage
-        localStorage.setItem("theme", isDarkMode ? "dark" : "light");
-      }, [isDarkMode]);
+        // localStorage.setItem("theme", isDarkMode ? "dark" : "light");
+        localStorage.setItem("isDarkMode", isDarkMode )
+    }, [isDarkMode]);
 
       // j'ai utilisé la variable isDarkMode pour conditionner le rendu en fonction du thème.
       const themeClass = isDarkMode ? 'dark-theme' : 'light-theme';
