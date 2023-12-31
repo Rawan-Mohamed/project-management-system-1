@@ -170,7 +170,6 @@ const Projects: React.FC = () => {
   // *****************************************************
   // **********search by proj name***********************
   const getProjectTitleValue = (e: MouseEvent) => {
-    getAllProjectsList(1, e.target.value);
     setSearchString(e.target.value);
   };
   // ************************
@@ -247,7 +246,7 @@ const Projects: React.FC = () => {
                         {userRole == "Manager" ? (
                           <td>
                             <button
-                              className="border-0 icon-bg-custom" 
+                              className="border-0 icon-bg-custom"
                               onClick={() => showViewModal(project?.id)}
                             >
                               <i className="fa fa-eye  text-info px-2"></i>
