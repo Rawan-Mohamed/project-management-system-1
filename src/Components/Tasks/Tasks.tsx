@@ -35,13 +35,25 @@ const Tasks: React.FC = () => {
   const [pagesArray, setPagesArray] = useState([]);
   const [projectList, setProjectList] = useState([])
   const [selectedProjectId, setSelectedProjectId] = useState<number | null>(null);
-
+  const [timerId, setTimerId] = useState(null);
+  const [searchString, setSearchString] = useState('');
+  const [selectedUser, setSelectedUser] = useState(null);
   const [taskId, setTaskId]: any = useState(0);
+
+
+  interface FormValues {
+    title: string;
+    description: string;
+    employeeId?: number;
+
+  }
+
   const {
     register,
     setValue,
     handleSubmit,
     formState: { errors },
+    setError,
   } = useForm<FormValues>();
 
 
@@ -69,7 +81,7 @@ const Tasks: React.FC = () => {
     setModalState("delete-modal");
   };
   // **********get all tasks**********pageSize:number, pageNumber:number*******
-  const getManagerTasksList = async (pageNumber) => {
+  const getManagerTasksList = async (pageNumber: number, title: string) => {
     setIsLoading(true);
     await axios
       .get(`${baseUrl}/Task/manager`,
@@ -78,6 +90,7 @@ const Tasks: React.FC = () => {
           params: {
             pageSize: 5,
             pageNumber: pageNumber,
+            title: title
           }
         })
       .then((response) => {
@@ -196,14 +209,18 @@ const Tasks: React.FC = () => {
         );
 
         // getTasksList();
-        // getEmployeeTasksList();
+        // getManagerTasksList(1);
+        getManagerTasksList();
       })
       .catch((error) => {
         getToastValue(
           "error",
           error?.response?.data?.message ||
           "An error occurred. Please try again."
-        ).finally(() => setIsLoading(false));
+        );
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   };
   // ************get tasks details to view****************
@@ -228,13 +245,10 @@ const Tasks: React.FC = () => {
   // *********Search in dropdown **************
   const handleUserChange = (selectedOption) => {
     setSelectedUser(selectedOption);
-    getAllUsers(selectedOption?.label);
-  };
-  const filterOptions = (options, { inputValue }) => {
-    return options.filter((user) =>
-      user.label.toLowerCase().includes(inputValue.toLowerCase())
-    ).slice(0, 5); // Limit the results to 5 items
-  };
+    // getUsersList(selectedOption?.label);
+    setValue("employeeId", selectedOption?.value); // Set value for react-hook-form
+    setError("employeeId", { type: "", message: "" });
+  }
   const userOptions = userList.map((user) => ({
     value: user.id,
     label: user.userName,
@@ -309,108 +323,112 @@ const Tasks: React.FC = () => {
       });
   };
 
-  // ************** get all project for mangaer */
-  const getAllProjectsList = () => {
-    axios
-      .get(`${baseUrl}/Project`, {
-        headers: requestHeaders,
-        params: {
-          pageSize: 30,
+  // ******** get all tasks by project for  */
+  // const getAllProjectsList = () => {
+  //   axios
+  //     .get(`${baseUrl}/Project`, {
+  //       headers: requestHeaders,
+  //       params: {
+  //         pageSize: 30,
 
-        }
-      })
-      .then((response) => {
+  //       }
+  //     })
+  //     .then((response) => {
 
-        setProjectList(response?.data?.data);
-      })
-      .catch((error) => {
-        getToastValue(
-          "error",
-          error?.response?.data?.message ||
-          "An error occurred. Please try again."
-        );
-      });
-  };
+  //       setProjectList(response?.data?.data);
+  //     })
+  //     .catch((error) => {
+  //       getToastValue(
+  //         "error",
+  //         error?.response?.data?.message ||
+  //         "An error occurred. Please try again."
+  //       );
+  //     });
+  // };
 
-  const getTasksByProjectId = (projectId) => {
-    const apiUrl = projectId
-      ? `${baseUrl}/Task/project/${projectId}`
-      : `${baseUrl}/Task/manager`;
+  // const getTasksByProjectId = (projectId) => {
+  //   const apiUrl = projectId
+  //     ? `${baseUrl}/Task/project/${projectId}`
+  //     : `${baseUrl}/Task/manager`;
 
-    axios
-      .get(apiUrl, {
-        headers: requestHeaders,
-        params: {
-          pageSize: 50,
-          // pageNumber: pageNumber,
-        }
-      })
-      .then((response) => {
-        setTasks(response?.data?.data);
-        setPagesArray(
-          Array(response?.data?.totalNumberOfPages)
-            .fill()
-            .map((_, i) => i + 1)
-        );
-      })
-      .catch((error) => {
-        getToastValue(
-          "error",
-          error?.response?.data?.message ||
-          "An error occurred. Please try again."
-        );
-      });
-  };
+  //   axios
+  //     .get(apiUrl, {
+  //       headers: requestHeaders,
+  //       params: {
+  //         pageSize: 50,
+  //         // pageNumber: pageNumber,
+  //       }
+  //     })
+  //     .then((response) => {
+  //       setTasks(response?.data?.data);
+  //       setPagesArray(
+  //         Array(response?.data?.totalNumberOfPages)
+  //           .fill()
+  //           .map((_, i) => i + 1)
+  //       );
+  //     })
+  //     .catch((error) => {
+  //       getToastValue(
+  //         "error",
+  //         error?.response?.data?.message ||
+  //         "An error occurred. Please try again."
+  //       );
+  //     });
+  // };
 
-  const handleProjectSelection = (selectedValue) => {
-    const projectId = selectedValue ? selectedValue.value : null;
+  // const handleProjectSelection = (selectedValue) => {
+  //   const projectId = selectedValue ? selectedValue.value : null;
 
-    setSelectedProjectId(selectedValue);
+  //   setSelectedProjectId(selectedValue);
 
-    if (selectedValue !== null) {
-      // If a specific project is selected, filter tasks by project
-      getTasksByProjectId(selectedValue);
-    } else {
-      // If no project is selected, fetch all tasks
-      if (userRole === 'Manager') {
-        getManagerTasksList();
-      } else if (userRole === 'Employee') {
-        getEmployeeTasksList();
-      }
-    }
-  };
-
-  // const handleProjectSelection = (selectedOption) => {
-  //   const projectId = selectedOption.value;
-
-  //   setSelectedProjectId(projectId);
-  //   getTasksByProjectId(projectId);
-  //   // if (projectId !== null) {
-  //   //   getTasksByProjectId(projectId);
-  //   // } else {
-  //   //   if (userRole === 'Manager') {
-  //   //     getManagerTasksList();
-  //   //   } else if (userRole === 'Employee') {
-  //   //     getEmployeeTasksList();
-  //   //   }
-  //   // }
+  //   if (selectedValue !== null) {
+  //     // If a specific project is selected, filter tasks by project
+  //     getTasksByProjectId(selectedValue);
+  //   } else {
+  //     // If no project is selected, fetch all tasks
+  //     if (userRole === 'Manager') {
+  //       getManagerTasksList();
+  //     } else if (userRole === 'Employee') {
+  //       getEmployeeTasksList();
+  //     }
+  //   }
   // };
 
 
   useEffect(() => {
-    if (userRole == 'Manager') {
-      getManagerTasksList(currentPage)
+    if (userRole === 'Manager') {
+      getManagerTasksList(currentPage);
       getAllUsers();
-      getAllProjectsList()
-
-
-    }
-    else if (userRole == 'Employee') {
+    } else if (userRole === 'Employee') {
       getEmployeeTasksList();
     }
+  }, [userRole, currentPage]);
 
+  useEffect(() => {
+    if (userRole === 'Manager') {
+      if (timerId) {
+        clearTimeout(timerId);
+      }
 
-  }, [userRole, currentPage])
+      const newTimeOut = setTimeout(() => {
+        getManagerTasksList(1, searchString);
+      }, 500);
+
+      setTimerId(newTimeOut);
+    }
+
+    // Clear timeout on component unmount to avoid memory leaks
+    return () => {
+      if (timerId) {
+        clearTimeout(timerId);
+      }
+    };
+  }, [searchString, userRole]);
+  // Search Task  by name
+  const getTaskTitleValue = (input: string) => {
+    setSearchString(input?.target?.value);
+
+  }
 
   return (
     <>
@@ -434,19 +452,19 @@ const Tasks: React.FC = () => {
         {
           userRole === 'Manager' ? (
             <div className="table-container1 vh-100">
-              <div className="w-50">
-                <Select
-                  options={projectList.map((project) => ({ value: project.id, label: project.title }))}
-                  value={
-                    selectedProjectId
-                      ? { value: selectedProjectId, label: projectList.find((project) => project.id === selectedProjectId)?.title || '' }
-                      : null
-                  }
-                  onChange={(selectedOption) => handleProjectSelection(selectedOption?.value)}
-                  placeholder="Search or select a project"
-                  isSearchable
-                  isClearable
-                />
+              <div className="w-25 px-3">
+                <div className="icon-input position-relative">
+                  <i
+                    className={`${style.icons} fa-solid fa-search position-absolute text-success`}
+                  />
+                  <input
+                    onChange={getTaskTitleValue}
+                    placeholder="search by Task name...."
+                    className="form-control  my-2 "
+                    type="text"
+                    style={{ paddingLeft: "2rem" }}
+                  />
+                </div>
               </div>
               <table className="table">
                 <thead className="table-head table-bg ">
@@ -462,55 +480,58 @@ const Tasks: React.FC = () => {
                 </thead>
                 <tbody>
                   {!isLoading ? (
-                    tasks?.length > 0 ? (
-                      tasks.map((task: any) => (
-                        <tr key={task?.id}>
-                          <th scope="row">{task?.title}</th>
-                          <td className=' text-white' style={{ textAlign: 'center' }}>
-                            <div style={{
-                              backgroundColor:
-                                task?.status === 'ToDo'
-                                  ? '#E4E1F5'
-                                  : task?.status === 'InProgress'
-                                    ? '#EF9B28'
-                                    : task?.status === 'Done'
-                                      ? '#009247'
-                                      : 'inherit',
-                              borderRadius: '15px',
-                              fontSize: '16px',
-                              padding: '10px',
-                              fontWeight: '250',
-                              fontFamily: 'Montserrat-Regular',
-                            }}>
-                              {task?.status}
-                            </div>
-                          </td>
-                          <td>{task?.description}</td>
-                          <td>{task?.employee?.userName}</td>
-                          <td>{task?.project?.title}</td>
-                          <td>{new Date(task.creationDate).toLocaleDateString()}</td>
-                          <td>
-                            <button onClick={() => showViewModal(task?.id)} className="p-0 border-0 bg-white">
-                              <i className="fa fa-eye text-info px-1"></i>
-                            </button>
-                            <button onClick={() => showUpdateModal(task)} className="p-0 border-0 bg-white">
-                              <i className="fa fa-pen text-warning px-1"></i>
-                            </button>
-                            <button onClick={() => showDeleteModal(task.id)} className="p-0 border-0 bg-white">
-                              <i className="fa fa-trash text-danger px-1"></i>
-                            </button>
+                    <>
+                      {tasks?.length > 0 ? (
+                        tasks.map((task: any) => (
+                          <tr key={task?.id}>
+                            <th scope="row">{task?.title}</th>
+                            <td className=' text-white' style={{ textAlign: 'center' }}>
+                              <div style={{
+                                backgroundColor:
+                                  task?.status === 'ToDo'
+                                    ? '#E4E1F5'
+                                    : task?.status === 'InProgress'
+                                      ? '#EF9B28'
+                                      : task?.status === 'Done'
+                                        ? '#009247'
+                                        : 'inherit',
+                                borderRadius: '15px',
+                                fontSize: '16px',
+                                padding: '10px',
+                                fontWeight: '250',
+                                fontFamily: 'Montserrat-Regular',
+                              }}>
+                                {task?.status}
+                              </div>
+                            </td>
+                            <td>{task?.description}</td>
+                            <td>{task?.employee?.userName}</td>
+                            <td>{task?.project?.title}</td>
+                            <td>{new Date(task.creationDate).toLocaleDateString()}</td>
+                            <td>
+                              <button onClick={() => showViewModal(task?.id)} className="p-0 border-0 bg-white">
+                                <i className="fa fa-eye text-info px-1"></i>
+                              </button>
+                              <button onClick={() => showUpdateModal(task)} className="p-0 border-0 bg-white">
+                                <i className="fa fa-pen text-warning px-1"></i>
+                              </button>
+                              <button onClick={() => showDeleteModal(task.id)} className="p-0 border-0 bg-white">
+                                <i className="fa fa-trash text-danger px-1"></i>
+                              </button>
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td colSpan="7">
+                            <NoData />
                           </td>
                         </tr>
-                      ))
-                    ) : (
-                      <tr>
-                        <td colSpan="7">
-                          <NoData />
-                        </td>
-                      </tr>
-                    )
+                      )}
+                    </>
                   ) : (
                     <tr>
+                      {" "}
                       <td colSpan="7">
                         <Loading />
                       </td>
@@ -589,9 +610,9 @@ const Tasks: React.FC = () => {
                       )}
                     </div>
                     <div className="form-group my-3">
-                      <select
+                      {/* <select
                         {...register("employeeId", { required: true, valueAsNumber: true })}
-                        aria-label="Default select example"
+                        // aria-label="Default select example"
                         className="form-select"
                       >
                         <option className="text-muted">User</option>
@@ -600,7 +621,17 @@ const Tasks: React.FC = () => {
                             {user.userName}
                           </option>
                         ))}
-                      </select>
+                      </select> */}
+
+                      <Select
+                        {...register("employeeId", { required: true, valueAsNumber: true })}
+                        options={userOptions}
+                        value={selectedUser}
+                        onChange={handleUserChange}
+                        placeholder="Search user..."
+                        isClearable
+
+                      />
                       {errors.employeeId && errors.employeeId.type === "required" && (
                         <span className="text-danger ">No User Selected</span>
                       )}
