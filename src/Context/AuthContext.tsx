@@ -8,6 +8,7 @@ export interface IAuth {
   requestHeaders: string;
   baseUrl: string;
   userRole: string;
+  updateUserData: () => void;
 }
 
 // Create the AuthContext and set the initial value to null
@@ -16,7 +17,10 @@ export const AuthContext = createContext<IAuth>({
   saveUserData: () => {},
   requestHeaders: '',
   baseUrl: '',
-  userRole: ''});
+  userRole: '',
+  updateUserData: () => {},
+});
+ 
 
 // Define the props for AuthContextProvider component
 interface AuthContextProviderProps {
@@ -28,6 +32,9 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = (props) =
   const [userData, setUserData] = useState<any | null>(null);
   const [userRole, setUserRole] = useState<any | null>(null);
 
+  const updateUserData =(newUserData:string)=>{
+    setUserData(newUserData);
+  }
   // Save user data function
   const saveUserData = () => {
     const encodedToken = localStorage.getItem("userToken");
@@ -54,7 +61,8 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = (props) =
     saveUserData,
     requestHeaders,
     baseUrl: "http://upskilling-egypt.com:3003/api/v1",
-    userRole
+    userRole,
+    updateUserData
   };
 
   return <AuthContext.Provider value={contextValue}>{props.children}</AuthContext.Provider>;
