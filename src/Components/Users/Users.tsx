@@ -6,6 +6,8 @@ import Modal from 'react-bootstrap/Modal';
 import style from '../Users/Users.module.css';
 import noData from "../../../src/assets/images/no-data.png"
 import NoData from '../../Shared/NoData/NoData';
+import CustomPagination from '../../Shared/CustomPagination/CustomPagination';
+import Loading from '../../Shared/Loading/Loading';
 
 
 export default function Users() {
@@ -18,11 +20,14 @@ export default function Users() {
   const [modelState, setModelState] = useState("close")
   const [userDetails, setUserDetails] = useState({});
   const [timerId, setTimerId] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pagesArray, setPagesArray] = useState([])
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleClose = () => setModelState("close");
   // Get All users
   const getAllUsers = (pageNo: number, name: string) => {
-
+    setIsLoading(true);
     axios.get(`${baseUrl}/Users/`, {
       headers: requestHeaders,
       params: {
@@ -32,11 +37,15 @@ export default function Users() {
       }
     })
       .then((response) => {
+        setPagesArray(Array(response.data.totalNumberOfPages).fill().map((_, i) => i + 1));
         setUserList(response?.data?.data);
       })
       .catch((error) => {
         console.log(error);
       })
+      .finally(() => {
+        setIsLoading(false);
+      });
   }
   //View Users API
   const getUsersDetails = (id) => {
@@ -46,6 +55,7 @@ export default function Users() {
       })
 
       .then((response) => {
+
         setUserDetails(response.data);
 
       })
@@ -99,6 +109,10 @@ export default function Users() {
     setSearchString(input.target.value);
     // getAllUsers(1, input.target.value);
   }
+  useEffect(() => {
+    getAllUsers(currentPage);
+  }, [currentPage]);
+
 
   return (
     <>
@@ -134,77 +148,87 @@ export default function Users() {
       </div>
 
       <div className=''>
-        <div className=' row mx-4 w-50 '>
-          <div className='col-md-6'>
+        <div className='w-25 px-3'>
+
             <div className='icon-input position-relative'>
               <i className={`${style.icons} fa-solid fa-search position-absolute text-success`} />
-              <input onChange={getNameValue} placeholder='search by user name....' className='form-control ${style.inputField} my-2' type="text"
-                style={{ paddingLeft: '2rem' }} />
-
+              <input
+                onChange={getNameValue}
+                placeholder='search by user name....'
+                className={`form-control ${style.inputField} my-2`}
+                type="text"
+                style={{ paddingLeft: '2rem' }}
+              />
             </div>
-          </div>
+
         </div>
-        {userList.length > 0 ?
-          <div className='table-container1 vh-100'>
 
-
-            <table className="table">
-              <thead className='table-head table-bg'>
+        <div className='table-responsive table-container1 vh-100'>
+          <table className="table">
+            <thead className='table-head table-bg'>
+              <tr>
+                <th scope="col">User Name</th>
+                <th scope="col">Status</th>
+                <th scope="col">Phone Number</th>
+                <th scope="col">Email</th>
+                <th scope="col">Date Created</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {!isLoading ? (
+                <>
+                  {userList.length > 0 ? (
+                    userList.map((user) => (
+                      <tr key={user.id}>
+                        <td>{user.userName}</td>
+                        <td>
+                          {user.isActivated ? (
+                            <div className={`${style.active} ${style.badgeActiveInActive}`}>Active</div>
+                          ) : (
+                            <div className={`${style.inactive} ${style.badgeActiveInActive}`}>Inactive</div>
+                          )}
+                        </td>
+                        <td>{user.phoneNumber}</td>
+                        <td>{user.email}</td>
+                        <td>{new Date(user.creationDate).toLocaleDateString()}</td>
+                        <td>
+                          <div className={style.btnactions}>
+                            <span className={`p-2 mx-1`} onClick={() => toggleActivationStatus(user.id, user.isActivated)}>
+                              {user.isActivated ? (
+                                <button className={`bg-danger text-white rounded-4 ${style.blockunblock}`}>Block</button>
+                              ) : (
+                                <button className={`bg-success text-white rounded-4 ${style.blockunblock}`}>Unblock</button>
+                              )}
+                            </span>
+                            <button className='border-0 bg-white' onClick={() => showViewModel(user.id)}>
+                              <i className={`fa-solid fa-eye text-success ${style.eyeIcon}`}></i>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="6">
+                        <NoData />
+                      </td>
+                    </tr>
+                  )}
+                </>
+              ) : (
                 <tr>
-
-                  <th scope="col">user Name</th>
-                  <th scope="col">Statues</th>
-                  <th scope="col">Phone Number</th>
-                  <th scope="col">Email</th>
-                  <th scope="col">Date Created</th>
-                  <th scope="col">Action</th>
-
+                  <td colSpan="6">
+                    <Loading />
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                {userList.map((user) => (
-
-                  <tr key={user.id} >
-
-                    <td >{user.userName}</td>
-                    <td >
-                      {user.isActivated ?
-                        (
-                          <div className={`${style.active} ${style.badgeActiveInActive}`}>Active</div>) : (
-                          <div className={`${style.inactive} ${style.badgeActiveInActive}`}>InActive</div>
-                        )}
-                    </td>
-                    <td >{user.phoneNumber}</td>
-                    <td >{user.email}</td>
-                    <td >{new Date(user.creationDate).toLocaleDateString()}</td>
-                    <td>
-                      <div className={style.btnactions}>
-                        <span className={`p-2 mx-1`} onClick={() => toggleActivationStatus(user.id, user.isActivated)}
-                        >
-                          {user.isActivated ?
-                            <button className={`bg-danger text-white rounded-4  ${style.blockunblock} `}>Block</button> :
-                            <button className={`bg-success text-white rounded-4  ${style.blockunblock} `}>Unblock</button>
-                            // 'Block' : 'Unblock'
-                          }
-                        </span>
-
-                        <button className=' border-0 bg-white' onClick={() => showViewModel(user.id)}  >
-                          <i className={`fa-solid fa-eye text-success ${style.eyeIcon} `}></i>
-                        </button>
-
-                      </div>
-                    </td>
-                  </tr>
-
-                ))}
-              </tbody>
-            </table>
-          </div>
-          :
-          <NoData />
-
-        }
+              )}
+            </tbody>
+          </table>
+          <CustomPagination totalPages={pagesArray.length} currentPage={currentPage} onPageChange={setCurrentPage} />
+        </div>
       </div>
+
     </>
   )
 }

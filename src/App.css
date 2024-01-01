@@ -87,6 +87,12 @@ button[type="submit"] {
 .sidebar-container .ps-sidebar-container .ps-menu-button:hover {
   background-color: rgba(239, 155, 40, 0.3);
 }
+._container1_9ea38_1 ._sidebar_9ea38_21{
+  background-color: rgba(14, 56, 47, 1);
+
+}
+
+
 
 /* .nav-bg{
   background-color: rgba(255, 255, 255, 1);
@@ -264,7 +270,7 @@ table td {
 .tasks-count>div:first-child .tasks-status {
   background-color: #E5E6F4;
 }
-.tasks-count >div:first-child .tasks-status i::before, 
+.tasks-count >div:first-child .tasks-status i::before,
 .users-count>div:first-child .tasks-status i::before,
 .users-count>:first-child .status  i::before{
   background-color: #CFD1EC;
@@ -297,7 +303,7 @@ table td {
 }
 .users-count>:nth-child(2n) .status{
   background-color: #F4F4E5;
-}  
+}
 .tasks-chart{
   background-color: rgb(216, 241, 242);
 }
@@ -321,8 +327,13 @@ table td {
 }
 /* side bar dark mode */
 .dark-theme .sidebar-container .ps-sidebar-container,
-._sidebar_gufjs_21 {
+._sidebar_gufjs_21  {
   background-color: #121826;
+}
+
+.dark-theme ._container1_9ea38_1 ._sidebar_9ea38_21 {
+  background-color: #121826;
+
 }
 .dark-theme  .sidebar-container .ps-sidebar-container .ps-menu-button:hover {
   /* background-color: #292f3b; */
@@ -370,7 +381,7 @@ table td {
 .dark-theme .tasks-count>div:first-child .tasks-status,
 .dark-theme .tasks-count >div:nth-child(2n) .tasks-status,
 .dark-theme .tasks-count >div:nth-child(3n) .tasks-status,
-.dark-theme .users-count>:first-child .status, 
+.dark-theme .users-count>:first-child .status,
 .dark-theme .users-count>:nth-child(2n) .status{
   background-color:  #121826 !important;
 }
@@ -382,8 +393,9 @@ table td {
   background-color: #121826 !important;
 }
 .dark-theme .text-dark-light{
-  color: #fff !important; 
+  color: #fff !important;
 }
 .dark-theme .recharts-label {
   fill: #FFFFFF; /* Set the label color for dark mode */
 }
+
