@@ -188,7 +188,7 @@ export default function Users() {
                           }
                         </span>
 
-                        <button className=' border-0 bg-white' onClick={() => showViewModel(user.id)}  >
+                        <button className=' border-0 icon-bg-custom' onClick={() => showViewModel(user.id)}  >
                           <i className={`fa-solid fa-eye text-success ${style.eyeIcon} `}></i>
                         </button>
 
