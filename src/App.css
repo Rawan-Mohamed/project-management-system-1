@@ -160,6 +160,11 @@ table td {
 .icon-bg-custom:hover{
   box-shadow:none !important
 }
+/* not found */
+.notfound{
+  background-image: url(../src/assets/images/not-found-bg.png);
+  background-size: 100% 100%;
+}
 /* *****loader ************/
 .loader{
   display: inline-block;
