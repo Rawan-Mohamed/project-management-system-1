@@ -315,9 +315,11 @@ table td {
 } */
 /* start dark & light mode ******/
 .light-theme{
+  transition: all 0.3s ease-in-out;
   background-color: #fff;
 }
 .dark-theme {
+  transition: all 0.3s ease-in-out;
   background-color: #060f20;
   /* background-color: #121826; */
   color: #fff;
@@ -329,6 +331,9 @@ table td {
 .dark-theme .sidebar-container .ps-sidebar-container,
 ._sidebar_gufjs_21 {
   background-color: #121826;
+}
+.dark-theme .sidebar-container .ps-sidebar-root{
+  border-right: 1px solid #121826;
 }
 .dark-theme  .sidebar-container .ps-sidebar-container .ps-menu-button:hover {
   /* background-color: #292f3b; */
