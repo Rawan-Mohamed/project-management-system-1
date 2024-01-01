@@ -45,7 +45,7 @@ const CustomPagination: React.FC<CustomPaginationProps> = ({
   };
 
   return (
-    <nav aria-label="..." className="">
+    <nav aria-label="..." className="pagination-position">
       <ul className=" m-0 pagination justify-content-center pagination-sm">
         <button
           className="page-link btn-hover-custom bg-white px-2 border-0"
@@ -74,7 +74,7 @@ const CustomPagination: React.FC<CustomPaginationProps> = ({
         </button>
       </ul>
 
-      <div className="input-group mb-3 w-50  d-flex justify-content-center align-items-center  m-auto">
+      <div className="input-group mb-3  d-flex justify-content-center align-items-center  m-auto">
         <input
           type="number"
           className="form-control custom-input h-25 rounded"
