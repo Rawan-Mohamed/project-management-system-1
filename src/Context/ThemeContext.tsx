@@ -1,56 +1,52 @@
+import { createContext, useState, ReactNode, useEffect } from "react";
 
-import { createContext, useState , ReactNode, useEffect} from 'react';
-
-export interface ITheme{
-    isDarkMode: boolean;
-    setIsDarkMode: React.Dispatch<React.SetStateAction<boolean>>;
-    toggleTheme: () => void;
-    themeClass: string;
+export interface ITheme {
+  isDarkMode: boolean;
+  setIsDarkMode: React.Dispatch<React.SetStateAction<boolean>>;
+  toggleTheme: () => void;
+  themeClass: string;
 }
 interface ThemeContextProviderProps {
-    children: ReactNode;
-  }
+  children: ReactNode;
+}
 export const ThemeContext = createContext<ITheme | null>(null);
 
-const ThemeContextProvider: React.FC<ThemeContextProviderProps>= (props)=>{
-    // const [isDarkMode, setIsDarkMode] = useState(() => {
-      
-    //     const savedTheme =localStorage.getItem("isDarkMode");
-        
-   
-    //     return savedTheme === 'true'; // Convert the stored string to a boolean
-    // });
-    const [isDarkMode, setIsDarkMode] = useState<boolean>(() =>{
-    const savedTheme =localStorage.getItem("isDarkMode");
-    return savedTheme ? JSON.parse(savedTheme) : false;}
-    // JSON.parse(localStorage.getItem("isDarkMode")) 
-    );
+const ThemeContextProvider: React.FC<ThemeContextProviderProps> = (props) => {
+  // const [isDarkMode, setIsDarkMode] = useState(() => {
 
-   const toggleTheme = () =>{
-        // setTheme((current)=> (current === 'light' ? 'dark' : 'light' ))
-        setIsDarkMode((previousValue:boolean) => !previousValue); 
-    }
-    useEffect(() => {
-        // Save the theme preference to localStorage
-        
-        localStorage.setItem('isDarkMode', String(isDarkMode));
-        
-    }, [isDarkMode]);
+  //     const savedTheme =localStorage.getItem("isDarkMode");
 
-      // j'ai utilisé la variable isDarkMode pour conditionner le rendu en fonction du thème.
-      const themeClass = isDarkMode ? 'dark-theme' : 'light-theme';
+  //     return savedTheme === 'true'; // Convert the stored string to a boolean
+  // });
 
-    const contextValue:ITheme={
-        isDarkMode, 
-        setIsDarkMode,
-         toggleTheme,
-         themeClass
-    }
-    return(
-        
-        <ThemeContext.Provider value={contextValue}>
-            {props.children}
-        </ThemeContext.Provider>
-        )
-}
-export default ThemeContextProvider
+  // JSON.parse(localStorage.getItem("isDarkMode")) / convert string "true" or "false" to true and false
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(
+    () => JSON.parse(localStorage.getItem("isDarkMode")) ?? true
+  );
+
+  const toggleTheme = () => {
+    // setTheme((current)=> (current === 'light' ? 'dark' : 'light' ))
+    setIsDarkMode((previousValue: boolean) => !previousValue);
+  };
+  useEffect(() => {
+    // Save the theme preference to localStorage
+
+    localStorage.setItem("isDarkMode", isDarkMode);
+  }, [isDarkMode]);
+
+  // isDarkMode variable  is used to condition the rendering according to the theme.
+  const themeClass = isDarkMode ? "dark-theme" : "light-theme";
+
+  const contextValue: ITheme = {
+    isDarkMode,
+    setIsDarkMode,
+    toggleTheme,
+    themeClass,
+  };
+  return (
+    <ThemeContext.Provider value={contextValue}>
+      {props.children}
+    </ThemeContext.Provider>
+  );
+};
+export default ThemeContextProvider;
