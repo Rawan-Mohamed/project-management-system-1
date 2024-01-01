@@ -1,0 +1,88 @@
+
+
+
+.columnContainer {
+  display: flex;
+  justify-content: center;
+  height: 100%;
+}
+
+.column {
+  width: 250px;
+  min-height: 500px;
+  padding: 4px;
+  margin: 0 8px;
+}
+
+/* Media query for small screens */
+@media (max-width: 768px) {
+  .columnContainer {
+    flex-direction: column; /* Stack columns vertically */
+    align-items: center; /* Center columns horizontally */
+  }
+
+  .column {
+    width: 100%; /* Take full width of the screen */
+    margin: 0 0 16px 0; /* Add some space between columns */
+  }
+}
+/* td .statusColor{
+  color: #ffffff;
+  font-family: "Montserrat-Regular", Helvetica;
+  font-size: 16px;
+  font-weight: 250;
+  border-radius: 15px;
+  text-align: center;
+  transition: background-color 0.5s ease;
+padding: 5px;
+} */
+
+/* .bgStatus{
+  background-color: hsla(168, 29%, 27%, 0.898);
+  height: 400px;
+  width: 300px;
+} */
+
+/* .taskItem {
+
+  margin-bottom: 10px;
+} */
+/* .taskContent {
+  display: flex;
+  align-items: center;
+  background-color: #EF9B28;
+  border-radius: 15px;
+  padding-right: 10px;
+
+} */
+
+/* .taskTitleBackground {
+  position: relative;
+  padding: 10px;
+  color: white;
+  flex-grow: 1;
+} */
+.editIcon {
+  cursor: pointer;
+  color: #fff;
+  display: block;
+}
+
+.bgStatus{
+  margin: 8px;
+  width: 270px;
+  background-color: #024337;
+  /* display: flex;
+  flex-direction: column; */
+  min-height: 500px;
+}
+
+/* .taskContent{
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 8px;
+  transition: background-color 0.5s ease;
+  flex-grow: 1;
+
+
+} */
