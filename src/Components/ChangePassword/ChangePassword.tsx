@@ -48,7 +48,7 @@ export default function ChangePassword() {
       });
   };
   return (
-    <div className="d-flex auth-container justify-content-center align-items-center flex-column">
+    <div className="d-flex overlay-bg justify-content-center align-items-center flex-column">
       <div className="text-center mb-2">
         <img src={logo} className="img-fluid" alt="logo" />
       </div>

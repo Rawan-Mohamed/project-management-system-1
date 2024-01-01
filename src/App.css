@@ -18,6 +18,10 @@ body,
   background-size: cover;
   background-position: center center;
 }
+.overlay-bg{
+  background-image: linear-gradient(to right top, rgba(49, 89, 81, 0.9), rgba(187, 144, 88, 0.6));
+
+}
 .login-wrapper {
   background-color: rgba(49, 89, 81, 0.9);
   border-radius: 20px;
@@ -264,7 +268,7 @@ table td {
 .tasks-count>div:first-child .tasks-status {
   background-color: #E5E6F4;
 }
-.tasks-count >div:first-child .tasks-status i::before, 
+.tasks-count >div:first-child .tasks-status i::before,
 .users-count>div:first-child .tasks-status i::before,
 .users-count>:first-child .status  i::before{
   background-color: #CFD1EC;
@@ -297,7 +301,7 @@ table td {
 }
 .users-count>:nth-child(2n) .status{
   background-color: #F4F4E5;
-}  
+}
 .tasks-chart{
   background-color: rgb(216, 241, 242);
 }
@@ -370,7 +374,7 @@ table td {
 .dark-theme .tasks-count>div:first-child .tasks-status,
 .dark-theme .tasks-count >div:nth-child(2n) .tasks-status,
 .dark-theme .tasks-count >div:nth-child(3n) .tasks-status,
-.dark-theme .users-count>:first-child .status, 
+.dark-theme .users-count>:first-child .status,
 .dark-theme .users-count>:nth-child(2n) .status{
   background-color:  #121826 !important;
 }
@@ -382,7 +386,7 @@ table td {
   background-color: #121826 !important;
 }
 .dark-theme .text-dark-light{
-  color: #fff !important; 
+  color: #fff !important;
 }
 .dark-theme .recharts-label {
   fill: #FFFFFF; /* Set the label color for dark mode */
