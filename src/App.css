@@ -399,11 +399,11 @@ table td {
 .dark-theme .icon-bg-custom{
   background-color:   var(--main-dark-color) !important;
 }
-._sidebar_9ea38_21{
+/* ._sidebar_9ea38_21{
   background-color: #0e382f;
   border-right: 2px solid #fff;
 }
 .dark-theme ._sidebar_9ea38_21{
   background-color:  var(--main-dark-color);
 
-}
+} */
