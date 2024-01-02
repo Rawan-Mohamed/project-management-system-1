@@ -28,7 +28,7 @@ export default function Users() {
   // Get All users
   const getAllUsers = (pageNo: number, name: string) => {
     setIsLoading(true);
-    axios.get(`${baseUrl}/Users/`, {
+    axios.get(`${baseUrl}/Users/Manager`, {
       headers: requestHeaders,
       params: {
         pageSize: 5,
