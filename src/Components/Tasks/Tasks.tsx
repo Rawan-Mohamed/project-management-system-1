@@ -509,13 +509,13 @@ const Tasks: React.FC = () => {
                             <td>{task?.project?.title}</td>
                             <td>{new Date(task.creationDate).toLocaleDateString()}</td>
                             <td>
-                              <button onClick={() => showViewModal(task?.id)} className="p-0 border-0 bg-white">
+                              <button onClick={() => showViewModal(task?.id)} className="p-0 border-0 icon-bg-custom">
                                 <i className="fa fa-eye text-info px-1"></i>
                               </button>
-                              <button onClick={() => showUpdateModal(task)} className="p-0 border-0 bg-white">
+                              <button onClick={() => showUpdateModal(task)} className="p-0 border-0 icon-bg-custom">
                                 <i className="fa fa-pen text-warning px-1"></i>
                               </button>
-                              <button onClick={() => showDeleteModal(task.id)} className="p-0 border-0 bg-white">
+                              <button onClick={() => showDeleteModal(task.id)} className="p-0 border-0 icon-bg-custom">
                                 <i className="fa fa-trash text-danger px-1"></i>
                               </button>
                             </td>
@@ -536,6 +536,7 @@ const Tasks: React.FC = () => {
                         <Loading />
                       </td>
                     </tr>
+
                   )}
                 </tbody>
               </table>
@@ -663,6 +664,7 @@ const Tasks: React.FC = () => {
                       are you sure you want to delete this item ? if you are sure
                       just click on delete it
                     </p>
+
                   </div>
                   <div className="text-end ">
                     <button

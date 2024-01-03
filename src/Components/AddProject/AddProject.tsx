@@ -45,10 +45,10 @@ const AddProject: React.FC = () => {
 
   return (
     <>
-      <div className="header d-flex justify-content-between p-3 bg-light">
+      <div className="header d-flex justify-content-between p-3 ">
         <h5>Add New Project</h5>
       </div>
-      <div className="vh-100 bg-light">
+      <div className="vh-100 ">
         <form
           onSubmit={handleSubmit(onSubmit)}
           action=""

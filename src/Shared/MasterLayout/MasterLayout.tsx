@@ -10,7 +10,7 @@ export default function MasterLayout() {
       <div className="container-fluid">
         <div className="row">
           {/* Navbar at the top */}
-          <div className="col-12 p-0">            
+          <div className="col-12 p-0">
               <NavBar/>
           </div>
         </div>
@@ -18,7 +18,7 @@ export default function MasterLayout() {
         <div className={styles.container1}>
           {/* Sidebar on the left */}
           <div className={styles.sidebar}>
-            <SideBar />
+            <SideBar  />
           </div>
 
           {/* Main content area */}
