@@ -101,7 +101,7 @@ const AddTask: React.FC = () => {
 
   return (
     <>
-      <div className="header d-flex justify-content-between p-3 bg-light">
+      <div className="header d-flex justify-content-between p-3 ">
         <div className="">
         <Link to='/dashboard/tasks'
             className="btn ">&laquo; View All Tasks
@@ -114,7 +114,7 @@ const AddTask: React.FC = () => {
         </div>
 
       </div>
-      <div className="vh-50 w-75  bg-light shadow-lg rounded-4">
+      <div className="vh-50 w-75   shadow-lg rounded-4">
         <form
           onSubmit={handleSubmit(onSubmit)}
           action=""

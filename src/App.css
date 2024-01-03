@@ -33,6 +33,10 @@ body,
   background-color: #fff !important;
   border-radius: 20px;
 }
+.dark-theme .form-wrapper{
+  background-color: #394251 !important;
+  color: #fff;
+}
 .title {
   color: var(--main-color);
   position: relative;
@@ -115,7 +119,7 @@ button[type="submit"] {
 }
 
 .custom-model {
-  width: 300px;
+  width: 500px;
 }
 .changewidth {
   width: 60%;
@@ -253,6 +257,7 @@ table td {
   background: linear-gradient(to left, rgba(0,0,0,0.2), #0e382f);
   border-radius: 20px;
 }
+
 .titles{
   position: relative;
 }
