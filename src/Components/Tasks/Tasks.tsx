@@ -536,6 +536,7 @@ const Tasks: React.FC = () => {
                         <Loading />
                       </td>
                     </tr>
+
                   )}
                 </tbody>
               </table>
@@ -663,6 +664,7 @@ const Tasks: React.FC = () => {
                       are you sure you want to delete this item ? if you are sure
                       just click on delete it
                     </p>
+
                   </div>
                   <div className="text-end ">
                     <button
