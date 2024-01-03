@@ -160,16 +160,24 @@ table td {
   transition: 0.5s ease-in-out;
 }
 /********** pagination ***********/
-.pagination .page-link ,
-.pagination .page-link > span,.pagination .page-link:hover {
-  color: var(--second-color) ;
+
+.pagination-position .pagination .page-link ,
+.pagination-position .pagination .page-link > span,.pagination-position .pagination .page-link:hover {
+  color: rgba(49, 89, 81, 0.9);
   font-weight: bold;
   border: 1px solid #ccc !important;
 }
-.pagination .page-link:focus, .pagination .page-link:active,.active>.page-link, .page-link.active{
-  background-color: var(--second-color)  !important;
-  border-color: var(--second-color)  !important;
+.pagination-position .pagination .page-link:focus, .pagination .page-link:active,.active>.page-link, .page-link.active{
+  background-color: rgba(49, 89, 81, 0.9) !important;
+  border-color: rgba(49, 89, 81, 0.9) !important;
+
   color: #fff !important;
+}
+.pagination-position{
+  position: absolute;
+  bottom: 0;
+  left: 40%;
+  bottom: -9%;
 }
 /* btn icon hover */
 .icon-bg-custom{
@@ -330,10 +338,16 @@ table td {
 } */
 /* start dark & light mode ******/
 .light-theme{
+  transition: all 0.3s ease-in-out;
   background-color: #fff;
 }
 .dark-theme {
+
+  transition: all 0.3s ease-in-out;
+/*   background-color: #060f20; */
+
   background-color: var(--main-bg-dark-color);
+
   /* background-color: #121826; */
   color: #fff;
 }
@@ -351,6 +365,9 @@ table td {
 .dark-theme ._container1_9ea38_1 ._sidebar_9ea38_21 {
   background-color: #121826;
 
+}
+.dark-theme .sidebar-container .ps-sidebar-root{
+  border-right: 1px solid #121826;
 }
 .dark-theme  .sidebar-container .ps-sidebar-container .ps-menu-button:hover {
   /* background-color: #292f3b; */

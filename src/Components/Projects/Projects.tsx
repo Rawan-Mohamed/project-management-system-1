@@ -186,7 +186,7 @@ const Projects: React.FC = () => {
 
   useEffect(() => {
     getAllProjectsList(currentPage);
-  }, [currentPage]);
+  }, [currentPage,userRole]);
 
   return (
     <>
