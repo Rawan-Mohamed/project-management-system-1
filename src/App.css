@@ -20,6 +20,10 @@ body,
   background-size: cover;
   background-position: center center;
 }
+.overlay-bg{
+  background-image: linear-gradient(to right top, rgba(49, 89, 81, 0.9), rgba(187, 144, 88, 0.6));
+
+}
 .login-wrapper {
   background-color: var(--second-color);
   border-radius: 20px;
@@ -30,6 +34,10 @@ body,
 .form-wrapper {
   background-color: #fff !important;
   border-radius: 20px;
+}
+.dark-theme .form-wrapper{
+  background-color: #394251 !important;
+  color: #fff;
 }
 .title {
   color: var(--main-color);
@@ -119,7 +127,7 @@ button[type="submit"] {
 }
 
 .custom-model {
-  width: 300px;
+  width: 500px;
 }
 .changewidth {
   width: 60%;
@@ -261,6 +269,7 @@ table td {
   background: linear-gradient(to left, rgba(0,0,0,0.2), #0e382f);
   border-radius: 20px;
 }
+
 .titles{
   position: relative;
 }
