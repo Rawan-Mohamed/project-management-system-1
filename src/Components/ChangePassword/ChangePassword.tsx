@@ -7,7 +7,10 @@ import { AuthContext } from "./../../Context/AuthContext";
 import logo from "./../../assets/images/pms.png";
 import { ToastContext } from "../../Context/ToastContext";
 
-export default function ChangePassword() {
+interface ChangePasswordProps {
+  handleClose: () => void;
+}
+const ChangePassword: React.FC<ChangePasswordProps> = ({ handleClose }) => {
   const { baseUrl, requestHeaders } = useContext(AuthContext);
 
   const { getToastValue } = useContext(ToastContext);
@@ -36,8 +39,11 @@ export default function ChangePassword() {
         console.log(response);
         // localStorage.setItem('userToken', response.data.token)
         // saveUserData();
-        navigate("/login");
-        getToastValue("success", "Congratulations! You are logIn");
+        // navigate("/login");
+        handleClose();
+
+
+        getToastValue("success", "Congratulations! Your Password Changed");
       })
       .catch((error) => {
         console.log(error);
@@ -125,7 +131,7 @@ export default function ChangePassword() {
               )}
           </div>
           {/* Buttuon login */}
-          <div className="form-group my-3 d-flex justify-content-between">
+          {/* <div className="form-group my-3 d-flex justify-content-between">
             <Link to="/register" className="text-white text-decoration-none">
               Register Now?
             </Link>
@@ -136,7 +142,7 @@ export default function ChangePassword() {
             >
               Forgot Password?
             </Link>
-          </div>
+          </div> */}
           <div className="form-group my-3">
             <button type="submit" className="btn w-100">
               Change Password
@@ -147,3 +153,4 @@ export default function ChangePassword() {
     </div>
   );
 }
+export default ChangePassword;
