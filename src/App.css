@@ -1,6 +1,8 @@
 :root {
   --main-color: #ef9b28;
-  --second-color: #315951e5;
+  --second-color: rgba(49, 89, 81, 0.9);
+  --main-dark-color: #121826;
+  --main-bg-dark-color: #060F20;
 }
 
 *,
@@ -19,7 +21,7 @@ body,
   background-position: center center;
 }
 .login-wrapper {
-  background-color: rgba(49, 89, 81, 0.9);
+  background-color: var(--second-color);
   border-radius: 20px;
 }
 .row {
@@ -50,10 +52,10 @@ body,
   color: var(--main-color);
 }
 form {
-  background-color: rgba(49, 89, 81, 0.9) !important;
+  background-color: var(--second-color) !important;
 }
 .custom-input {
-  background-color: rgba(49, 89, 81, 0.9) !important;
+  background-color: var(--second-color) !important;
   color: #fff !important;
   border: none !important;
   border-bottom: 2px solid #fff !important;
@@ -128,10 +130,11 @@ button[type="submit"] {
   /* background-color: rgba(245, 245, 245, 1); */
   padding: 30px;
 }
+
 table th {
   padding: 1.5rem !important;
 
-  background-color: rgba(49, 89, 81, 0.9) !important;
+  background-color: var(--second-color) !important;
   color: #fff !important;
 }
 table td {
@@ -151,13 +154,13 @@ table td {
 /********** pagination ***********/
 .pagination .page-link ,
 .pagination .page-link > span,.pagination .page-link:hover {
-  color: rgba(49, 89, 81, 0.9);
+  color: var(--second-color) ;
   font-weight: bold;
   border: 1px solid #ccc !important;
 }
 .pagination .page-link:focus, .pagination .page-link:active,.active>.page-link, .page-link.active{
-  background-color: rgba(49, 89, 81, 0.9) !important;
-  border-color: rgba(49, 89, 81, 0.9) !important;
+  background-color: var(--second-color)  !important;
+  border-color: var(--second-color)  !important;
   color: #fff !important;
 }
 /* btn icon hover */
@@ -171,6 +174,9 @@ table td {
 .notfound{
   background-image: url(../src/assets/images/not-found-bg.png);
   background-size: 100% 100%;
+}
+.dark-theme .notfound{
+  color: var(--main-bg-dark-color);
 }
 /* *****loader ************/
 .loader{
@@ -318,7 +324,7 @@ table td {
   background-color: #fff;
 }
 .dark-theme {
-  background-color: #060f20;
+  background-color: var(--main-bg-dark-color);
   /* background-color: #121826; */
   color: #fff;
 }
@@ -327,8 +333,10 @@ table td {
 }
 /* side bar dark mode */
 .dark-theme .sidebar-container .ps-sidebar-container,
-._sidebar_gufjs_21  {
-  background-color: #121826;
+
+._sidebar_gufjs_21 {
+  background-color: var(--main-dark-color);
+
 }
 
 .dark-theme ._container1_9ea38_1 ._sidebar_9ea38_21 {
@@ -340,7 +348,7 @@ table td {
   background-color: #ef9b28;
 }
 .dark-theme  .fa-bell{
-  color:#121826;
+  color: var(--main-dark-color);
 }
 .dark-theme  .navbar{
   background-color: #394251;
@@ -364,11 +372,11 @@ table td {
   border-color: var(--main-color) !important;
 }
 .dark-theme td{
-  background-color: #121826 !important;
+  background-color:  var(--main-dark-color) !important;
   color: #fff  !important;
 }
 .btn-hover-custom{
-  background-color: #121826 !important;
+  background-color:  var(--main-dark-color) !important;
 }
 /* .dark-theme .login-wrapper{
   background-color: #394251 !important;
@@ -383,19 +391,26 @@ table td {
 .dark-theme .tasks-count >div:nth-child(3n) .tasks-status,
 .dark-theme .users-count>:first-child .status,
 .dark-theme .users-count>:nth-child(2n) .status{
-  background-color:  #121826 !important;
+  background-color:  var(--main-dark-color) !important;
 }
 .dark-theme .tasks-status > i,
 .dark-theme .status > i{
   color: #000;
 }
 .dark-theme .tasks-chart{
-  background-color: #121826 !important;
+  background-color:  var(--main-dark-color) !important;
 }
 .dark-theme .text-dark-light{
   color: #fff !important;
 }
 .dark-theme .recharts-label {
   fill: #FFFFFF; /* Set the label color for dark mode */
+}
+
+.dark-theme .loader{
+  color: #fff;
+}
+.dark-theme .icon-bg-custom{
+  background-color:   var(--main-dark-color) !important;
 }
 
