@@ -19,6 +19,9 @@ const Projects: React.FC = () => {
   const [projects, setProjects] = useState([]);
   let [itemId, setItemId]: any = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const [timerId, setTimerId] = useState(null);
+  // *********search***********
+  const [searchString, setSearchString] = useState("");
   // *******pagination*******
   const [currentPage, setCurrentPage] = useState(1);
   const [pagesArray, setPagesArray] = useState([]);
@@ -59,7 +62,7 @@ const Projects: React.FC = () => {
     setModalState("delete-modal");
   };
   // **********get all projects*****************
-  const getAllProjectsList = (pageNo: number) => {
+  const getAllProjectsList = (pageNo: number, title: string) => {
     setIsLoading(true);
     axios
       .get(
@@ -71,6 +74,7 @@ const Projects: React.FC = () => {
           params: {
             pageSize: 5,
             pageNumber: pageNo,
+            title: title,
           },
         }
       )
@@ -164,10 +168,25 @@ const Projects: React.FC = () => {
       });
   };
   // *****************************************************
+  // **********search by proj name***********************
+  const getProjectTitleValue = (e: MouseEvent) => {
+    setSearchString(e.target.value);
+  };
+  // ************************
+
+  useEffect(() => {
+    if (timerId) {
+      clearTimeout(timerId);
+    }
+    const newTimeOut = setTimeout(() => {
+      getAllProjectsList(1, searchString);
+    }, 500);
+    setTimerId(newTimeOut);
+  }, [searchString]);
 
   useEffect(() => {
     getAllProjectsList(currentPage);
-  }, [currentPage]);
+  }, [currentPage,userRole]);
 
   return (
     <>
@@ -187,6 +206,20 @@ const Projects: React.FC = () => {
       </div>
       {/* table */}
       <>
+        <div className="w-25 px-3">
+          <div className="icon-input position-relative">
+            <i
+              className={`${style.icons} fa-solid fa-search position-absolute text-success`}
+            />
+            <input
+              onChange={getProjectTitleValue}
+              placeholder="search by project name...."
+              className="form-control  my-2 "
+              type="text"
+              style={{ paddingLeft: "2rem" }}
+            />
+          </div>
+        </div>
         <div className="table-responsive table-container1 vh-100">
           <table className="table">
             <thead className="table-head table-bg ">
@@ -212,17 +245,28 @@ const Projects: React.FC = () => {
                         <td>{project?.task?.length}</td>
                         {userRole == "Manager" ? (
                           <td>
-                            <button className="btn-hover-custom bg-white border-0"  onClick={() => showViewModal(project?.id)}>
+
+
+                            <button
+                              className="border-0 icon-bg-custom"
+                              onClick={() => showViewModal(project?.id)}
+                            >
+
                               <i className="fa fa-eye  text-info px-2"></i>
                             </button>
 
-                            <button className="btn-hover-custom bg-white border-0"  onClick={() => showUpdateModal(project)}>
+                            <button
+                              className="icon-bg-custom border-0"
+                              onClick={() => showUpdateModal(project)}
+                            >
                               <i className="fa fa-pen  text-warning px-2"></i>
                             </button>
-                            <button className="btn-hover-custom bg-white border-0" 
+                            <button
+                              className="icon-bg-custom border-0"
                               onClick={() => showDeleteModal(project.id)}
-                            ><i className="fa fa-trash  text-danger"></i></button>
-                            
+                            >
+                              <i className="fa fa-trash  text-danger"></i>
+                            </button>
                           </td>
                         ) : (
                           <td>
@@ -367,12 +411,13 @@ const Projects: React.FC = () => {
           </Modal>
           {/************************* * //delete modal*************** */}
           {/* pagination */}
-          {!isLoading ? (
-          <CustomPagination
-            totalPages={pagesArray.length}
-            currentPage={currentPage}
-            onPageChange={setCurrentPage}
-          />):('')}
+          {!isLoading && (
+            <CustomPagination
+              totalPages={pagesArray.length}
+              currentPage={currentPage}
+              onPageChange={setCurrentPage}
+            />
+          )}
         </div>
       </>
       {/* table */}
