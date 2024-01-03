@@ -378,6 +378,8 @@ const Tasks: React.FC = () => {
                             padding: '10px', // Adjust the padding as needed
                             fontWeight: '250',
                             fontFamily: 'Montserrat-Regular',
+                            color:
+                            task?.status === 'ToDo' ? '#000' :'inherit',
                           }}>
                             {task?.status}
                           </div>
@@ -388,20 +390,20 @@ const Tasks: React.FC = () => {
                         <td>{new Date(task.creationDate).toLocaleDateString()}</td>
                         <td>
                           <button onClick={() => showViewModal(task?.id)}
-                            className="p-0 border-0 bg-white">
+                            className="p-0 border-0 icon-bg-custom">
                             <i
 
                               className="fa fa-eye  text-info px-1"
                             ></i>
                           </button>
-                          <button className="p-0 border-0 bg-white">
+                          <button className="p-0 border-0 icon-bg-custom">
                             <i
                               onClick={() => showUpdateModal(task)}
                               className="fa fa-pen  text-warning px-1"
                             ></i>
                           </button >
                           <button onClick={() => showDeleteModal(task.id)}
-                            className="p-0 border-0 bg-white">
+                            className="p-0 border-0 icon-bg-custom">
                             <i
 
                               className="fa fa-trash  text-danger px-1"
