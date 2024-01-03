@@ -180,6 +180,7 @@ const AddTask: React.FC = () => {
             <div className="col-md-6">
               <Select
                 {...register("employeeId", { required: true, valueAsNumber: true })}
+                className="text-black"
                 options={userOptions}
                 value={selectedUser}
                 onChange={handleUserChange}
