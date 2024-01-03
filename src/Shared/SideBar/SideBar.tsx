@@ -12,7 +12,7 @@ const SideBar: React.FC = () => {
   let { userRole } = useContext(AuthContext);
   // console.log(userRole);
   const { toggleTheme, isDarkMode }:ITheme = useContext(ThemeContext);
-                    
+
   //*************sidebar collapse***************
   let [isCollapsed, setIsCollapsed] = useState(false);
   let handleToggle = () => {
