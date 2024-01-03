@@ -161,23 +161,17 @@ table td {
 }
 /********** pagination ***********/
 
-.pagination-position .pagination .page-link ,
-.pagination-position .pagination .page-link > span,.pagination-position .pagination .page-link:hover {
+.pagination .page-link ,
+ .pagination .page-link > span, .pagination .page-link:hover {
   color: rgba(49, 89, 81, 0.9);
   font-weight: bold;
   border: 1px solid #ccc !important;
 }
-.pagination-position .pagination .page-link:focus, .pagination .page-link:active,.active>.page-link, .page-link.active{
+ .pagination .page-link:focus, .pagination .page-link:active,.active>.page-link, .page-link.active{
   background-color: rgba(49, 89, 81, 0.9) !important;
   border-color: rgba(49, 89, 81, 0.9) !important;
 
   color: #fff !important;
-}
-.pagination-position{
-  position: absolute;
-  bottom: 0;
-  left: 40%;
-  bottom: -9%;
 }
 /* btn icon hover */
 .icon-bg-custom{

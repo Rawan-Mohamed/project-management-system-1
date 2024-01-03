@@ -191,7 +191,7 @@ const Projects: React.FC = () => {
   return (
     <>
       <div className="header d-flex justify-content-between p-3">
-        <h3>projects</h3>
+        <h3>Projects</h3>
         {userRole == "Manager" ? (
           <Link
             to={"/dashboard/projects/add-project"}
@@ -261,12 +261,14 @@ const Projects: React.FC = () => {
                             >
                               <i className="fa fa-pen  text-warning px-2"></i>
                             </button>
+
                             <button
                               className="icon-bg-custom border-0"
                               onClick={() => showDeleteModal(project.id)}
-                            >
-                              <i className="fa fa-trash  text-danger"></i>
+                            ><i className="fa fa-trash  text-danger"></i>
                             </button>
+
+
                           </td>
                         ) : (
                           <td>

@@ -6,6 +6,8 @@ interface CustomPaginationProps {
   onPageChange: (page: number) => void;
 }
 
+// ... (your imports and interface)
+
 const CustomPagination: React.FC<CustomPaginationProps> = ({
   totalPages,
   currentPage,
@@ -45,11 +47,14 @@ const CustomPagination: React.FC<CustomPaginationProps> = ({
   };
 
   return (
-    <nav aria-label="..." className="pagination-position">
-      <ul className=" m-0 pagination justify-content-center pagination-sm">
+
+    <nav aria-label="..." className="">
+      <ul className="m-0 pagination justify-content-center pagination-sm">
+
         <button
           className="page-link btn-hover-custom bg-white px-2 border-0"
           onClick={() => onPageChange(currentPage - 1)}
+          disabled={currentPage === 1} // Disable if on the first page
         >
           Prev
         </button>
@@ -59,7 +64,7 @@ const CustomPagination: React.FC<CustomPaginationProps> = ({
             key={page}
             className={`page-item ${
               page === currentPage ? "active" : ""
-            } page-link btn-hover-custom bg-white  px-3 border-0`}
+            } page-link btn-hover-custom bg-white px-3 border-0`}
             onClick={() => onPageChange(page)}
           >
             {page}
@@ -67,21 +72,24 @@ const CustomPagination: React.FC<CustomPaginationProps> = ({
         ))}
 
         <button
-          className="page-link btn-hover-custom bg-white  px-2 border-0"
+          className="page-link btn-hover-custom bg-white px-2 border-0"
           onClick={() => onPageChange(currentPage + 1)}
+          disabled={currentPage === totalPages} // Disable if on the last page
         >
           Next
         </button>
       </ul>
 
+
       <div className="input-group mb-3  d-flex justify-content-center align-items-center  m-auto">
+
         <input
           type="number"
           className="form-control custom-input h-25 rounded"
           placeholder="Go to page"
           value={pageNumberInput}
           onChange={handlePageNumberInputChange}
-          onKeyPress={handlePageNumberInputKeyPress} // Add this line
+          onKeyPress={handlePageNumberInputKeyPress}
         />
         <div className="input-group-append m-2">
           <button

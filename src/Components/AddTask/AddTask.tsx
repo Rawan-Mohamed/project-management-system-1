@@ -7,6 +7,8 @@ import { ToastContext } from "../../Context/ToastContext";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { ProjectContext } from '../../Context/ProjectContext';
 import { FormValues, projectType, IAuth } from './../../Types/Types';
+import Select from 'react-select';
+
 
 
 const AddTask: React.FC = () => {
@@ -19,13 +21,16 @@ const AddTask: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const [userList, setUserList] = useState([])
-  const [projectList,setProjectList]=useState([])
-
+  const [projectList, setProjectList] = useState([])
+  const [selectedUser, setSelectedUser] = useState(null);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
+    setError,
+
   } = useForm<FormValues>();
 
   const goBack = () => {
@@ -33,7 +38,7 @@ const AddTask: React.FC = () => {
   }
   const onSubmit: SubmitHandler<FormValues> = async (data: FormValues) => {
     // setIsLoading(true)
-    console.log(data);
+    data = { ...data, employeeId: selectedUser?.value };
     axios
       .post(`${baseUrl}/Task`, data, { headers: requestHeaders })
       .then((response) => {
@@ -49,7 +54,7 @@ const AddTask: React.FC = () => {
         getToastValue(
           "error",
           error?.response?.data?.message ||
-            "An error occurred. Please try again."
+          "An error occurred. Please try again."
         );
       })
       .finally(() => setIsLoading(false));
@@ -62,7 +67,7 @@ const AddTask: React.FC = () => {
     axios.get(`${baseUrl}/Users/`, {
       headers: requestHeaders,
       params: {
-        pageSize: 40,
+        pageSize: 100,
 
       }
 
@@ -74,7 +79,7 @@ const AddTask: React.FC = () => {
         getToastValue(
           "error",
           error?.response?.data?.message ||
-            "An error occurred. Please try again."
+          "An error occurred. Please try again."
         );
       })
   }
@@ -88,7 +93,7 @@ const AddTask: React.FC = () => {
         getToastValue(
           "error",
           error?.response?.data?.message ||
-            "An error occurred. Please try again."
+          "An error occurred. Please try again."
         );
       });
   };
@@ -98,14 +103,32 @@ const AddTask: React.FC = () => {
     getAllProjectsList()
 
   }, [])
+  const handleUserChange = (selectedOption) => {
+    setSelectedUser(selectedOption);
+    // getUsersList(selectedOption?.label);
+    setValue("employeeId", selectedOption?.value); // Set value for react-hook-form
+    setError("employeeId", { type: "", message: "" });
+
+
+  };
+  // const filterOptions = (options, { inputValue }) => {
+  //   return options.filter((user) =>
+  //     user.label.toLowerCase().includes(inputValue.toLowerCase())
+  //   ).slice(0, 5); // Limit the results to 5 items
+  // };
+  const userOptions = userList.map((user) => ({
+    value: user.id,
+    label: user.userName,
+  }));
+
 
   return (
     <>
       <div className="header d-flex justify-content-between p-3 ">
         <div className="">
-        <Link to='/dashboard/tasks'
+          <Link to='/dashboard/tasks'
             className="btn ">&laquo; View All Tasks
-            </Link>
+          </Link>
           {/* <button
             onClick={goBack}
             className="btn ">&laquo; View All Tasks
@@ -114,7 +137,9 @@ const AddTask: React.FC = () => {
         </div>
 
       </div>
+
       <div className="vh-50 w-75   shadow-lg rounded-4">
+
         <form
           onSubmit={handleSubmit(onSubmit)}
           action=""
@@ -155,22 +180,16 @@ const AddTask: React.FC = () => {
           </div>
           <div className="row">
             <div className="col-md-6">
-              <select
+              <Select
                 {...register("employeeId", { required: true, valueAsNumber: true })}
-                aria-label="Default select example"
-                // type="number"
-                className="form-select"
-              >
-                <option  className="text-muted">
-                  User
-                </option>
-                {userList.map(({id, userName})=>(
-                <option key={id} value={id} >
-                  {userName}
-                </option>
+                className="text-black"
+                options={userOptions}
+                value={selectedUser}
+                onChange={handleUserChange}
+                placeholder="Search user..."
+                isClearable
 
-                ))}
-              </select>
+              />
               {errors.employeeId && errors.employeeId.type === "required" && (
                 <span className="text-danger ">No User Selected</span>
               )}
