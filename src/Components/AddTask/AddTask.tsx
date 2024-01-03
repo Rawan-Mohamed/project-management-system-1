@@ -10,6 +10,7 @@ import { FormValues, projectType, IAuth } from './../../Types/Types';
 import Select from 'react-select';
 
 
+
 const AddTask: React.FC = () => {
   const { baseUrl, requestHeaders }: any
     //Pick<IAuth, 'baseUrl','requestHeaders'>
@@ -27,6 +28,9 @@ const AddTask: React.FC = () => {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
+    setError,
+
   } = useForm<FormValues>();
 
   const goBack = () => {
@@ -34,7 +38,7 @@ const AddTask: React.FC = () => {
   }
   const onSubmit: SubmitHandler<FormValues> = async (data: FormValues) => {
     // setIsLoading(true)
-    console.log(data);
+    data = { ...data, employeeId: selectedUser?.value };
     axios
       .post(`${baseUrl}/Task`, data, { headers: requestHeaders })
       .then((response) => {
@@ -63,7 +67,7 @@ const AddTask: React.FC = () => {
     axios.get(`${baseUrl}/Users/`, {
       headers: requestHeaders,
       params: {
-        pageSize: 40,
+        pageSize: 100,
 
       }
 
@@ -101,13 +105,17 @@ const AddTask: React.FC = () => {
   }, [])
   const handleUserChange = (selectedOption) => {
     setSelectedUser(selectedOption);
-    getAllUsers(selectedOption?.label);
+    // getUsersList(selectedOption?.label);
+    setValue("employeeId", selectedOption?.value); // Set value for react-hook-form
+    setError("employeeId", { type: "", message: "" });
+
+
   };
-  const filterOptions = (options, { inputValue }) => {
-    return options.filter((user) =>
-      user.label.toLowerCase().includes(inputValue.toLowerCase())
-    ).slice(0, 5); // Limit the results to 5 items
-  };
+  // const filterOptions = (options, { inputValue }) => {
+  //   return options.filter((user) =>
+  //     user.label.toLowerCase().includes(inputValue.toLowerCase())
+  //   ).slice(0, 5); // Limit the results to 5 items
+  // };
   const userOptions = userList.map((user) => ({
     value: user.id,
     label: user.userName,
@@ -176,6 +184,7 @@ const AddTask: React.FC = () => {
                 value={selectedUser}
                 onChange={handleUserChange}
                 placeholder="Search user..."
+                isClearable
 
               />
               {errors.employeeId && errors.employeeId.type === "required" && (
