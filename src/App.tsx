@@ -1,4 +1,4 @@
-import { RouterProvider, createBrowserRouter, createHashRouter } from "react-router-dom";
+import { RouterProvider, createHashRouter } from "react-router-dom";
 import AuthLayout from "./Shared/AuthLayout/AuthLayout";
 import Login from "./Components/Login/Login";
 import Register from "./Components/Register/Register";
@@ -23,7 +23,7 @@ import { ThemeContext, ITheme } from './Context/ThemeContext';
 
 
 function App() {
-  let { userData, saveUserData, userRole } = useContext(AuthContext);
+  let { userData, saveUserData } :string= useContext(AuthContext);
   const {isDarkMode, themeClass}:ITheme = useContext(ThemeContext);
 
   const routes = createHashRouter([
