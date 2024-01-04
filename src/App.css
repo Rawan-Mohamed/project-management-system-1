@@ -68,6 +68,10 @@ form {
   border: none !important;
   border-bottom: 2px solid #fff !important;
   border-radius: 0 !important;
+
+}
+input .custom-input{
+  width: 15px !important;
 }
 .custom-input::placeholder {
   color: rgba(250, 232, 232, 0.4) !important; /* Set the desired color */
@@ -126,9 +130,9 @@ button[type="submit"] {
   transform: rotate(180deg);
 }
 
-.custom-model {
+/* .custom-model {
   width: 500px;
-}
+} */
 .changewidth {
   width: 60%;
 }
@@ -428,9 +432,18 @@ table td {
 }
 
 .dark-theme .loader{
-  color: #fff;
+  color: #ef9b28;
 }
 .dark-theme .icon-bg-custom{
   background-color:   var(--main-dark-color) !important;
 }
 
+.custom-model {
+  min-width: 90%;
+  margin: auto; /* Center the modal horizontally */
+}
+
+.custom-model .modal-content {
+  max-height: 100vh;
+  margin: auto; /* Center the modal vertically */
+}

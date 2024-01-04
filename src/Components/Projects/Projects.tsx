@@ -109,7 +109,7 @@ const Projects: React.FC = () => {
       .then((response) => {
         handleClose();
 
-        getAllProjectsList(1);
+        getAllProjectsList();
         getToastValue(
           "success",
           response?.data?.message || "Project updated suceessfully"
@@ -140,7 +140,7 @@ const Projects: React.FC = () => {
           response?.data?.message || "project deleted successfully"
         );
 
-        getAllProjectsList(1);
+        getAllProjectsList();
       })
       .catch((error) => {
         getToastValue(
@@ -182,11 +182,22 @@ const Projects: React.FC = () => {
       getAllProjectsList(1, searchString);
     }, 500);
     setTimerId(newTimeOut);
-  }, [searchString]);
+  }, [userRole,searchString]);
 
+  // useEffect(() => {
+
+
+  //   getAllProjectsList(currentPage);
+  // }, [userRole,currentPage]);
   useEffect(() => {
-    getAllProjectsList(currentPage);
-  }, [currentPage,userRole]);
+    if (userRole === 'Manager') {
+      getAllProjectsList(currentPage)
+
+    } else if (userRole === 'Employee') {
+      getAllProjectsList(currentPage)
+    }
+  }, [userRole, currentPage]);
+
 
   return (
     <>

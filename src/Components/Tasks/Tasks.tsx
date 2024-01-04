@@ -449,23 +449,26 @@ const Tasks: React.FC = () => {
 
       {/* table */}
       <>
+      {
+          userRole === 'Manager' ?
+        <div className="w-25 px-3">
+          <div className="icon-input position-relative">
+            <i
+              className={`${style.icons} fa-solid fa-search position-absolute text-success`}
+            />
+            <input
+              onChange={getTaskTitleValue}
+              placeholder="search by Task name...."
+              className="form-control  my-2 "
+              type="text"
+              style={{ paddingLeft: "2rem" }}
+            />
+          </div>
+        </div> : ''}
         {
           userRole === 'Manager' ? (
             <div className="table-container1 vh-100">
-              <div className="w-25 px-3">
-                <div className="icon-input position-relative">
-                  <i
-                    className={`${style.icons} fa-solid fa-search position-absolute text-success`}
-                  />
-                  <input
-                    onChange={getTaskTitleValue}
-                    placeholder="search by Task name...."
-                    className="form-control  my-2 "
-                    type="text"
-                    style={{ paddingLeft: "2rem" }}
-                  />
-                </div>
-              </div>
+
               <table className="table">
                 <thead className="table-head table-bg ">
                   <tr>
@@ -484,12 +487,12 @@ const Tasks: React.FC = () => {
                       {tasks?.length > 0 ? (
                         tasks.map((task: any) => (
                           <tr key={task?.id}>
-                            <th scope="row">{task?.title}</th>
+                            <td scope="row">{task?.title}</td>
                             <td className=' text-white' style={{ textAlign: 'center' }}>
                               <div style={{
                                 backgroundColor:
                                   task?.status === 'ToDo'
-                                    ? '#E4E1F5'
+                                    ? '#4da79d'
                                     : task?.status === 'InProgress'
                                       ? '#EF9B28'
                                       : task?.status === 'Done'
