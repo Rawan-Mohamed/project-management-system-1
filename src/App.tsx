@@ -12,7 +12,7 @@ import Projects from "./Components/Projects/Projects";
 import Users from "./Components/Users/Users";
 import Tasks from "./Components/Tasks/Tasks";
 import { useContext } from "react";
-import { AuthContext } from "./Context/AuthContext";
+import { AuthContext, IAuth } from "./Context/AuthContext";
 import ChangePassword from "./Components/ChangePassword/ChangePassword";
 import ProtectedRoute from "./Shared/ProtectedRoute/ProtectedRoute";
 import { ToastContainer } from "react-toastify";
@@ -23,7 +23,7 @@ import { ThemeContext, ITheme } from './Context/ThemeContext';
 
 
 function App() {
-  let { userData, saveUserData } :string= useContext(AuthContext);
+  const{ userData, saveUserData } :IAuth= useContext(AuthContext);
   const {isDarkMode, themeClass}:ITheme = useContext(ThemeContext);
 
   const routes = createHashRouter([
