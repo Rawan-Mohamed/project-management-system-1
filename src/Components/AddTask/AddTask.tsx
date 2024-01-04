@@ -138,7 +138,7 @@ const AddTask: React.FC = () => {
 
       </div>
 
-      <div className="vh-50 w-75   shadow-lg rounded-4">
+      <div className="vh-100   shadow-lg rounded-4">
 
         <form
           onSubmit={handleSubmit(onSubmit)}
