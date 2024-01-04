@@ -55,15 +55,17 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({ handleClose }) => {
   };
   return (
     <div className="d-flex overlay-bg justify-content-center align-items-center flex-column">
-      <div className="text-center mb-2">
-        <img src={logo} className="img-fluid" alt="logo" />
-      </div>
+
       {/* form */}
       <div className=" changewidth h-50">
+
         <form
           className="login-wrapper m-auto w-100 my-5 py-3 px-5"
           onSubmit={handleSubmit(onSubmit)}
         >
+          <div className="text-center mb-2">
+        <img src={logo} className="img-fluid" alt="logo" />
+      </div>
           <p className="text-white">welcome to PMS</p>
           <h2 className="title mb-5">Change Password</h2>
 

@@ -37,7 +37,8 @@ const SideBar: React.FC = () => {
         show={show}
         onHide={handleClose}
         size="lg"
-        className="custom-model"
+        // className="custom-model"
+        dialogClassName="custom-model"
       >
         <Modal.Body className="p-0">
           <ChangePassword handleClose={handleClose} />

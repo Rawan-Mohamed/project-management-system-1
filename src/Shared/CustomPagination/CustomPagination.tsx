@@ -90,6 +90,7 @@ const CustomPagination: React.FC<CustomPaginationProps> = ({
           value={pageNumberInput}
           onChange={handlePageNumberInputChange}
           onKeyPress={handlePageNumberInputKeyPress}
+          style={{ width: '50%', flex: 'none' }} //New line
         />
         <div className="input-group-append m-2">
           <button
