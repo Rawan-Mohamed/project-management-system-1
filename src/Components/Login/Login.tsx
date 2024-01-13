@@ -51,8 +51,7 @@ const Login: React.FC = () => {
         <img src={logo} alt="logo" className='img-fluid' />
       </div>
       <div
-      // className='w-50 mb-5'
-      >
+      className='w-50 mb-5'>
         <form onSubmit={handleSubmit(onSubmit)}
           action="" className="login-wrapper m-auto mt-1 py-3 px-5 w-100">
           <p className='text-white'>welcome to PMS</p>
