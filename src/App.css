@@ -27,6 +27,8 @@ body,
 .login-wrapper {
   background-color: var(--second-color);
   border-radius: 20px;
+  padding: 1rem;
+  /* add this line */
 }
 .row {
   margin-right: 0 !important;
@@ -58,6 +60,8 @@ body,
 }
 .label-title {
   color: var(--main-color);
+  font-size: 1.2rem;
+  /* add this line */
 }
 form {
   background-color: var(--second-color) !important;
@@ -68,6 +72,8 @@ form {
   border: none !important;
   border-bottom: 2px solid #fff !important;
   border-radius: 0 !important;
+  font-size: 1rem;
+  /* add this line */
 
 }
 input .custom-input{
@@ -259,6 +265,8 @@ table td {
 @media only screen and (max-width: 768px) {
   h2 {
     font-size: 1rem !important;
+    width: 80%;
+    /* add this line */
   }
 }
 
