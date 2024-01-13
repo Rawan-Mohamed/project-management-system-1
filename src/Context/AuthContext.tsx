@@ -13,14 +13,14 @@ export interface IAuth {
 
 // Create the AuthContext and set the initial value to null
 export const AuthContext = createContext<IAuth>({
-  userData: '', 
+  userData: '',
   saveUserData: () => {},
   requestHeaders: '',
   baseUrl: '',
   userRole: '',
   updateUserData: () => {},
 });
- 
+
 
 // Define the props for AuthContextProvider component
 interface AuthContextProviderProps {
@@ -60,7 +60,7 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = (props) =
     userData,
     saveUserData,
     requestHeaders,
-    baseUrl: "http://upskilling-egypt.com:3003/api/v1",
+    baseUrl: "https://upskilling-egypt.com:3003/api/v1",
     userRole,
     updateUserData
   };
